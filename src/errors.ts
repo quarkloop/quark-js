@@ -27,3 +27,17 @@ export class ValidationError extends QuarkError {
     this.name = "ValidationError";
   }
 }
+
+export class CatalogError extends QuarkError {
+  constructor(message: string) {
+    super(message, "CATALOG_ERROR");
+    this.name = "CatalogError";
+  }
+}
+
+export class ConnectionError extends QuarkError {
+  constructor(message: string) {
+    super(message, "CONNECTION_ERROR");
+    this.name = "ConnectionError";
+  }
+}
