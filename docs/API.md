@@ -1,0 +1,404 @@
+# API reference
+
+Complete reference for every public type, function, and error class exported by `@quarkloop/quark-js`.
+
+For architecture and design rationale, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## Table of contents
+
+- [Factories](#factories)
+  - [`createClient(opts)`](#createclientopts)
+  - [`createAdminClient(opts)`](#createadminclientopts)
+- [Types](#types)
+  - [`QuarkClientOptions`](#quarkclientoptions)
+  - [`NodeInfo`](#nodeinfo)
+  - [`HealthStatus`](#healthstatus)
+  - [`RuntimeStatus`](#runtimestatus)
+  - [`NodePackage`](#nodepackage)
+  - [`PushNodeRequest`](#pushnoderequest)
+  - [`ExecuteResponse`](#executeresponse)
+  - [`CatalogListResponse`](#cataloglistresponse)
+- [Interfaces](#interfaces)
+  - [`QuarkClient`](#quarkclient)
+  - [`QuarkAdminClient`](#quarkadminclient)
+  - [`NodeHandle`](#nodehandle)
+  - [`PipelineBuilder`](#pipelinebuilder)
+- [Errors](#errors)
+
+---
+
+## Factories
+
+### `createClient(opts)`
+
+Creates and connects a `QuarkClient` to a Quark runtime.
+
+```typescript
+import { createClient } from '@quarkloop/quark-js';
+
+const quark = await createClient({
+  servers: ['localhost:4222'],
+  timeout: 5000,           // optional, default 5000 ms
+  requestTimeout: 30000,   // optional, default 30000 ms
+});
+```
+
+**Parameters**
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `servers` | `string[]` | — | Quark server URLs (required) |
+| `timeout` | `number` | `5000` | Connection timeout (ms) |
+| `requestTimeout` | `number` | `30000` | Per-request timeout (ms) |
+
+**Returns:** `Promise<QuarkClient>`
+
+---
+
+### `createAdminClient(opts)`
+
+Creates and connects a `QuarkAdminClient` for admin operations. Same options shape as `createClient`.
+
+```typescript
+import { createAdminClient } from '@quarkloop/quark-js';
+
+const admin = await createAdminClient({ servers: ['localhost:4222'] });
+await admin.health();
+await admin.status();
+```
+
+**Returns:** `Promise<QuarkAdminClient>`
+
+---
+
+## Types
+
+### `QuarkClientOptions`
+
+```typescript
+interface QuarkClientOptions {
+  servers: string[];
+  timeout?: number;
+  requestTimeout?: number;
+}
+```
+
+### `NodeInfo`
+
+Catalog entry for a single node.
+
+```typescript
+interface NodeInfo {
+  uri: string;             // e.g. 'myorg/myteam/validate:v1'
+  version: string;         // e.g. '1.0.0'
+  description: string;     // human-readable name
+  language: string;        // 'native' | 'wasm'
+  contentType?: string;    // 'shared-library' | 'wasm'
+  checksum?: string;       // (planned, for pull/push)
+  createdAt?: string;      // ISO 8601 (planned, for pull/push)
+}
+```
+
+### `HealthStatus`
+
+```typescript
+interface HealthStatus {
+  status: string;          // 'ok' | 'degraded' | 'down'
+  version: string;         // runtime version, e.g. '0.3.0'
+}
+```
+
+### `RuntimeStatus`
+
+```typescript
+interface RuntimeStatus {
+  runtimeId: string;       // per-instance ID, e.g. 'rt-01HZX9J8K7N6M5P4-00001234'
+  mode: string;            // 'hybrid' (supports .so + .wasm)
+  loadedNodes: string[];   // URIs currently discoverable
+  uptime: number;          // seconds since runtime started
+}
+```
+
+### `NodePackage`
+
+Full node artifact (used by future `pull` / `push` operations).
+
+```typescript
+interface NodePackage {
+  uri: string;
+  version: string;
+  manifest: string;
+  content: Uint8Array;
+  contentType: string;
+  checksum: string;
+  createdAt: string;
+}
+```
+
+### `PushNodeRequest`
+
+Request body for future `push` operations.
+
+```typescript
+interface PushNodeRequest {
+  uri: string;
+  version: string;
+  manifest: string;
+  content: Uint8Array;
+  contentType: string;
+}
+```
+
+### `ExecuteResponse`
+
+Wire-protocol response shape for `quark.node.<uri>.execute`.
+
+```typescript
+interface ExecuteResponse {
+  success: boolean;
+  output?: unknown;
+  error?: string;
+}
+```
+
+### `CatalogListResponse`
+
+Wire-protocol response shape for `quark.catalog.list` and `quark.catalog.search`.
+
+```typescript
+interface CatalogListResponse {
+  nodes: NodeInfo[];
+}
+```
+
+---
+
+## Interfaces
+
+### `QuarkClient`
+
+The primary API surface for application code.
+
+| Method | Signature | Status |
+|---|---|---|
+| `node(uri)` | `(uri: string) => NodeHandle` | Implemented |
+| `run(uri, input)` | `(uri: string, input: unknown) => Promise<unknown>` | Implemented (shorthand for `node(uri).run(input)`) |
+| `batch(calls)` | `(calls: Array<[string, unknown]>) => Promise<unknown[]>` | Implemented (parallel via `Promise.all`) |
+| `pipeline(uri, input)` | `(uri: string, input: unknown) => PipelineBuilder` | Implemented |
+| `list(prefix?)` | `(prefix?: string) => Promise<NodeInfo[]>` | Implemented |
+| `search(keyword)` | `(keyword: string) => Promise<NodeInfo[]>` | Implemented |
+| `pull(uri)` | `(uri: string) => Promise<NodePackage>` | Planned — throws `NotImplementedError` |
+| `close()` | `() => Promise<void>` | Implemented |
+
+**Example: batch execution**
+
+```typescript
+const [a, b, c] = await quark.batch([
+  ['myorg/myteam/validate:v1', serverConfig],
+  ['myorg/myteam/validate-wasm:v1', serverConfig],
+  ['myorg/myteam/validate-go:v1', serverConfig],
+]);
+```
+
+**Example: catalog browsing**
+
+```typescript
+const all = await quark.list();
+const infraNodes = await quark.list('myorg/infra/');
+const matches = await quark.search('validate');
+```
+
+---
+
+### `QuarkAdminClient`
+
+Admin-level operations for runtime operators.
+
+| Method | Signature | Status |
+|---|---|---|
+| `push(uri, pkg)` | `(uri: string, pkg: PushNodeRequest) => Promise<void>` | Planned — throws `NotImplementedError` |
+| `delete(uri)` | `(uri: string) => Promise<void>` | Planned — throws `NotImplementedError` |
+| `list(prefix?)` | `(prefix?: string) => Promise<NodeInfo[]>` | Implemented |
+| `search(keyword)` | `(keyword: string) => Promise<NodeInfo[]>` | Implemented |
+| `info(uri)` | `(uri: string) => Promise<NodeInfo>` | Implemented |
+| `pull(uri)` | `(uri: string) => Promise<NodePackage>` | Planned — throws `NotImplementedError` |
+| `health()` | `() => Promise<HealthStatus>` | Implemented |
+| `status()` | `() => Promise<RuntimeStatus>` | Implemented |
+| `flushCache(uri?)` | `(uri?: string) => Promise<void>` | Planned — throws `NotImplementedError` |
+| `close()` | `() => Promise<void>` | Implemented |
+
+Catalog browsing methods (`list`, `search`, `info`) mirror `QuarkClient`'s so admin tooling doesn't need both clients.
+
+---
+
+### `NodeHandle`
+
+Per-node operations bound to a specific URI.
+
+```typescript
+interface NodeHandle<I = unknown, O = unknown> {
+  run(input: I): Promise<O>;
+  info(): Promise<NodeInfo>;
+  validate(
+    inputValidator?: (input: unknown) => void | Promise<void>,
+    outputValidator?: (output: unknown) => void | Promise<void>,
+  ): NodeHandle<I, O>;
+}
+```
+
+**Example: basic usage**
+
+```typescript
+const handle = quark.node('myorg/myteam/validate:v1');
+await handle.run(input);                    // -> output
+await handle.info();                        // -> NodeInfo
+```
+
+**Example: with validators**
+
+```typescript
+const strictHandle = handle.validate(
+  (input) => {
+    if (!input.servers?.length) throw new Error('input.servers must be non-empty');
+  },
+  (output) => {
+    if (!output.valid) throw new Error('node reported invalid config');
+  },
+);
+
+await strictHandle.run(input);  // throws if validators fail
+```
+
+Validators run before/after the NATS call. A throwing input validator aborts before the request fires; a throwing output validator aborts before the result is returned to the caller. `validate()` returns a new `NodeHandle` (does not mutate the original).
+
+---
+
+### `PipelineBuilder`
+
+Chains multiple node executions where each step's output feeds the next step's input.
+
+```typescript
+interface PipelineBuilder {
+  then(uri: string, partialInput?: Record<string, unknown>): PipelineBuilder;
+  execute(): Promise<unknown>;
+}
+```
+
+**Merge rules for subsequent steps:**
+
+- The first step receives its `input` verbatim.
+- For subsequent steps:
+  - If both the previous output and `partialInput` are objects: shallow-merge (`{ ...prevOutput, ...partialInput }`, `partialInput` wins on key conflict).
+  - If `partialInput` is `undefined`: previous output passes through unchanged.
+  - If previous output is not an object but `partialInput` is provided: `partialInput` replaces the input entirely.
+
+**Example**
+
+```typescript
+await quark
+  .pipeline('uri1', input1)            // first step: input1 verbatim
+  .then('uri2', { extra: 'merged' })   // second step: {...prevOutput, ...partialInput}
+  .then('uri3')                        // third step: prevOutput verbatim
+  .execute();
+```
+
+On failure at any step, throws `NodeExecutionError` with the step index and the failing node's URI.
+
+---
+
+## Errors
+
+All errors thrown by this SDK extend `QuarkError` with a `code` field for programmatic handling.
+
+| Class | `code` | Thrown by |
+|---|---|---|
+| `NodeExecutionError` | `NODE_EXECUTION_ERROR` | `node.run`, `pipeline.execute` when the runtime returns `success: false` |
+| `ValidationError` | `VALIDATION_ERROR` | `node.validate` validators |
+| `CatalogError` | `CATALOG_ERROR` | Reserved for future catalog operations |
+| `ConnectionError` | `CONNECTION_ERROR` | `Connection.request` when a call fails or times out |
+| `NotImplementedError` | `NOT_IMPLEMENTED` | `pull`, `push`, `delete`, `flushCache` |
+
+### Catching errors
+
+```typescript
+import {
+  QuarkError,
+  NodeExecutionError,
+  NotImplementedError,
+  ConnectionError,
+} from '@quarkloop/quark-js';
+
+try {
+  await quark.run('myorg/myteam/validate:v1', input);
+} catch (err) {
+  if (err instanceof NodeExecutionError) {
+    console.error(`Node "${err.uri}" failed: ${err.message}`);
+  } else if (err instanceof NotImplementedError) {
+    console.error(`Not yet implemented: ${err.message}`);
+  } else if (err instanceof ConnectionError) {
+    console.error(`Connection failed: ${err.message}`);
+  } else if (err instanceof QuarkError) {
+    console.error(`Quark error (${err.code}): ${err.message}`);
+  } else {
+    throw err;  // unexpected — rethrow
+  }
+}
+```
+
+### `QuarkError`
+
+Base class for all SDK errors.
+
+```typescript
+class QuarkError extends Error {
+  readonly code: string;
+  constructor(message: string, code: string);
+}
+```
+
+### `NodeExecutionError`
+
+```typescript
+class NodeExecutionError extends QuarkError {
+  constructor(uri: string, message: string);
+  // message format: `Node "<uri>" failed: <message>`
+  // code: 'NODE_EXECUTION_ERROR'
+}
+```
+
+### `ValidationError`
+
+```typescript
+class ValidationError extends QuarkError {
+  constructor(message: string);
+  // code: 'VALIDATION_ERROR'
+}
+```
+
+### `CatalogError`
+
+```typescript
+class CatalogError extends QuarkError {
+  constructor(message: string);
+  // code: 'CATALOG_ERROR'
+}
+```
+
+### `ConnectionError`
+
+```typescript
+class ConnectionError extends QuarkError {
+  constructor(message: string);
+  // code: 'CONNECTION_ERROR'
+}
+```
+
+### `NotImplementedError`
+
+```typescript
+class NotImplementedError extends QuarkError {
+  constructor(method: string);
+  // message format: `<method> is not yet implemented. The runtime currently supports: ...`
+  // code: 'NOT_IMPLEMENTED'
+}
+```
