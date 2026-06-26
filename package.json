@@ -31,5 +31,8 @@
     "src",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "@nats-io/transport-node": "^3.0.0-0"
+  }
 }
