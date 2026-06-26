@@ -16,7 +16,7 @@ This project is in early development (pre-1.0). Only the latest `main` branch re
 Instead, email **reza.ebrahimi.dev@gmail.com** with:
 
 1. A description of the vulnerability and its impact.
-2. Steps to reproduce (a minimal PoC is ideal).
+2. Steps to reproduce (a minimal reproducer is ideal).
 3. Affected versions (run `npm ls @quarkloop/quark-js`).
 4. Any suggested fixes or mitigations.
 
@@ -35,7 +35,7 @@ Critical vulnerabilities may be fixed and disclosed faster. Lower-severity issue
 
 ## Scope
 
-This security policy applies to the `@quarkloop/quark-js` TypeScript client library. Vulnerabilities in dependencies should be reported to the upstream project. Vulnerabilities in the [Quark Runtime](https://github.com/quarkloop/poc-rust-runtime) should be reported through that project's security policy.
+This security policy applies to the `@quarkloop/quark-js` TypeScript SDK. Vulnerabilities in dependencies should be reported to the upstream project. Vulnerabilities in the [Quark Runtime](https://github.com/quarkloop/quark) should be reported through that project's security policy.
 
 ### In scope
 

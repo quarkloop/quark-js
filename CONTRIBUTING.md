@@ -9,7 +9,7 @@ Thanks for your interest in contributing! This document describes how to set up 
 - [Bun](https://bun.sh/) ≥ 1.0
 - Node.js ≥ 20 (for `tsc` type-checking)
 - A running [NATS server](https://nats.io/download-nats-io/) for integration testing
-- The [Quark Runtime](https://github.com/quarkloop/poc-rust-runtime) if you want to run the E2E test
+- The [Quark Runtime](https://github.com/quarkloop/quark) if you want to run the E2E test
 
 ### Install dependencies
 
@@ -29,11 +29,11 @@ This runs `tsc --noEmit`. It should complete with no errors.
 
 ### Run the E2E test against a runtime
 
-The E2E test lives in the [runtime repo](https://github.com/quarkloop/poc-rust-runtime) under `test-project/`. It depends on this package via a `file:` link. To run it:
+The E2E test lives in the [Quark repo](https://github.com/quarkloop/quark) under `test-project/`. It depends on this package via a `file:` link. To run it:
 
 1. Clone the runtime repo as a sibling directory:
    ```bash
-   git clone https://github.com/quarkloop/poc-rust-runtime.git ../poc-rust-runtime
+   git clone https://github.com/quarkloop/quark.git ../quark
    ```
 2. Follow the runtime repo's README to build the runtime and test nodes.
 3. From the runtime repo: `make test-e2e`.
