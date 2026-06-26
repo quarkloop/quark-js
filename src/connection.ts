@@ -62,9 +62,4 @@ export class Connection {
   subscribe(subject: string) {
     return this.conn().subscribe(subject);
   }
-
-  /** Create a unique inbox for replies. */
-  createInbox(): string {
-    return this.conn().createInbox();
-  }
 }
