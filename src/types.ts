@@ -77,3 +77,43 @@ export interface PushNodeRequest {
   content: Uint8Array;
   contentType: string;
 }
+
+// ─── Public API interfaces ──────────────────────────────────────────────
+
+export interface NodeHandle<I = unknown, O = unknown> {
+  run(input: I): Promise<O>;
+  info(): Promise<NodeInfo>;
+  validate(
+    inputValidator?: (input: unknown) => void | Promise<void>,
+    outputValidator?: (output: unknown) => void | Promise<void>,
+  ): NodeHandle<I, O>;
+}
+
+export interface PipelineBuilder {
+  then(uri: string, partialInput?: Record<string, unknown>): PipelineBuilder;
+  execute(): Promise<unknown>;
+}
+
+export interface QuarkClient<S extends QuarkSchema = DefaultSchema> {
+  node(uri: string): NodeHandle;
+  run(uri: string, input: unknown): Promise<unknown>;
+  batch(calls: Array<[string, unknown]>): Promise<unknown[]>;
+  pipeline(uri: string, input: unknown): PipelineBuilder;
+  list(prefix?: string): Promise<NodeInfo[]>;
+  search(keyword: string): Promise<NodeInfo[]>;
+  pull(uri: string): Promise<NodePackage>;
+  close(): Promise<void>;
+}
+
+export interface QuarkAdminClient {
+  push(uri: string, pkg: PushNodeRequest): Promise<void>;
+  delete(uri: string): Promise<void>;
+  list(prefix?: string): Promise<NodeInfo[]>;
+  search(keyword: string): Promise<NodeInfo[]>;
+  info(uri: string): Promise<NodeInfo>;
+  pull(uri: string): Promise<NodePackage>;
+  health(): Promise<HealthStatus>;
+  status(): Promise<RuntimeStatus>;
+  flushCache(uri?: string): Promise<void>;
+  close(): Promise<void>;
+}
