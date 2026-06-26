@@ -41,3 +41,13 @@ export class ConnectionError extends QuarkError {
     this.name = "ConnectionError";
   }
 }
+
+export class NotImplementedError extends QuarkError {
+  constructor(method: string) {
+    super(
+      `${method} is not yet implemented. The runtime currently supports: execute, catalog.list, catalog.search, catalog.info, runtime.health, runtime.status.`,
+      "NOT_IMPLEMENTED",
+    );
+    this.name = "NotImplementedError";
+  }
+}
