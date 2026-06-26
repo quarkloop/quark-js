@@ -74,9 +74,9 @@ await admin.close();
 
 ## Documentation
 
-- [Architecture](./docs/ARCHITECTURE.md) — source layout, transport layer, and design rationale
-- [API reference](./docs/API.md) — every public type, function, and error class
-- [Build & development](./docs/BUILD.md) — local setup, type-checking, and testing
+- [Architecture](./docs/architecture.mdx) — source layout, transport layer, and design rationale
+- [API reference](./docs/api.mdx) — every public type, function, and error class
+- [Build & development](./docs/build.mdx) — local setup, type-checking, and testing
 - [Changelog](./CHANGELOG.md) — release history
 - [Contributing](./CONTRIBUTING.md) — development setup, PR workflow, code style
 
