@@ -1,18 +1,42 @@
-# @quarkloop/quark-js
+# Quark JS SDK
 
-TypeScript client library for the [Quark Runtime](https://github.com/quarkloop/poc-rust-runtime). Connect to NATS, execute nodes by URI, chain them in pipelines, browse the catalog.
+TypeScript SDK for [Quark](https://github.com/quarkloop/quark) — execute nodes by URI, chain them in pipelines, browse the catalog, and monitor runtime health from your TypeScript application.
 
-Think of it as the Supabase JS client, but for nodes — your runtime hosts small functions written in Rust, Go, Java, or any language that compiles to a shared library (`.so`) or WebAssembly (`.wasm`), and this library lets your TypeScript application call them over NATS.
+Think of it as the Supabase JS SDK, but for nodes: your Quark deployment hosts small functions written in Rust, Go, Java, or any language that compiles to a shared library (`.so`) or WebAssembly (`.wasm`), and this SDK lets your TypeScript application call them.
 
-## Install
+## Installation
+
+### npm
 
 ```bash
-bun add @quarkloop/quark-js
-# or
 npm install @quarkloop/quark-js
 ```
 
-> This package ships source TypeScript directly — there is no compiled `dist/` step required. It works out of the box with Bun. For Node.js, use a TypeScript-aware loader (tsx, ts-node, or compile with `tsc`).
+### Bun
+
+```bash
+bun add @quarkloop/quark-js
+```
+
+### Deno
+
+Add the package to your `deno.json` imports:
+
+```json
+{
+  "imports": {
+    "@quarkloop/quark-js": "npm:@quarkloop/quark-js@^0.1.0"
+  }
+}
+```
+
+Then import as usual:
+
+```typescript
+import { createClient } from '@quarkloop/quark-js';
+```
+
+> This package ships source TypeScript directly — no compiled `dist/` step required. It works out of the box with Bun and Deno. For Node.js, use a TypeScript-aware loader (tsx, ts-node, or compile with `tsc`).
 
 ## Quick start
 
@@ -20,7 +44,7 @@ npm install @quarkloop/quark-js
 import { createClient, createAdminClient } from '@quarkloop/quark-js';
 
 const quark = await createClient({
-  servers: ['nats://localhost:4222'],
+  servers: ['localhost:4222'],
   // timeout: 5000,            // connection timeout (ms)
   // requestTimeout: 30000,    // per-request timeout (ms)
 });
@@ -48,7 +72,7 @@ const all = await quark.list();
 const matches = await quark.search('validate');
 
 // Admin operations (health + status):
-const admin = await createAdminClient({ servers: ['nats://localhost:4222'] });
+const admin = await createAdminClient({ servers: ['localhost:4222'] });
 await admin.health();   // -> { status: 'ok', version: '0.3.0' }
 await admin.status();   // -> { runtimeId, mode, loadedNodes, uptime }
 
@@ -64,7 +88,7 @@ Creates and connects a client. `opts.servers` is required.
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `servers` | `string[]` | — | NATS server URLs (required) |
+| `servers` | `string[]` | — | Quark server URLs (required) |
 | `timeout` | `number` | `5000` | Connection timeout (ms) |
 | `requestTimeout` | `number` | `30000` | Per-request timeout (ms) |
 
@@ -100,7 +124,7 @@ Creates and connects an admin client. Same options shape as `createClient`.
 | `flushCache(uri?)` | Planned — currently throws `NotImplementedError` |
 | `close()` | Implemented |
 
-Methods marked "Planned" exist in the type system for forward compatibility. The runtime has not yet implemented the corresponding NATS subjects. Calling them throws `NotImplementedError` synchronously — no NATS request is fired.
+Methods marked "Planned" exist in the type system for forward compatibility. Calling them throws `NotImplementedError` synchronously — no request is fired.
 
 ### `NodeHandle`
 
@@ -111,7 +135,7 @@ await handle.info();                        // -> NodeInfo
 handle.validate(inputCheck, outputCheck);   // returns a new handle with validators attached
 ```
 
-`validate()` takes optional input/output validators. They run before/after the NATS call. A validator that throws aborts the call.
+`validate()` takes optional input/output validators. They run before/after the request. A validator that throws aborts the call.
 
 ### `PipelineBuilder`
 
@@ -127,14 +151,14 @@ For steps after the first, if both the previous output and the step's `partialIn
 
 ### Errors
 
-All errors thrown by this library extend `QuarkError` with a `code` field:
+All errors thrown by this SDK extend `QuarkError` with a `code` field:
 
 | Class | `code` | Thrown by |
 |---|---|---|
-| `NodeExecutionError` | `NODE_EXECUTION_ERROR` | `node.run`, `pipeline.execute` when runtime returns `success: false` |
+| `NodeExecutionError` | `NODE_EXECUTION_ERROR` | `node.run`, `pipeline.execute` when the runtime returns `success: false` |
 | `ValidationError` | `VALIDATION_ERROR` | `node.validate` validators |
 | `CatalogError` | `CATALOG_ERROR` | Reserved for future catalog operations |
-| `ConnectionError` | `CONNECTION_ERROR` | `Connection.request` when NATS call fails or times out |
+| `ConnectionError` | `CONNECTION_ERROR` | `Connection.request` when a call fails or times out |
 | `NotImplementedError` | `NOT_IMPLEMENTED` | `pull`, `push`, `delete`, `flushCache` |
 
 ```typescript
@@ -153,37 +177,15 @@ try {
 }
 ```
 
-## NATS dependency
-
-This package depends on `@nats-io/transport-node` v3 — the official NATS client. It does **not** depend on the deprecated `nats` package.
-
-## Source layout
-
-```
-src/
-├── index.ts          # Public exports
-├── types.ts          # All interfaces and wire-protocol types
-├── errors.ts         # QuarkError + subclasses
-├── connection.ts     # NATS connection, request-reply, subscribe helpers
-├── client.ts         # QuarkClient implementation
-├── admin-client.ts   # QuarkAdminClient implementation
-├── client-factory.ts # createClient()
-├── admin-factory.ts  # createAdminClient()
-├── node-handle.ts    # NodeHandle implementation
-└── pipeline.ts       # PipelineBuilder implementation
-```
-
-One responsibility per file — no god objects, no circular deps.
-
 ## Compatibility
 
 | Runtime | Supported |
 |---|---|
 | Bun | ≥ 1.0 |
 | Node.js | ≥ 20 (with a TypeScript loader) |
-| Deno | Not yet tested |
+| Deno | ≥ 1.30 |
 
-The library uses ESM (`"type": "module"`) and TypeScript 5.7+ syntax features.
+This SDK uses ESM (`"type": "module"`) and TypeScript 5.7+ syntax features.
 
 ## Versioning
 
@@ -191,4 +193,4 @@ This package follows [Semantic Versioning](https://semver.org/). Pre-1.0 minor b
 
 ## License
 
-[MIT](./LICENSE) © Quarkloop Contributors
+This project is licensed under the MIT License - see the LICENSE file for details.
