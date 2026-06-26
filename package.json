@@ -24,6 +24,14 @@
     "typescript"
   ],
   "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
   "engines": {
     "node": ">=20"
   },
@@ -32,6 +40,9 @@
     "README.md",
     "LICENSE"
   ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@nats-io/transport-node": "^3.0.0-0"
   },
