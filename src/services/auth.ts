@@ -1,7 +1,7 @@
 /**
  * Auth service client.
  *
- * Wraps all 13 gRPC services exposed by the Quark auth component
+ * Wraps all 10 gRPC services exposed by the Quark auth component
  * (`platform.auth.v1`):
  *
  * | Service                | RPCs | Purpose                                              |
@@ -14,12 +14,14 @@
  * | SSOService             | 3    | SAML SSO                                             |
  * | OAuthServerService     | 8    | Quark acting as an OAuth2/OIDC provider          |
  * | AdminService           | 28   | Admin-only user/factor/passkey/SSO/OAuth management  |
- * | OrganizationService    | 8    | Organization CRUD + lifecycle                        |
- * | ProjectService         | 8    | Project CRUD + lifecycle                             |
- * | WorkspaceService       | 8    | Workspace CRUD + lifecycle                           |
  * | RoleService            | 7    | Role CRUD + permission grants                        |
  * | PolicyService          | 4    | RBAC policy CRUD                                     |
- * | Total                  | 115  |                                                      |
+ * | Total                  | 91   |                                                      |
+ *
+ * NOTE: OrganizationService / ProjectService / WorkspaceService used to live
+ * under `platform.auth.v1` but have been migrated to the server component
+ * (`platform.server.v1`). See `src/services/server.ts` for those service
+ * classes and the corresponding accessors on `ServerClient`.
  *
  * Every RPC method on every service class below takes a `request: unknown`
  * (the JSON-serialisable request message) and returns a `Promise<unknown>`
@@ -487,144 +489,6 @@ export class AdminService extends ServiceClient {
   }
 }
 
-// ─── OrganizationService ──────────────────────────────────────────────────
-
-/** `platform.auth.v1.OrganizationService` — organization CRUD + lifecycle (8 RPCs). */
-export class OrganizationService extends ServiceClient {
-  createOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('CreateOrganization', request, options);
-  }
-  getOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('GetOrganization', request, options);
-  }
-  listOrganizations(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ListOrganizations', request, options);
-  }
-  updateOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('UpdateOrganization', request, options);
-  }
-  activateOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ActivateOrganization', request, options);
-  }
-  deactivateOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('DeactivateOrganization', request, options);
-  }
-  archiveOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ArchiveOrganization', request, options);
-  }
-  deleteOrganization(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('DeleteOrganization', request, options);
-  }
-}
-
-// ─── ProjectService ───────────────────────────────────────────────────────
-
-/** `platform.auth.v1.ProjectService` — project CRUD + lifecycle (8 RPCs). */
-export class ProjectService extends ServiceClient {
-  createProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('CreateProject', request, options);
-  }
-  getProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('GetProject', request, options);
-  }
-  listProjects(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('ListProjects', request, options);
-  }
-  updateProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('UpdateProject', request, options);
-  }
-  activateProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('ActivateProject', request, options);
-  }
-  deactivateProject(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('DeactivateProject', request, options);
-  }
-  archiveProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('ArchiveProject', request, options);
-  }
-  deleteProject(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('DeleteProject', request, options);
-  }
-}
-
-// ─── WorkspaceService ─────────────────────────────────────────────────────
-
-/** `platform.auth.v1.WorkspaceService` — workspace CRUD + lifecycle (8 RPCs). */
-export class WorkspaceService extends ServiceClient {
-  createWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('CreateWorkspace', request, options);
-  }
-  getWorkspace(request: unknown, options?: QuarkCallOptions): Promise<unknown> {
-    return this.rpc('GetWorkspace', request, options);
-  }
-  listWorkspaces(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ListWorkspaces', request, options);
-  }
-  updateWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('UpdateWorkspace', request, options);
-  }
-  activateWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ActivateWorkspace', request, options);
-  }
-  deactivateWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('DeactivateWorkspace', request, options);
-  }
-  archiveWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('ArchiveWorkspace', request, options);
-  }
-  deleteWorkspace(
-    request: unknown,
-    options?: QuarkCallOptions,
-  ): Promise<unknown> {
-    return this.rpc('DeleteWorkspace', request, options);
-  }
-}
-
 // ─── RoleService ──────────────────────────────────────────────────────────
 
 /** `platform.auth.v1.RoleService` — role CRUD + permission grants (7 RPCs). */
@@ -679,9 +543,14 @@ export class PolicyService extends ServiceClient {
  * Client for the Quark auth component.
  *
  * Extends {@link AuthService} so all 19 authentication RPCs (`login`,
- * `signup`, `token`, `verify`, etc.) are callable directly. The remaining 12
+ * `signup`, `token`, `verify`, etc.) are callable directly. The remaining 9
  * services are accessed via lazy accessors (`users()`, `mfa()`, `admin()`,
  * etc.).
+ *
+ * NOTE: `organization()` / `project()` / `workspace()` accessors used to live
+ * here but have been migrated to `ServerClient` (see `src/services/server.ts`)
+ * along with the underlying services' move from `platform.auth.v1` to
+ * `platform.server.v1`.
  *
  * Usage:
  * ```ts
@@ -699,9 +568,6 @@ export class AuthClient extends AuthService {
   private _sso?: SSOService;
   private _oauthServer?: OAuthServerService;
   private _admin?: AdminService;
-  private _organization?: OrganizationService;
-  private _project?: ProjectService;
-  private _workspace?: WorkspaceService;
   private _role?: RoleService;
   private _policy?: PolicyService;
 
@@ -748,21 +614,6 @@ export class AuthClient extends AuthService {
   /** `platform.auth.v1.AdminService` — admin-only operations (28 RPCs). */
   admin(): AdminService {
     return (this._admin ??= new AdminService(this.transport, 'platform.auth.v1.AdminService'));
-  }
-
-  /** `platform.auth.v1.OrganizationService` — organization CRUD + lifecycle (8 RPCs). */
-  organization(): OrganizationService {
-    return (this._organization ??= new OrganizationService(this.transport, 'platform.auth.v1.OrganizationService'));
-  }
-
-  /** `platform.auth.v1.ProjectService` — project CRUD + lifecycle (8 RPCs). */
-  project(): ProjectService {
-    return (this._project ??= new ProjectService(this.transport, 'platform.auth.v1.ProjectService'));
-  }
-
-  /** `platform.auth.v1.WorkspaceService` — workspace CRUD + lifecycle (8 RPCs). */
-  workspace(): WorkspaceService {
-    return (this._workspace ??= new WorkspaceService(this.transport, 'platform.auth.v1.WorkspaceService'));
   }
 
   /** `platform.auth.v1.RoleService` — role CRUD + permission grants (7 RPCs). */

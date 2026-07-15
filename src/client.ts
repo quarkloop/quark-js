@@ -10,7 +10,7 @@
  */
 
 import { AuthClient } from './services/auth.ts';
-import { ServerService } from './services/server.ts';
+import { ServerClient } from './services/server.ts';
 import { NodeService } from './services/node.ts';
 import { WorkflowService } from './services/workflow.ts';
 import type { QuarkTransport } from './transport.ts';
@@ -33,7 +33,7 @@ export interface QuarkClientConfig {
  */
 export class QuarkClient {
   private _auth?: AuthClient;
-  private _server?: ServerService;
+  private _server?: ServerClient;
   private _node?: NodeService;
   private _workflow?: WorkflowService;
 
@@ -75,15 +75,22 @@ export class QuarkClient {
   /** `true` if a server endpoint was configured. */
   hasServer(): boolean { return this._serverTransport !== undefined; }
 
-  /** `platform.server.v1.ServerService` — orchestration, registry, admin (8 RPCs). */
-  server(): ServerService {
+  /** `platform.server.v1.ServerService` — orchestration, registry, admin (8 RPCs).
+   *
+   * Returns a {@link ServerClient} which extends `ServerService`, so all 8
+   * orchestration RPCs are callable directly. The CRUD services for
+   * organizations / projects / workspaces (also served by the server as of
+   * the org/project/workspace migration) are accessible via
+   * `.organization()` / `.project()` / `.workspace()` accessors on the
+   * returned client. */
+  server(): ServerClient {
     if (!this._serverTransport) {
       throw new Error(
         'QuarkClient.server() called but no server endpoint was configured. ' +
         'Call QuarkClientBuilder.serverEndpoint(url) before build().',
       );
     }
-    return this._server ??= new ServerService(this._serverTransport, 'platform.server.v1.ServerService');
+    return this._server ??= new ServerClient(this._serverTransport);
   }
 
   /** `true` if a node endpoint was configured. */

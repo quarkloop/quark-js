@@ -58,15 +58,18 @@ export {
   SSOService,
   OAuthServerService,
   AdminService,
-  OrganizationService,
-  ProjectService,
-  WorkspaceService,
   RoleService,
   PolicyService,
 } from './services/auth.ts';
 
-// Server.
-export { ServerService } from './services/server.ts';
+// Server (ServerClient extends ServerService — deploy/rollback/etc. are direct).
+export {
+  ServerClient,
+  ServerService,
+  OrganizationService,
+  ProjectService,
+  WorkspaceService,
+} from './services/server.ts';
 
 // Node.
 export { NodeService } from './services/node.ts';
