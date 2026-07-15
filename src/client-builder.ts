@@ -4,7 +4,7 @@
  * A single builder accumulates endpoint URLs and shared configuration for any
  * subset of the four Quark components (auth, server, node, workflow), then
  * {@link QuarkClientBuilder.build | build()} produces a {@link QuarkClient}
- * whose accessors expose only the configured sub-clients.
+ * whose accessors expose the configured service clients directly.
  *
  * ```ts
  * const quark = await new QuarkClientBuilder()
@@ -18,10 +18,10 @@
  *   .requestTimeout(15_000)
  *   .build();
  *
- * const session = await quark.auth().auth().login({ handle: 'reza', apiKey: '…' });
- * const registry = await quark.server().controlPlane().getServiceRegistry({});
- * const result = await quark.node().node().execute({ nodeUri: '…', input: { … } });
- * const run = await quark.workflow().workflow().startRun({ workflowId: '…' });
+ * const session = await quark.auth().login({ handle: 'reza', apiKey: '…' });
+ * const registry = await quark.controlPlane().getServiceRegistry({});
+ * const result = await quark.node().execute({ nodeUri: '…', input: { … } });
+ * const run = await quark.workflow().startRun({ workflowId: '…' });
  * ```
  *
  * The builder is single-use: {@link build} consumes the accumulated state and
@@ -29,11 +29,7 @@
  */
 
 import type { Interceptor } from '@connectrpc/connect';
-import { QuarkClient, type QuarkClientConfig } from './client.ts';
-import { AuthClient } from './services/auth.ts';
-import { ServerClient } from './services/server.ts';
-import { NodeClient } from './services/node.ts';
-import { WorkflowClient } from './services/workflow.ts';
+import { QuarkClient } from './client.ts';
 import {
   createQuarkTransport,
   type QuarkProtocol,
@@ -142,8 +138,7 @@ export class QuarkClientBuilder {
   /**
    * Set the default per-RPC deadline in milliseconds. Every unary call that
    * does not override `timeoutMs` in its `CallOptions` is bounded by this
-   * value. Defaults to 30 000 ms. Set to `0` to disable the default deadline
-   * (calls will run until the server or network responds).
+   * value. Defaults to 30 000 ms. Set to `0` to disable the default deadline.
    */
   requestTimeout(ms: number): this {
     if (!Number.isFinite(ms) || ms < 0) {
@@ -156,10 +151,8 @@ export class QuarkClientBuilder {
   /**
    * Select the wire protocol for the underlying Connect transport.
    *
-   * - `connect` (default) — Connect-JSON over HTTP. Used by the raw call path
-   *   today; works against any Connect-protocol endpoint.
-   * - `grpc-web` — gRPC-Web. Requires protobuf codegen for binary framing;
-   *   the raw call path still uses Connect-JSON until codegen lands.
+   * - `connect` (default) — Connect-JSON over HTTP.
+   * - `grpc-web` — gRPC-Web. Requires protobuf codegen for binary framing.
    */
   protocol(protocol: QuarkProtocol): this {
     this.protocolValue = protocol;
@@ -168,8 +161,7 @@ export class QuarkClientBuilder {
 
   /**
    * Set the default `Authorization: Bearer <token>` header applied to every
-   * RPC across every configured endpoint. Individual calls can override or
-   * augment headers via `CallOptions.headers`.
+   * RPC across every configured endpoint.
    */
   accessToken(token: string): this {
     this.accessTokenValue = token;
@@ -177,41 +169,25 @@ export class QuarkClientBuilder {
     return this;
   }
 
-  /**
-   * Add a default header applied to every RPC. Headers set here are merged
-   * into every request ahead of per-call headers.
-   */
+  /** Add a default header applied to every RPC. */
   header(name: string, value: string): this {
     this.defaultHeaders.set(name, value);
     return this;
   }
 
-  /**
-   * Replace the default headers wholesale. The previous headers (including
-   * any set via {@link accessToken}) are discarded.
-   */
+  /** Replace the default headers wholesale. */
   headers(headers: QuarkHeadersInit): this {
-    // Replace the whole map by constructing a fresh `Headers` — the undici /
-    // DOM `Headers` class has no `clear()` method.
     this.defaultHeaders = new Headers(headers);
     return this;
   }
 
-  /**
-   * Append a Connect-RPC interceptor to every underlying transport. The
-   * interceptors are applied to the underlying `@connectrpc/connect`
-   * transport; they will take effect for typed `createClient` calls once
-   * proto codegen is wired up.
-   */
+  /** Append a Connect-RPC interceptor to every underlying transport. */
   interceptor(interceptor: Interceptor): this {
     this.interceptors.push(interceptor);
     return this;
   }
 
-  /**
-   * Provide a custom `fetch` implementation. Required in environments without
-   * a global `fetch` (e.g. older Node.js); optional elsewhere.
-   */
+  /** Provide a custom `fetch` implementation. */
   fetch(fetchFn: typeof fetch): this {
     this.fetchFn = fetchFn;
     return this;
@@ -220,11 +196,9 @@ export class QuarkClientBuilder {
   /**
    * Build the {@link QuarkClient} from the accumulated configuration.
    *
-   * Creates one {@link QuarkTransport} per configured endpoint and wires up
-   * the corresponding sub-client(s). Throws if no endpoints are configured.
-   * The returned promise resolves immediately — the fetch-based transports
-   * perform no network I/O at construction time, so the first RPC is the
-   * first network round-trip.
+   * Creates one {@link QuarkTransport} per configured endpoint. Throws if no
+   * endpoints are configured. The returned promise resolves immediately —
+   * the fetch-based transports perform no network I/O at construction time.
    */
   async build(): Promise<QuarkClient> {
     if (
@@ -235,8 +209,8 @@ export class QuarkClientBuilder {
     ) {
       throw new Error(
         'QuarkClientBuilder.build() called with no endpoints configured. ' +
-          'Call at least one of authEndpoint/serverEndpoint/nodeEndpoint/' +
-          'workflowEndpoint before build().',
+        'Call at least one of authEndpoint/serverEndpoint/nodeEndpoint/' +
+        'workflowEndpoint before build().',
       );
     }
 
@@ -247,36 +221,24 @@ export class QuarkClientBuilder {
       interceptors: this.interceptors,
       fetch: this.fetchFn,
     };
-    // connectTimeoutMs is currently informational; surface it so future
-    // pre-flight checks can read it without re-plumbing the builder.
     void this.connectTimeoutMs;
 
-    const config: QuarkClientConfig = {};
+    const config = {
+      authTransport: this.authEndpointUrl ? this.transportFor(this.authEndpointUrl, shared) : undefined,
+      serverTransport: this.serverEndpointUrl ? this.transportFor(this.serverEndpointUrl, shared) : undefined,
+      nodeTransport: this.nodeEndpointUrl ? this.transportFor(this.nodeEndpointUrl, shared) : undefined,
+      workflowTransport: this.workflowEndpointUrl ? this.transportFor(this.workflowEndpointUrl, shared) : undefined,
+      workflowNamespace: this.workflowNamespaceValue,
+      workflowIdentity: this.workflowIdentityValue,
+    };
 
-    if (this.authEndpointUrl) {
-      config.auth = new AuthClient(this.transportFor(this.authEndpointUrl, shared));
+    const client = new QuarkClient(config);
+    if (this.workflowNamespaceValue || this.workflowIdentityValue) {
+      client.setWorkflowDefaults(this.workflowNamespaceValue, this.workflowIdentityValue);
     }
-    if (this.serverEndpointUrl) {
-      config.server = new ServerClient(this.transportFor(this.serverEndpointUrl, shared));
-    }
-    if (this.nodeEndpointUrl) {
-      config.node = new NodeClient(this.transportFor(this.nodeEndpointUrl, shared));
-    }
-    if (this.workflowEndpointUrl) {
-      config.workflow = new WorkflowClient(
-        this.transportFor(this.workflowEndpointUrl, shared),
-        this.workflowNamespaceValue,
-        this.workflowIdentityValue,
-      );
-    }
-
-    return new QuarkClient(config);
+    return client;
   }
 
-  /**
-   * Construct a single {@link QuarkTransport} bound to `baseUrl` with the
-   * shared options.
-   */
   private transportFor(baseUrl: string, shared: SharedTransportOptions): QuarkTransport {
     return createQuarkTransport({
       baseUrl,

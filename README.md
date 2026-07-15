@@ -54,16 +54,16 @@ const quark = await new QuarkClientBuilder()
 
 try {
   // Auth: log in with an API key.
-  const session = await quark.auth().auth().login({
+  const session = await quark.auth().login({
     handle: 'reza',
     apiKey: 'secret-api-key',
   });
 
   // Server: fetch the service registry.
-  const registry = await quark.server().controlPlane().getServiceRegistry({});
+  const registry = await quark.controlPlane().getServiceRegistry({});
 
   // Node: execute a node.
-  const result = await quark.node().node().execute({
+  const result = await quark.node().execute({
     apiVersion: 'v1',
     requestId: crypto.randomUUID(),
     nodeUri: 'myorg/myteam/validate:v1',
@@ -72,7 +72,7 @@ try {
   });
 
   // Workflow: start a run.
-  const run = await quark.workflow().workflow().startRun({
+  const run = await quark.workflow().startRun({
     workflowId: 'wf-deploy',
   });
 } catch (err) {
@@ -90,65 +90,65 @@ try {
 }
 ```
 
-## Sub-Clients
+## Service Accessors
 
-Each sub-client is constructed only if the corresponding `*Endpoint(url)` was called on the builder. Accessors on `QuarkClient` throw if the sub-client was not configured; use the `hasAuth()` / `hasServer()` / `hasNode()` / `hasWorkflow()` guards to check without throwing.
+Each service is constructed only if the corresponding `*Endpoint(url)` was called on the builder. Accessors on `QuarkClient` throw if accessors were not configured; use the `hasAuth()` / `hasServer()` / `hasNode()` / `hasWorkflow()` guards to check without throwing.
 
-### `AuthClient` — `platform.auth.v1` (115 RPCs across 13 services)
+### Auth Services — `platform.auth.v1` (115 RPCs across 13 services)
 
 ```ts
-quark.auth().auth()        // AuthService         — 19 RPCs
-quark.auth().users()       // UserService         —  7 RPCs
-quark.auth().identity()    // IdentityService     —  3 RPCs
-quark.auth().mfa()         // MFAService          —  5 RPCs
-quark.auth().passkey()     // PasskeyService      —  7 RPCs
-quark.auth().sso()         // SSOService          —  3 RPCs
-quark.auth().oauthServer() // OAuthServerService  —  8 RPCs
-quark.auth().admin()       // AdminService        — 28 RPCs
-quark.auth().organization()// OrganizationService —  8 RPCs
-quark.auth().project()     // ProjectService      —  8 RPCs
-quark.auth().workspace()   // WorkspaceService    —  8 RPCs
-quark.auth().role()        // RoleService         —  7 RPCs
-quark.auth().policy()      // PolicyService       —  4 RPCs
+quark.auth()        // AuthService         — 19 RPCs
+quark.users()       // UserService         —  7 RPCs
+quark.identity()    // IdentityService     —  3 RPCs
+quark.mfa()         // MFAService          —  5 RPCs
+quark.passkey()     // PasskeyService      —  7 RPCs
+quark.sso()         // SSOService          —  3 RPCs
+quark.oauthServer() // OAuthServerService  —  8 RPCs
+quark.admin()       // AdminService        — 28 RPCs
+quark.organization()// OrganizationService —  8 RPCs
+quark.project()     // ProjectService      —  8 RPCs
+quark.workspace()   // WorkspaceService    —  8 RPCs
+quark.role()        // RoleService         —  7 RPCs
+quark.policy()      // PolicyService       —  4 RPCs
 ```
 
-### `ServerClient` — `platform.controlplane.v1.ControlPlaneService` (8 RPCs)
+### Server Service
 
 ```ts
-quark.server().controlPlane().getServiceRegistry({});
-quark.server().controlPlane().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
-quark.server().controlPlane().rollback({ deploymentId: 'dpl-123' });
-quark.server().controlPlane().getDeployment({ id: 'dpl-123' });
-quark.server().controlPlane().listDeployments({ query: { page: 1, pageSize: 20 } });
-quark.server().controlPlane().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
-quark.server().controlPlane().listTenants({ query: { page: 1, pageSize: 20 } });
-quark.server().controlPlane().getSystemHealth({});
+quark.controlPlane().getServiceRegistry({});
+quark.controlPlane().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
+quark.controlPlane().rollback({ deploymentId: 'dpl-123' });
+quark.controlPlane().getDeployment({ id: 'dpl-123' });
+quark.controlPlane().listDeployments({ query: { page: 1, pageSize: 20 } });
+quark.controlPlane().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
+quark.controlPlane().listTenants({ query: { page: 1, pageSize: 20 } });
+quark.controlPlane().getSystemHealth({});
 ```
 
-### `NodeClient` — `quark.node.v1.NodeService` (7 RPCs)
+### Node Service
 
 ```ts
-quark.node().node().execute({ nodeUri: '…', input: {}, deadlineMs: 5000 });
-quark.node().node().cancel({ requestId: 'req-123', reason: 'user-aborted' });
-quark.node().node().health({});
-quark.node().node().ready({});
-quark.node().node().status({});
-quark.node().node().drain({ timeoutMs: 30_000 });
-quark.node().node().shutdown({ force: false });
+quark.node().execute({ nodeUri: '…', input: {}, deadlineMs: 5000 });
+quark.node().cancel({ requestId: 'req-123', reason: 'user-aborted' });
+quark.node().health({});
+quark.node().ready({});
+quark.node().status({});
+quark.node().drain({ timeoutMs: 30_000 });
+quark.node().shutdown({ force: false });
 ```
 
-### `WorkflowClient` — `platform.workflow.v1.WorkflowService` (9 RPCs)
+### Workflow Service
 
 ```ts
-quark.workflow().workflow().createWorkflow({ name: 'wf-deploy' });
-quark.workflow().workflow().getWorkflow({ id: 'wf-1' });
-quark.workflow().workflow().listWorkflows({ query: { page: 1, pageSize: 20 } });
-quark.workflow().workflow().updateWorkflow({ id: 'wf-1', name: 'wf-deploy-v2' });
-quark.workflow().workflow().deleteWorkflow({ id: 'wf-1' });
-quark.workflow().workflow().startRun({ workflowId: 'wf-1' });
-quark.workflow().workflow().getRun({ id: 'run-1' });
-quark.workflow().workflow().cancelRun({ id: 'run-1' });
-quark.workflow().workflow().listRuns({ query: { page: 1, pageSize: 20 }, workflowId: 'wf-1' });
+quark.workflow().createWorkflow({ name: 'wf-deploy' });
+quark.workflow().getWorkflow({ id: 'wf-1' });
+quark.workflow().listWorkflows({ query: { page: 1, pageSize: 20 } });
+quark.workflow().updateWorkflow({ id: 'wf-1', name: 'wf-deploy-v2' });
+quark.workflow().deleteWorkflow({ id: 'wf-1' });
+quark.workflow().startRun({ workflowId: 'wf-1' });
+quark.workflow().getRun({ id: 'run-1' });
+quark.workflow().cancelRun({ id: 'run-1' });
+quark.workflow().listRuns({ query: { page: 1, pageSize: 20 }, workflowId: 'wf-1' });
 ```
 
 ## Per-Call Options
@@ -164,7 +164,7 @@ const opts: QuarkCallOptions = {
   signal: controller.signal,
 };
 
-await quark.node().node().execute({ nodeUri: '…', input: {} }, opts);
+await quark.node().execute({ nodeUri: '…', input: {} }, opts);
 ```
 
 ## Errors
@@ -194,10 +194,10 @@ quark-js/
 │   ├── client.ts                 # QuarkClient facade
 │   ├── client-builder.ts         # QuarkClientBuilder fluent builder
 │   └── services/
-│       ├── auth.ts               # AuthClient + 13 service classes (115 RPCs)
-│       ├── server.ts             # ServerClient + ControlPlaneService (8 RPCs)
-│       ├── node.ts               # NodeClient + NodeService (7 RPCs)
-│       └── workflow.ts           # WorkflowClient + WorkflowService (9 RPCs)
+│       ├── auth.ts               # AuthService + 12 more service classes (115 RPCs)
+│       ├── server.ts             # ControlPlaneService (8 RPCs)
+│       ├── node.ts               # NodeService (7 RPCs)
+│       └── workflow.ts           # WorkflowService (9 RPCs)
 ├── package.json
 ├── tsconfig.json
 ├── AGENTS.md

@@ -1,11 +1,10 @@
 /**
- * @quarkloop/quark-js — Unified TypeScript client SDK for the Quark
- * platform.
+ * @quarkloop/quark-js — Unified TypeScript client SDK for the Quark platform.
  *
- * The SDK speaks gRPC to the four Quark components — auth, server
- * (control-plane), node, and workflow — using the Connect-RPC wire protocol
- * over HTTP. A single {@link QuarkClient} facade exposes the subset of
- * sub-clients configured on the {@link QuarkClientBuilder}.
+ * The SDK speaks gRPC to the four Quark components — auth, server, node, and
+ * workflow — using the Connect-RPC wire protocol over HTTP. A single
+ * {@link QuarkClient} facade exposes service clients directly — no
+ * intermediate wrapper classes.
  *
  * ```ts
  * import { QuarkClientBuilder, QuarkError } from '@quarkloop/quark-js';
@@ -18,18 +17,13 @@
  *   .build();
  *
  * try {
- *   const result = await quark.node().node().execute({ nodeUri: '…', input: { … } });
+ *   const result = await quark.node().execute({ nodeUri: '…', input: { … } });
  * } catch (err) {
  *   if (err instanceof QuarkError) {
  *     console.error(err.code, err.message);
  *   }
  * }
  * ```
- *
- * Until `buf generate` is wired up, every RPC method takes a `request: unknown`
- * and returns a `Promise<unknown>`. When generated TypeScript types land, the
- * method signatures will narrow to the generated request/response types but
- * the public API names and the builder/facade wiring will not change.
  */
 
 // Facade + builder.
@@ -54,10 +48,9 @@ export {
 } from './errors.ts';
 export type { QuarkErrorCode } from './errors.ts';
 
-// Sub-clients (re-exported so consumers can `import { AuthClient } from …`
-// and so that `instanceof` checks work against these classes).
+// Service classes (re-exported so consumers can import them directly and
+// so that `instanceof` checks work).
 export {
-  AuthClient,
   AuthService,
   UserService,
   IdentityService,
@@ -73,12 +66,11 @@ export {
   PolicyService,
 } from './services/auth.ts';
 
-export { ServerClient, ControlPlaneService } from './services/server.ts';
-export { NodeClient, NodeService } from './services/node.ts';
-export { WorkflowClient, WorkflowService } from './services/workflow.ts';
+export { ControlPlaneService } from './services/server.ts';
+export { NodeService } from './services/node.ts';
+export { WorkflowService } from './services/workflow.ts';
 
-// Transport-layer types (advanced use — custom transports, typed
-// `createClient` once codegen lands).
+// Transport-layer types (advanced use).
 export {
   createQuarkTransport,
   ServiceClient,
@@ -88,4 +80,5 @@ export type {
   QuarkTransportOptions,
   QuarkProtocol,
   QuarkCallOptions,
+  QuarkHeadersInit,
 } from './transport.ts';
