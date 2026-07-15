@@ -1,37 +1,27 @@
 # Quark JS SDK
 
-Unified TypeScript client SDK for the Quark platform. Talks gRPC to the
-four Quark components — **auth**, **server**, **node**, and **workflow** —
-over the [connect-rpc](https://connectrpc.com/) wire protocol using the
-`@connectrpc/connect` + `@connectrpc/connect-web` runtime.
+Unified TypeScript client SDK for the Quark platform. Talks gRPC to the four Quark components — **auth**, **server**, **node**, and **workflow** — over the [Connect-RPC](https://connectrpc.com/) wire protocol using `@connectrpc/connect` + `@connectrpc/connect-web`.
 
-licensed under the mit license.
+Licensed under the MIT License.
 
-## features
+## Overview
 
-- **single facade.** one `quarkclient` exposes the subset of sub-clients you
-  configured on a fluent `quarkclientbuilder`.
-- **no build step.** the package ships source typescript. bun, deno, and
-  modern bundlers consume `.ts` directly.
-- **esm-only.** `"type": "module"`.
-- **typed errors.** every failure — server status, transport failure, local
-  precondition — is a `quarkerror` subclass with a stable `code` string.
+- **Single facade.** One `QuarkClient` exposes the subset of sub-clients you configured on a fluent `QuarkClientBuilder`.
+- **No build step.** The package ships source TypeScript. Bun, Deno, and modern bundlers consume `.ts` directly.
+- **ESM-only.** `"type": "module"`.
+- **Typed errors.** Every failure — server status, transport failure, local precondition — is a `QuarkError` subclass with a stable `code` string.
 
-## status: proto-codegen pending
+## Status: Proto-Codegen Pending
 
-this sdk is wired against the live gRPC services, but generated typescript
-types from `buf generate` are **not yet** included. until they land:
+This SDK is wired against the live gRPC services, but generated TypeScript types from `buf generate` are **not yet** included. Until they land:
 
-- every rpc method takes `request: unknown` and returns `promise<unknown>`.
-- at runtime, requests are sent as connect-json and responses are parsed as
-  json, so the sdk is fully functional today.
-- each service class's method names are stable and match the proto rpc names
-  (lowercamelcased). when codegen lands, each class will narrow its signatures
-  to the generated request/response types without changing names.
+- Every RPC method takes `request: unknown` and returns `Promise<unknown>`.
+- At runtime, requests are sent as Connect-JSON and responses are parsed as JSON, so the SDK is fully functional today.
+- Each service class's method names are stable and match the proto RPC names (lowerCamelCased). When codegen lands, each class will narrow its signatures to the generated request/response types without changing names.
 
-the builder, facade, transport layer, and error model are all final.
+The builder, facade, transport layer, and error model are all final.
 
-## install
+## Install
 
 ```bash
 bun add @quarkloop/quark-js
@@ -39,60 +29,58 @@ bun add @quarkloop/quark-js
 npm install @quarkloop/quark-js
 ```
 
-node.js ≥ 20 (global `fetch`) or any modern browser is required. in
-environments without a global `fetch`, pass one to the builder via
-`.fetch(myfetch)`.
+Node.js ≥ 20 (global `fetch`) or any modern browser is required. In environments without a global `fetch`, pass one to the builder via `.fetch(myFetch)`.
 
-## quick start
+## Quick Start
 
 ```ts
 import {
-  quarkclientbuilder,
-  quarkerror,
-  unauthenticatederror,
-  notfounderror,
+  QuarkClientBuilder,
+  QuarkError,
+  UnauthenticatedError,
+  NotFoundError,
 } from '@quarkloop/quark-js';
 
-const quark = await new quarkclientbuilder()
-  .authendpoint('https://auth.example.com')
-  .serverendpoint('https://controlplane.example.com')
-  .nodeendpoint('https://node.example.com')
-  .workflowendpoint('https://workflow.example.com')
-  .workflownamespace('my-org/my-project')
-  .workflowidentity('user-123')
-  .accesstoken('<jwt access token>')
-  .requesttimeout(15_000)
+const quark = await new QuarkClientBuilder()
+  .authEndpoint('https://auth.example.com')
+  .serverEndpoint('https://controlplane.example.com')
+  .nodeEndpoint('https://node.example.com')
+  .workflowEndpoint('https://workflow.example.com')
+  .workflowNamespace('my-org/my-project')
+  .workflowIdentity('user-123')
+  .accessToken('<jwt access token>')
+  .requestTimeout(15_000)
   .build();
 
 try {
-  // auth: log in with an api key.
+  // Auth: log in with an API key.
   const session = await quark.auth().auth().login({
     handle: 'reza',
-    apikey: 'secret-api-key',
+    apiKey: 'secret-api-key',
   });
 
-  // server: fetch the service registry.
-  const registry = await quark.server().controlplane().getserviceregistry({});
+  // Server: fetch the service registry.
+  const registry = await quark.server().controlPlane().getServiceRegistry({});
 
-  // node: execute a node.
+  // Node: execute a node.
   const result = await quark.node().node().execute({
-    apiversion: 'v1',
-    requestid: crypto.randomuuid(),
-    nodeuri: 'myorg/myteam/validate:v1',
+    apiVersion: 'v1',
+    requestId: crypto.randomUUID(),
+    nodeUri: 'myorg/myteam/validate:v1',
     input: { servers: ['nats://localhost:4222'] },
-    deadlinems: 5000,
+    deadlineMs: 5000,
   });
 
-  // workflow: start a run.
-  const run = await quark.workflow().workflow().startrun({
-    workflowid: 'wf-deploy',
+  // Workflow: start a run.
+  const run = await quark.workflow().workflow().startRun({
+    workflowId: 'wf-deploy',
   });
 } catch (err) {
-  if (err instanceof unauthenticatederror) {
+  if (err instanceof UnauthenticatedError) {
     // re-login
-  } else if (err instanceof notfounderror) {
+  } else if (err instanceof NotFoundError) {
     // entity missing
-  } else if (err instanceof quarkerror) {
+  } else if (err instanceof QuarkError) {
     console.error(err.code, err.message);
   } else {
     throw err;
@@ -102,114 +90,130 @@ try {
 }
 ```
 
-## the four sub-clients
+## Sub-Clients
 
-each sub-client is constructed only if the corresponding `*endpoint(url)` was
-called on the builder. accessors on `quarkclient` throw if the sub-client was
-not configured; use the `hasauth()` / `hasserver()` / `hasnode()` /
-`hasworkflow()` guards to check without throwing.
+Each sub-client is constructed only if the corresponding `*Endpoint(url)` was called on the builder. Accessors on `QuarkClient` throw if the sub-client was not configured; use the `hasAuth()` / `hasServer()` / `hasNode()` / `hasWorkflow()` guards to check without throwing.
 
-### `authclient` — `platform.auth.v1` (115 rpcs across 13 services)
+### `AuthClient` — `platform.auth.v1` (115 RPCs across 13 services)
 
 ```ts
-quark.auth().auth()        // authservice         — 19 rpcs
-quark.auth().users()       // userservice         —  7 rpcs
-quark.auth().identity()    // identityservice     —  3 rpcs
-quark.auth().mfa()         // mfaservice          —  5 rpcs
-quark.auth().passkey()     // passkeyservice      —  7 rpcs
-quark.auth().sso()         // ssoservice          —  3 rpcs
-quark.auth().oauthserver() // oauthserverservice  —  8 rpcs
-quark.auth().admin()       // adminservice        — 28 rpcs
-quark.auth().organization()// organizationservice —  8 rpcs
-quark.auth().project()     // projectservice      —  8 rpcs
-quark.auth().workspace()   // workspaceservice    —  8 rpcs
-quark.auth().role()        // roleservice         —  7 rpcs
-quark.auth().policy()      // policyservice       —  4 rpcs
+quark.auth().auth()        // AuthService         — 19 RPCs
+quark.auth().users()       // UserService         —  7 RPCs
+quark.auth().identity()    // IdentityService     —  3 RPCs
+quark.auth().mfa()         // MFAService          —  5 RPCs
+quark.auth().passkey()     // PasskeyService      —  7 RPCs
+quark.auth().sso()         // SSOService          —  3 RPCs
+quark.auth().oauthServer() // OAuthServerService  —  8 RPCs
+quark.auth().admin()       // AdminService        — 28 RPCs
+quark.auth().organization()// OrganizationService —  8 RPCs
+quark.auth().project()     // ProjectService      —  8 RPCs
+quark.auth().workspace()   // WorkspaceService    —  8 RPCs
+quark.auth().role()        // RoleService         —  7 RPCs
+quark.auth().policy()      // PolicyService       —  4 RPCs
 ```
 
-### `serverclient` — `platform.controlplane.v1.controlplaneservice` (8 rpcs)
+### `ServerClient` — `platform.controlplane.v1.ControlPlaneService` (8 RPCs)
 
 ```ts
-quark.server().controlplane().getserviceregistry({});
-quark.server().controlplane().deploy({ versionid: 'v1.2.3', workflowid: 'wf-deploy' });
-quark.server().controlplane().rollback({ deploymentid: 'dpl-123' });
-quark.server().controlplane().getdeployment({ id: 'dpl-123' });
-quark.server().controlplane().listdeployments({ query: { page: 1, pagesize: 20 } });
-quark.server().controlplane().provisiontenant({ orgname: 'acme', orgslug: 'acme' });
-quark.server().controlplane().listtenants({ query: { page: 1, pagesize: 20 } });
-quark.server().controlplane().getsystemhealth({});
+quark.server().controlPlane().getServiceRegistry({});
+quark.server().controlPlane().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
+quark.server().controlPlane().rollback({ deploymentId: 'dpl-123' });
+quark.server().controlPlane().getDeployment({ id: 'dpl-123' });
+quark.server().controlPlane().listDeployments({ query: { page: 1, pageSize: 20 } });
+quark.server().controlPlane().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
+quark.server().controlPlane().listTenants({ query: { page: 1, pageSize: 20 } });
+quark.server().controlPlane().getSystemHealth({});
 ```
 
-### `nodeclient` — `quark.node.v1.nodeservice` (7 rpcs)
+### `NodeClient` — `quark.node.v1.NodeService` (7 RPCs)
 
 ```ts
-quark.node().node().execute({ nodeuri: '…', input: {}, deadlinems: 5000 });
-quark.node().node().cancel({ requestid: 'req-123', reason: 'user-aborted' });
+quark.node().node().execute({ nodeUri: '…', input: {}, deadlineMs: 5000 });
+quark.node().node().cancel({ requestId: 'req-123', reason: 'user-aborted' });
 quark.node().node().health({});
 quark.node().node().ready({});
 quark.node().node().status({});
-quark.node().node().drain({ timeoutms: 30_000 });
+quark.node().node().drain({ timeoutMs: 30_000 });
 quark.node().node().shutdown({ force: false });
 ```
 
-### `workflowclient` — `platform.workflow.v1.workflowservice` (9 rpcs)
+### `WorkflowClient` — `platform.workflow.v1.WorkflowService` (9 RPCs)
 
 ```ts
-quark.workflow().workflow().createworkflow({ name: 'wf-deploy' });
-quark.workflow().workflow().getworkflow({ id: 'wf-1' });
-quark.workflow().workflow().listworkflows({ query: { page: 1, pagesize: 20 } });
-quark.workflow().workflow().updateworkflow({ id: 'wf-1', name: 'wf-deploy-v2' });
-quark.workflow().workflow().deleteworkflow({ id: 'wf-1' });
-quark.workflow().workflow().startrun({ workflowid: 'wf-1' });
-quark.workflow().workflow().getrun({ id: 'run-1' });
-quark.workflow().workflow().cancelrun({ id: 'run-1' });
-quark.workflow().workflow().listruns({ query: { page: 1, pagesize: 20 }, workflowid: 'wf-1' });
+quark.workflow().workflow().createWorkflow({ name: 'wf-deploy' });
+quark.workflow().workflow().getWorkflow({ id: 'wf-1' });
+quark.workflow().workflow().listWorkflows({ query: { page: 1, pageSize: 20 } });
+quark.workflow().workflow().updateWorkflow({ id: 'wf-1', name: 'wf-deploy-v2' });
+quark.workflow().workflow().deleteWorkflow({ id: 'wf-1' });
+quark.workflow().workflow().startRun({ workflowId: 'wf-1' });
+quark.workflow().workflow().getRun({ id: 'run-1' });
+quark.workflow().workflow().cancelRun({ id: 'run-1' });
+quark.workflow().workflow().listRuns({ query: { page: 1, pageSize: 20 }, workflowId: 'wf-1' });
 ```
 
-## errors
+## Per-Call Options
 
-all errors thrown by the sdk extend `quarkerror` with a stable `code` string.
+Every RPC method accepts an optional `QuarkCallOptions` as its second argument:
 
-| class                    | `code`                | when                                                                  |
-|--------------------------|-----------------------|-----------------------------------------------------------------------|
-| `unauthenticatederror`   | `unauthenticated`     | grpc code 16 — request lacks valid credentials                        |
-| `notfounderror`          | `not_found`           | grpc code 5 — entity not found                                        |
-| `permissiondeniederror`  | `permission_denied`   | grpc code 7 — caller authenticated but not authorised                 |
-| `alreadyexistserror`     | `already_exists`      | grpc code 6 — entity already exists                                   |
-| `unavailableerror`       | `unavailable`         | grpc code 14 — service temporarily unavailable; retry with backoff    |
-| `deadlineexceedederror`  | `deadline_exceeded`   | grpc code 4 — rpc exceeded its deadline (also caller aborts)          |
-| `invalidargumenterror`   | `invalid_argument`    | grpc code 3 — malformed request                                       |
-| `connectionerror`        | `connection_error`    | transport failure (dns, tls, connection refused, network reset, …)    |
-| `quarkerror`             | `unknown` (or other)  | any other grpc code or unknown cause                                  |
+```ts
+import type { QuarkCallOptions } from '@quarkloop/quark-js';
 
-## repository layout
+const opts: QuarkCallOptions = {
+  timeoutMs: 5_000,
+  headers: { 'X-Trace-Id': 'abc' },
+  signal: controller.signal,
+};
+
+await quark.node().node().execute({ nodeUri: '…', input: {} }, opts);
+```
+
+## Errors
+
+All errors thrown by the SDK extend `QuarkError` with a stable `code` string.
+
+| Class | `code` | When |
+|---|---|---|
+| `UnauthenticatedError` | `UNAUTHENTICATED` | gRPC code 16 — request lacks valid credentials |
+| `NotFoundError` | `NOT_FOUND` | gRPC code 5 — entity not found |
+| `PermissionDeniedError` | `PERMISSION_DENIED` | gRPC code 7 — caller authenticated but not authorised |
+| `AlreadyExistsError` | `ALREADY_EXISTS` | gRPC code 6 — entity already exists |
+| `UnavailableError` | `UNAVAILABLE` | gRPC code 14 — service temporarily unavailable |
+| `DeadlineExceededError` | `DEADLINE_EXCEEDED` | gRPC code 4 — RPC exceeded its deadline |
+| `InvalidArgumentError` | `INVALID_ARGUMENT` | gRPC code 3 — malformed request |
+| `ConnectionError` | `CONNECTION_ERROR` | Transport failure (DNS, TLS, connection refused, …) |
+| `QuarkError` | `UNKNOWN` | Any other gRPC code or unknown cause |
+
+## Repository Layout
 
 ```
 quark-js/
 ├── src/
-│   ├── index.ts                  # public api barrel
-│   ├── errors.ts                 # quarkerror + 8 subclasses + fromconnecterror
-│   ├── transport.ts              # internal: quarktransport, connect-json unary
-│   ├── client.ts                 # quarkclient facade
-│   ├── client-builder.ts         # quarkclientbuilder fluent builder
+│   ├── index.ts                  # Public API barrel
+│   ├── errors.ts                 # QuarkError + 8 subclasses + fromConnectError
+│   ├── transport.ts              # Internal: QuarkTransport, Connect-JSON unary
+│   ├── client.ts                 # QuarkClient facade
+│   ├── client-builder.ts         # QuarkClientBuilder fluent builder
 │   └── services/
-│       ├── auth.ts               # authclient + 13 service classes (115 rpcs)
-│       ├── server.ts             # serverclient + controlplaneservice (8 rpcs)
-│       ├── node.ts               # nodeclient + nodeservice (7 rpcs)
-│       └── workflow.ts           # workflowclient + workflowservice (9 rpcs)
+│       ├── auth.ts               # AuthClient + 13 service classes (115 RPCs)
+│       ├── server.ts             # ServerClient + ControlPlaneService (8 RPCs)
+│       ├── node.ts               # NodeClient + NodeService (7 RPCs)
+│       └── workflow.ts           # WorkflowClient + WorkflowService (9 RPCs)
 ├── package.json
 ├── tsconfig.json
-├── agENTS.md
-├── license
-└── readme.md
+├── AGENTS.md
+├── LICENSE
+└── README.md
 ```
 
-## development
+## Development
 
 ```bash
 npm install
-npm run typecheck    # tsc --noemit — must pass with zero errors
+npm run typecheck    # tsc --noEmit — must pass with zero errors
 ```
 
-there is no build step and no `dist/`. the package ships source typescript
-directly.
+There is no build step and no `dist/`. The package ships source TypeScript directly.
+
+## License
+
+[MIT](LICENSE)
