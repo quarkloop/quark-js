@@ -66,7 +66,7 @@ export {
 } from './services/auth.ts';
 
 // Server.
-export { ControlPlaneService } from './services/server.ts';
+export { ServerService } from './services/server.ts';
 
 // Node.
 export { NodeService } from './services/node.ts';

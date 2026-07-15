@@ -9,7 +9,7 @@
  * ```ts
  * const quark = await new QuarkClientBuilder()
  *   .authEndpoint('https://auth.example.com')
- *   .serverEndpoint('https://controlplane.example.com')
+ *   .serverEndpoint('https://127.0.0.1:3000')
  *   .nodeEndpoint('https://node.example.com')
  *   .workflowEndpoint('https://workflow.example.com')
  *   .workflowNamespace('my-org/my-project')
@@ -19,7 +19,7 @@
  *   .build();
  *
  * const session = await quark.auth().login({ handle: 'reza', apiKey: '…' });
- * const registry = await quark.controlPlane().getServiceRegistry({});
+ * const registry = await quark.server().getServiceRegistry({});
  * const result = await quark.node().execute({ nodeUri: '…', input: { … } });
  * const run = await quark.workflow().startRun({ workflowId: '…' });
  * ```
@@ -81,7 +81,7 @@ export class QuarkClientBuilder {
     return this;
   }
 
-  /** Set the server (control-plane) endpoint URL. */
+  /** Set the server (server) endpoint URL. */
   serverEndpoint(url: string): this {
     this.serverEndpointUrl = normalizeUrl(url);
     return this;

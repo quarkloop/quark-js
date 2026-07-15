@@ -1,7 +1,7 @@
 /**
- * Server (control-plane) service client.
+ * Server (server) service client.
  *
- * Wraps the `platform.controlplane.v1.ControlPlaneService` gRPC service — the
+ * Wraps the `platform.server.v1.ServerService` gRPC service — the
  * orchestration, service-registry, and admin API exposed by the Quark
  * server component. This is explicitly NOT a data-plane gateway: client CRUD
  * traffic never flows through here.
@@ -27,10 +27,10 @@ import type { QuarkCallOptions, QuarkTransport } from '../transport.ts';
 import { ServiceClient } from '../transport.ts';
 
 /**
- * `platform.controlplane.v1.ControlPlaneService` — orchestration, service
+ * `platform.server.v1.ServerService` — orchestration, service
  * registry, and admin API (8 RPCs).
  */
-export class ControlPlaneService extends ServiceClient {
+export class ServerService extends ServiceClient {
   /**
    * Fetch the service registry — the list of sibling service endpoints
    * (`auth`, `release`, `workflow`, `nodes`, `secrets`) with their gRPC URLs
@@ -105,14 +105,14 @@ export class ControlPlaneService extends ServiceClient {
 }
 
 /**
- * Client for the Quark server (control-plane) component.
+ * Client for the Quark server (server) component.
  *
- * Holds one {@link QuarkTransport} bound to the control-plane endpoint and
- * exposes the {@link ControlPlaneService}.
+ * Holds one {@link QuarkTransport} bound to the server endpoint and
+ * exposes the {@link ServerService}.
  */
 export class ServerClient {
   private readonly transport: QuarkTransport;
-  private _controlPlane?: ControlPlaneService;
+  private _server?: ServerService;
 
   /** @internal Constructed by {@link QuarkClientBuilder.build}. */
   constructor(transport: QuarkTransport) {
@@ -124,11 +124,11 @@ export class ServerClient {
     return this.transport;
   }
 
-  /** `platform.controlplane.v1.ControlPlaneService` (8 RPCs). */
-  controlPlane(): ControlPlaneService {
-    return (this._controlPlane ??= new ControlPlaneService(
+  /** `platform.server.v1.ServerService` (8 RPCs). */
+  server(): ServerService {
+    return (this._server ??= new ServerService(
       this.transport,
-      'platform.controlplane.v1.ControlPlaneService',
+      'platform.server.v1.ServerService',
     ));
   }
 

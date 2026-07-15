@@ -60,7 +60,7 @@ try {
   });
 
   // Server: fetch the service registry.
-  const registry = await quark.controlPlane().getServiceRegistry({});
+  const registry = await quark.server().getServiceRegistry({});
 
   // Node: execute a node.
   const result = await quark.node().execute({
@@ -114,17 +114,17 @@ quark.auth().role().createRole({ … });                     // RoleService — 
 quark.auth().policy().createPolicy({ … });                 // PolicyService — 4 RPCs
 ```
 
-### Server — `ControlPlaneService` (8 RPCs)
+### Server — `ServerService` (8 RPCs)
 
 ```ts
-quark.controlPlane().getServiceRegistry({});
-quark.controlPlane().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
-quark.controlPlane().rollback({ deploymentId: 'dpl-123' });
-quark.controlPlane().getDeployment({ id: 'dpl-123' });
-quark.controlPlane().listDeployments({ query: { page: 1, pageSize: 20 } });
-quark.controlPlane().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
-quark.controlPlane().listTenants({ query: { page: 1, pageSize: 20 } });
-quark.controlPlane().getSystemHealth({});
+quark.server().getServiceRegistry({});
+quark.server().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
+quark.server().rollback({ deploymentId: 'dpl-123' });
+quark.server().getDeployment({ id: 'dpl-123' });
+quark.server().listDeployments({ query: { page: 1, pageSize: 20 } });
+quark.server().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
+quark.server().listTenants({ query: { page: 1, pageSize: 20 } });
+quark.server().getSystemHealth({});
 ```
 
 ### Node — `NodeService` (7 RPCs)
@@ -197,7 +197,7 @@ quark-js/
 │   ├── client-builder.ts         # QuarkClientBuilder fluent builder
 │   └── services/
 │       ├── auth.ts               # AuthClient (extends AuthService) + 12 service classes
-│       ├── server.ts             # ControlPlaneService (8 RPCs)
+│       ├── server.ts             # ServerService (8 RPCs)
 │       ├── node.ts               # NodeService (7 RPCs)
 │       └── workflow.ts           # WorkflowService (9 RPCs)
 ├── package.json

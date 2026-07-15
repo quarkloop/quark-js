@@ -10,7 +10,7 @@
  */
 
 import { AuthClient } from './services/auth.ts';
-import { ControlPlaneService } from './services/server.ts';
+import { ServerService } from './services/server.ts';
 import { NodeService } from './services/node.ts';
 import { WorkflowService } from './services/workflow.ts';
 import type { QuarkTransport } from './transport.ts';
@@ -33,7 +33,7 @@ export interface QuarkClientConfig {
  */
 export class QuarkClient {
   private _auth?: AuthClient;
-  private _controlPlane?: ControlPlaneService;
+  private _server?: ServerService;
   private _node?: NodeService;
   private _workflow?: WorkflowService;
 
@@ -75,15 +75,15 @@ export class QuarkClient {
   /** `true` if a server endpoint was configured. */
   hasServer(): boolean { return this._serverTransport !== undefined; }
 
-  /** `platform.controlplane.v1.ControlPlaneService` — orchestration, registry, admin (8 RPCs). */
-  controlPlane(): ControlPlaneService {
+  /** `platform.server.v1.ServerService` — orchestration, registry, admin (8 RPCs). */
+  server(): ServerService {
     if (!this._serverTransport) {
       throw new Error(
-        'QuarkClient.controlPlane() called but no server endpoint was configured. ' +
+        'QuarkClient.server() called but no server endpoint was configured. ' +
         'Call QuarkClientBuilder.serverEndpoint(url) before build().',
       );
     }
-    return this._controlPlane ??= new ControlPlaneService(this._serverTransport, 'platform.controlplane.v1.ControlPlaneService');
+    return this._server ??= new ServerService(this._serverTransport, 'platform.server.v1.ServerService');
   }
 
   /** `true` if a node endpoint was configured. */
