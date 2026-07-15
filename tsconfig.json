@@ -10,7 +10,6 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "declaration": true,
-    "outDir": "dist",
     "lib": ["ES2022"],
     "types": ["node"]
   },

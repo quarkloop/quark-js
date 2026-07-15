@@ -1,42 +1,38 @@
 # Agent Guide
 
-This is the Quark JS SDK — a TypeScript client library for the Quark runtime. Your job is to make focused, tested changes that preserve the public API and keep the package ESM-only with no build step.
+This is the Quarkloop JS SDK — a unified TypeScript client for the Quarkloop
+platform. It speaks gRPC to the four Quarkloop components (auth, server,
+node, workflow) over the Connect-RPC wire protocol using
+`@connectrpc/connect` + `@connectrpc/connect-web`. Make focused, tested
+changes that preserve the public API and keep the package ESM-only with no
+build step.
 
 ## Repository
 
-- **Name**: Quark JS SDK
+- **Name**: Quarkloop JS SDK
 - **Language**: TypeScript (ESM-only, no build step)
-- **License**: MIT
-- **Repo**: [github.com/quarkloop/quark-js](https://github.com/quarkloop/quark-js)
-- **Guidelines**: [quarkloop/guidelines](https://github.com/quarkloop/guidelines)
+- **License**: Closed-source / proprietary — no license is granted to copy,
+  modify, or redistribute.
+- **Wire protocol**: Connect-RPC (JSON encoding over HTTP/1.1+) via
+  `@connectrpc/connect` and `@connectrpc/connect-web`.
 
 ## Quick reference
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Type-check (must pass with zero errors)
-bun run typecheck
-
-# Run the E2E test (requires NATS + Quark runtime running)
-cd ../quark && make test-e2e
+npm run typecheck
 ```
 
-There is no unit test suite yet — the E2E test in the Quark runtime repo is the source of truth. If you add a feature, add an E2E fixture there and verify it passes.
-
-Focused commands for debugging:
-
 ```bash
-# Check the package can be imported by a consumer
-bun run -e "import { createClient } from './src/index.ts'; console.log(typeof createClient)"
-
 # Verify the public API surface (what's exported from index.ts)
-bun run -e "import * as api from './src/index.ts'; console.log(Object.keys(api).sort())"
+node --input-type=module -e "import * as api from './src/index.ts'; console.log(Object.keys(api).sort().join('\n'))"
 
-# Check that no internal classes leaked into the public API
-grep -E "export.*Impl|export.*Connection" src/index.ts
-# (should return nothing — only interfaces and factories are exported)
+# Sanity-check that no internal modules leaked into the public API
+grep -E "export.*createQuarkTransportInternal|export.*connectJsonUnary" src/index.ts
+# (should return nothing — only the documented public API is exported)
 ```
 
 ## Structure
@@ -44,158 +40,236 @@ grep -E "export.*Impl|export.*Connection" src/index.ts
 ```
 quark-js/
 ├── src/
-│   ├── index.ts          # public API barrel exports — the package entry point
-│   ├── types.ts          # all interfaces and wire-protocol types (no implementation)
-│   ├── errors.ts         # QuarkError base + 5 subclasses (all with `code` field)
-│   ├── connection.ts     # NATS connection management (connect, request, close)
-│   ├── client.ts         # QuarkClientImpl — application-level client
-│   ├── admin-client.ts   # QuarkAdminClientImpl — admin-level client
-│   ├── client-factory.ts # createClient() — constructs + connects a QuarkClient
-│   ├── admin-factory.ts  # createAdminClient() — constructs + connects admin client
-│   ├── node-handle.ts    # NodeHandleImpl — per-node execution with validators
-│   └── pipeline.ts       # PipelineBuilderImpl — chained node execution
-├── docs/
-│   ├── architecture.mdx  # source layout, transport layer, design rationale
-│   ├── api.mdx           # full API reference (every type, function, error)
-│   └── build.mdx         # dev setup, type-checking, E2E test instructions
-├── package.json          # ESM ("type": "module"), ships source TS directly
-├── tsconfig.json         # strict mode, allowImportingTsExtensions, noEmit
+│   ├── index.ts                  # public API barrel — the package entry point
+│   ├── errors.ts                 # QuarkError + 8 subclasses + fromConnectError
+│   ├── client.ts                 # QuarkClient — unified facade
+│   ├── client-builder.ts         # QuarkClientBuilder — fluent builder
+│   └── services/
+│       ├── transport.ts          # internal: QuarkTransport, ServiceClient,
+│       │                         #         Connect-JSON unary call path
+│       ├── auth.ts               # AuthClient + 13 service classes (115 RPCs)
+│       ├── server.ts             # ServerClient + ControlPlaneService (8 RPCs)
+│       ├── node.ts               # NodeClient + NodeService (7 RPCs)
+│       └── workflow.ts           # WorkflowClient + WorkflowService (9 RPCs)
+├── package.json                  # ESM ("type": "module"), ships source TS
+├── tsconfig.json                 # strict, ES2022, bundler resolution, noEmit
+├── AGENTS.md
 └── README.md
 ```
 
-One responsibility per file. No god objects, no circular dependencies. The dependency graph is strictly acyclic:
+One responsibility per file. The dependency graph is strictly acyclic:
 
 ```
 index.ts
   ↓
-client-factory.ts ──► client.ts ──► node-handle.ts ──► connection.ts
-admin-factory.ts  ──► admin-client.ts ──► pipeline.ts ──► connection.ts
-                                              ↓
-                                          errors.ts
-                                              ↓
-                                          types.ts
+client-builder.ts ──► client.ts ──► services/auth.ts  ─┐
+                  └──► services/server.ts  ────────────┤
+                  └──► services/node.ts    ────────────┤
+                  └──► services/workflow.ts ───────────┤
+                                                       ↓
+                                              services/transport.ts
+                                                       ↓
+                                                   errors.ts
 ```
 
-Internal implementation classes (`QuarkClientImpl`, `QuarkAdminClientImpl`, `Connection`, `NodeHandleImpl`, `PipelineBuilderImpl`) are NOT exported from `index.ts`. Consumers depend on the interfaces, not the concrete classes.
+`ServiceClient` (the abstract base for every gRPC service wrapper) lives in
+`services/transport.ts` so that `auth.ts`, `server.ts`, `node.ts`, and
+`workflow.ts` share it without cross-importing each other.
+
+Internal helpers (`createQuarkTransport`, `connectJsonUnary`,
+`ServiceClient`) are NOT part of the documented public API; only the
+facade, the builder, the error classes, the sub-clients, and the
+service-wrapper classes are intended for consumers. `ServiceClient` and
+`createQuarkTransport` are nonetheless exported from `index.ts` for advanced
+use (custom transports, and as the bridge to typed `createClient` once
+proto codegen lands).
+
+## Status: proto-codegen pending
+
+`buf generate` is not yet wired up for this package. Until it is:
+
+- Every RPC method on every service class takes `request: unknown` and
+  returns `Promise<unknown>`.
+- At runtime, requests are sent as Connect-JSON and responses are parsed as
+  JSON — the SDK is fully functional today.
+- Each service class's method names are stable and match the proto RPC names
+  (lowerCamelCased). When codegen lands, each class will narrow its
+  signatures to the generated request/response types without changing names
+  or the builder/facade wiring.
+
+The builder, facade, transport layer, and error model are all final.
+
+## Wire protocol
+
+The default protocol is **Connect** (JSON encoding). A unary call is:
+
+```
+POST {baseUrl}/{package.Service}/{Method} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Connect-Protocol-Version: 1
+Connect-Timeout-Ms: <deadline>
+
+<JSON-encoded request message>
+```
+
+On success (HTTP 2xx) the response body is the JSON-encoded response message.
+On failure (HTTP non-2xx) the response body is a JSON object of the shape
+`{ "code": "not_found", "message": "...", "details": [...] }`.
+
+gRPC-Web is also selectable via `QuarkClientBuilder.protocol('grpc-web')`.
+Until codegen lands, the raw call path still uses Connect-JSON even when
+gRPC-Web is selected; the underlying `createGrpcWebTransport` is held for
+the future typed-client path.
+
+Do not invent new request shapes or URL patterns. The Connect protocol is
+specified at https://connectrpc.com/docs/protocol/.
+
+## Service coverage
+
+| Component | Sub-client       | Service                                    | RPCs |
+|-----------|------------------|--------------------------------------------|------|
+| auth      | `AuthClient`     | `platform.auth.v1.AuthService`             | 19   |
+| auth      | `AuthClient`     | `platform.auth.v1.UserService`             | 7    |
+| auth      | `AuthClient`     | `platform.auth.v1.IdentityService`         | 3    |
+| auth      | `AuthClient`     | `platform.auth.v1.MFAService`              | 5    |
+| auth      | `AuthClient`     | `platform.auth.v1.PasskeyService`          | 7    |
+| auth      | `AuthClient`     | `platform.auth.v1.SSOService`              | 3    |
+| auth      | `AuthClient`     | `platform.auth.v1.OAuthServerService`      | 8    |
+| auth      | `AuthClient`     | `platform.auth.v1.AdminService`            | 28   |
+| auth      | `AuthClient`     | `platform.auth.v1.OrganizationService`     | 8    |
+| auth      | `AuthClient`     | `platform.auth.v1.ProjectService`          | 8    |
+| auth      | `AuthClient`     | `platform.auth.v1.WorkspaceService`        | 8    |
+| auth      | `AuthClient`     | `platform.auth.v1.RoleService`             | 7    |
+| auth      | `AuthClient`     | `platform.auth.v1.PolicyService`           | 4    |
+| server    | `ServerClient`   | `platform.controlplane.v1.ControlPlaneService` | 8 |
+| node      | `NodeClient`     | `quark.node.v1.NodeService`                | 7    |
+| workflow  | `WorkflowClient` | `platform.workflow.v1.WorkflowService`     | 9    |
+| **total** |                  |                                            | **139** |
+
+When a new RPC is added to a `.proto`, add a matching method to the
+corresponding service class — same lowerCamelCase name, body
+`return this.rpc('PascalCaseRpcName', request, options);`, and a JSDoc
+comment. Do not skip RPCs.
 
 ## Rules
 
 ### API stability
 
 1. Do not break the public API without an explicit major version bump.
-2. Do not change error codes — they are part of the wire protocol.
-3. Do not remove or rename exported types from `index.ts` without a major version bump.
-4. Do not change the signature of `createClient()` or `createAdminClient()` — they are the primary entry points.
-5. Methods marked "Planned" (currently throwing `NotImplementedError`) must keep their signatures stable — only the implementation changes when the runtime catches up.
+2. Do not change `QuarkError.code` string values — they are part of the
+   contract with callers.
+3. Do not remove or rename exported types from `index.ts` without a major
+   version bump.
+4. Do not change the builder method names (`authEndpoint`, `serverEndpoint`,
+   `nodeEndpoint`, `workflowEndpoint`, `workflowNamespace`,
+   `workflowIdentity`, `connectTimeout`, `requestTimeout`, `build`) — they
+   are the primary entry points.
+5. The `unknown` request/response typing is temporary; when proto codegen
+   lands, narrow the types in place without renaming methods.
 
 ### Code style
 
 6. Do not disable TypeScript strict mode for individual files.
 7. Do not use `require()` — this is an ESM-only package.
-8. Do not add a build step — the package ships source TypeScript directly. Bun and modern bundlers consume it natively.
-9. Do not create a `dist/` directory — the `files` field in `package.json` ships `src/` only.
+8. Do not add a build step — the package ships source TypeScript directly.
+9. Do not create a `dist/` directory.
 10. One responsibility per file — if a file grows past 150 lines, split it.
-11. No circular dependencies — the current source layout is acyclic; keep it that way.
-12. Comments explain **why**, not **what**. The code already says what; comments explain the reasoning behind non-obvious decisions.
+    (`services/auth.ts` is the deliberate exception: all 13 auth services
+    live together because they share an endpoint and a service descriptor
+    prefix.)
+11. No circular dependencies — the current source layout is acyclic; keep it
+    that way.
+12. Comments explain **why**, not **what**.
 13. Do not add `// TODO` comments without an accompanying issue link.
+14. Import source files with `.ts` extensions
+    (`allowImportingTsExtensions` is on; `noEmit` is on).
 
 ### Dependencies
 
-14. Do not add new top-level dependencies without discussing in an issue first.
-15. Do not bump `@nats-io/transport-node` to a new major version without testing the E2E suite.
-16. Do not depend on the deprecated `nats` package — use `@nats-io/transport-node` v3.
+15. Do not add new top-level dependencies without discussing in an issue
+    first. The runtime surface is intentionally tiny: only
+    `@connectrpc/connect` and `@connectrpc/connect-web` (plus
+    `@bufbuild/protobuf` which they pull in transitively).
+16. Do not add `@connectrpc/connect-node` — the SDK must work in both Node
+    and browsers. Use the `fetch`-based `@connectrpc/connect-web` transports.
+17. Do not bump `@connectrpc/connect` or `@connectrpc/connect-web` to a new
+    major version without re-validating the Connect-JSON call path and the
+    `fromConnectError` mapping.
 
 ### Testing
 
-17. Every new function needs a unit test (once a test suite exists — until then, add E2E fixtures).
-18. Every bug fix needs a regression test.
-19. Run `bun run typecheck` before every commit — it must pass with zero errors.
-20. The E2E test cross-validates that v1 file-path, v2 buffer, Rust wasm, and Go wasm produce identical output — do not break this invariant.
+18. Run `npm run typecheck` before every commit — it must pass with zero
+    errors.
+19. When a unit test suite is added, place tests alongside source files
+    (`src/services/auth.test.ts`, etc.) and do not mock `fetch` — use a
+    real Connect-protocol endpoint (or `createRouterTransport` from
+    `@connectrpc/connect` for in-memory fixtures).
+20. Do not hardcode endpoint URLs in tests — read them from environment
+    variables with sensible defaults.
 
 ## Boundaries
 
-This is a single-package repo with no internal module boundaries. The only boundary is between **public API** (exported from `index.ts`) and **internal implementation** (everything else).
-
-- **Public API**: `createClient`, `createAdminClient`, `QuarkClient`, `QuarkAdminClient`, `NodeHandle`, `PipelineBuilder`, all types from `types.ts`, all errors from `errors.ts`.
-- **Internal**: `QuarkClientImpl`, `QuarkAdminClientImpl`, `Connection`, `NodeHandleImpl`, `PipelineBuilderImpl`.
-
-Consumers must never import from internal files. The `exports` field in `package.json` enforces this — only `.` (the root) is exported.
-
-## Commit conventions
-
-- Format: `type(scope): short summary`
-- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `build`
-- Scopes: `types`, `errors`, `connection`, `client`, `admin-client`, `node-handle`, `pipeline`, `index`, `readme`, `agents`
-- One scope per commit — do not mix unrelated changes.
-- Inspect staged files before every commit: `git diff --cached --stat`
-- Never stage: `.env`, `node_modules/`, `dist/`, `*.tsbuildinfo`, `bun.lock`, editor configs.
-- Do not include `Co-authored-by` trailers.
-- Do not use destructive git commands unless explicitly requested.
-- Examples:
-  - `feat(client): add streaming support for batch calls`
-  - `fix(pipeline): preserve step output when partialInput is null`
-  - `docs(readme): add Deno install instructions`
-
-## Testing
-
-- **Type-check**: `bun run typecheck` — runs `tsc --noEmit`. Must pass with zero errors.
-- **E2E**: The E2E test lives in the [Quark runtime repo](https://github.com/quarkloop/quark) under `test-project/`. It depends on this package via a `file:` link. Run it from the runtime repo: `make test-e2e`.
-- **No unit test suite yet** (planned). When adding a unit test suite, place tests alongside source files: `src/client.test.ts`, `src/pipeline.test.ts`, etc.
-- Tests must not mock the NATS connection — use a real NATS server (the E2E test starts one).
-- Tests must not hardcode node URIs — use the test nodes from the runtime repo.
-
-## When you're stuck
-
-- Read `docs/architecture.mdx` for design rationale (why `NodeHandle`, why shallow-merge, why `NotImplementedError`).
-- Read `docs/api.mdx` for the full API reference.
-- Read the [AGENTS.md spec](https://github.com/quarkloop/guidelines/blob/main/agents/SPEC.md) for org-wide conventions.
-- Search existing issues and PRs before asking.
-- If unsure about a public API change, open an issue and ask before implementing.
-
-## Wire protocol
-
-This SDK talks to the Quark runtime over NATS. The wire protocol is documented in the [Quark runtime's protocol docs](https://github.com/quarkloop/quark/blob/main/docs/protocol.mdx). Key subjects:
-
-| Subject | Direction | Purpose |
-|---|---|---|
-| `quark.node.<uri>.execute` | request-reply | Execute a node by URI |
-| `quark.catalog.list` | request-reply | List all nodes (optional prefix filter) |
-| `quark.catalog.search` | request-reply | Search by keyword in URI or description |
-| `quark.catalog.info` | request-reply | Get metadata for a single node (exact URI match) |
-| `quark.runtime.health` | request-reply | Liveness check |
-| `quark.runtime.status` | request-reply | Runtime ID, mode, loaded nodes, uptime |
-
-Do not invent new NATS subjects. If the runtime doesn't subscribe to a subject, the client request will hang until timeout. The `NotImplementedError` pattern exists specifically to prevent this — methods that target unimplemented subjects throw synchronously instead of firing a NATS request into the void.
-
-## Relationship with the Quark runtime repo
-
-This SDK is useless without a running Quark runtime. The runtime lives at [github.com/quarkloop/quark](https://github.com/quarkloop/quark). Key points:
-
-- The E2E test in the runtime repo's `test-project/` depends on this package via a `file:` link (`file:../../quark-js` in `package.json`).
-- When you change the SDK, the E2E test in the runtime repo is the verification gate.
-- The wire protocol is owned by the runtime repo, not this repo. If the runtime changes a subject or response shape, this SDK must adapt — not the other way around.
-- The `HealthStatus.version` field reflects the runtime's version, not the SDK's version. Do not hardcode it.
+The only boundary is between **public API** (exported from `index.ts`) and
+**internal implementation** (everything else). Consumers must never import
+from internal files. The `exports` field in `package.json` enforces this —
+only `.` (the root) is exported.
 
 ## Common mistakes to avoid
 
-1. **Firing NATS requests for unimplemented methods.** If a method throws `NotImplementedError`, it must throw synchronously — do not change it to fire a NATS request that will hang.
+1. **Using `HeadersInit` as a type.** This package compiles with
+   `lib: ["ES2022"]` (no DOM). `HeadersInit` is not a top-level global;
+   use the local `QuarkHeadersInit` type from `services/transport.ts`.
+   `Headers`, `fetch`, `Response`, `AbortController`, `DOMException`, and
+   `setTimeout` ARE globals (via `@types/node`'s undici-backed web globals).
 
-2. **Deep-merging in PipelineBuilder.** The merge is intentionally shallow. `{ ...prevOutput, ...partialInput }` is correct. Deep-merge would surprise callers who expect nested objects to be replaced, not merged.
+2. **Calling `Headers.prototype.clear()`.** Neither the undici nor the DOM
+   `Headers` class has a `clear()` method. To replace headers wholesale,
+   construct a fresh `Headers` instance.
 
-3. **Exporting implementation classes.** `QuarkClientImpl`, `QuarkAdminClientImpl`, `Connection`, `NodeHandleImpl`, `PipelineBuilderImpl` are internal. Consumers depend on the interfaces. If you need to export a new type, add it to `index.ts` as a type-only export.
+3. **Bypassing `fromConnectError`.** Every `catch` in the call path must
+   normalise the error via `fromConnectError` (or throw a `QuarkError`
+   subclass directly). Never rethrow raw `ConnectError` or `TypeError`
+   instances across the public API boundary.
 
-4. **Adding a build step.** The package ships source TypeScript. Do not add `tsc` to the build pipeline, do not create a `dist/` directory, do not add `prepublishOnly` scripts. Bun, Deno, and modern bundlers consume `.ts` directly.
+4. **Adding a build step.** The package ships source TypeScript. Do not add
+   `tsc` to the build pipeline, do not create a `dist/` directory, do not
+   add `prepublishOnly` scripts.
 
-5. **Using CommonJS.** `require()`, `module.exports`, `__dirname`, `__filename` — none of these exist in ESM. If you need `__dirname`, use `import.meta.url` with `fileURLToPath`.
+5. **Using CommonJS.** `require()`, `module.exports`, `__dirname`,
+   `__filename` — none of these exist in ESM. If you need `__dirname`, use
+   `import.meta.url` with `fileURLToPath`.
 
-6. **Breaking the `tsconfig.json` settings.** `allowImportingTsExtensions: true` and `noEmit: true` are required because source files import each other with `.ts` extensions (Bun-style). Removing either will break the type-check.
+6. **Breaking the `tsconfig.json` settings.** `allowImportingTsExtensions`,
+   `noEmit`, `strict`, `module: "ESNext"`, `moduleResolution: "bundler"`,
+   `target: "ES2022"`, `lib: ["ES2022"]` are all required. Removing any of
+   them breaks the type-check.
 
-7. **Changing the `files` field in `package.json`.** Only `src/`, `README.md`, and `LICENSE` are published. Do not add `docs/`, `test/`, or config files to the published package.
+7. **Deep-merging workflow defaults.** The `WorkflowService` merges
+   `namespace`/`identity` into requests shallowly. Deep-merge would surprise
+   callers who expect nested objects to be replaced. Do not change this.
 
-8. **Ignoring the `requestTimeout`.** The default is 30 seconds. If a node takes longer, the caller gets a `ConnectionError`. Do not set the timeout to 0 (infinite) — a hanging node should fail, not hang forever.
+8. **Making sub-client accessors return `undefined`.** `QuarkClient.auth()`,
+   `.server()`, `.node()`, `.workflow()` must throw if the sub-client was
+   not configured — never return `undefined`. The `hasAuth()` / `hasServer()`
+   / `hasNode()` / `hasWorkflow()` guards exist for callers who want to
+   check without throwing.
 
-9. **Not draining the NATS connection.** `close()` calls `nc.drain()` before closing. If you bypass `close()` and call `nc.close()` directly, pending publishes may be lost. Always use `close()`.
+9. **Skipping RPCs when a `.proto` changes.** Every RPC declared in a
+   `.proto` service must have a corresponding method on the service class.
+   Do not "simplify" by omitting rarely-used RPCs.
 
-10. **Mixing `input` and `partialInput` semantics in pipelines.** The first step receives `input` verbatim. Subsequent steps receive `{ ...prevOutput, ...partialInput }`. Do not change this — it's the documented behavior and callers depend on it.
+10. **Reusing a builder after `build()`.** `build()` consumes the
+    accumulated state. Construct a fresh `QuarkClientBuilder` for each
+    client.
 
-11. **Forgetting to update `CHANGELOG.md`.** Every user-facing change must be documented under `[Unreleased]` before merging.
+## When you're stuck
+
+- Read `src/services/transport.ts` for the Connect-JSON call path and the
+  `QuarkTransport` interface.
+- Read `src/errors.ts` for the full `fromConnectError` mapping table.
+- Read the [Connect protocol spec](https://connectrpc.com/docs/protocol/)
+  for wire-format questions.
+- Search existing issues and PRs before asking.
+- If unsure about a public API change, open an issue and ask before
+  implementing.
