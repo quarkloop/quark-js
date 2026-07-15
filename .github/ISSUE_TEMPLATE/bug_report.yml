@@ -48,8 +48,8 @@ body:
     id: version
     attributes:
       label: Project version
-      description: The version of the quarkloop project you're using.
-      placeholder: e.g. output of `quark version`, `npm ls @quarkloop/quark-js`, or commit SHA
+      description: The version of the quark project you're using.
+      placeholder: e.g. output of `quark version`, `npm ls @quark/quark-js`, or commit SHA
     validations:
       required: true
 
