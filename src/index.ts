@@ -82,10 +82,10 @@ export { WorkflowClient, WorkflowService } from './services/workflow.ts';
 export {
   createQuarkTransport,
   ServiceClient,
-} from './services/transport.ts';
+} from './transport.ts';
 export type {
   QuarkTransport,
   QuarkTransportOptions,
   QuarkProtocol,
   QuarkCallOptions,
-} from './services/transport.ts';
+} from './transport.ts';

@@ -39,7 +39,7 @@ import {
   type QuarkProtocol,
   type QuarkTransport,
   type QuarkHeadersInit,
-} from './services/transport.ts';
+} from './transport.ts';
 
 /** Default per-RPC deadline (30 seconds) if none is configured. */
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;

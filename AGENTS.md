@@ -1,6 +1,6 @@
 # Agent Guide
 
-This is the Quarkloop JS SDK — a unified TypeScript client for the Quarkloop
+This is the Quark JS SDK — a unified TypeScript client for the Quarkloop
 platform. It speaks gRPC to the four Quarkloop components (auth, server,
 node, workflow) over the Connect-RPC wire protocol using
 `@connectrpc/connect` + `@connectrpc/connect-web`. Make focused, tested
@@ -9,10 +9,9 @@ build step.
 
 ## Repository
 
-- **Name**: Quarkloop JS SDK
+- **Name**: Quark JS SDK
 - **Language**: TypeScript (ESM-only, no build step)
-- **License**: Closed-source / proprietary — no license is granted to copy,
-  modify, or redistribute.
+- **License**: MIT
 - **Wire protocol**: Connect-RPC (JSON encoding over HTTP/1.1+) via
   `@connectrpc/connect` and `@connectrpc/connect-web`.
 
@@ -265,7 +264,7 @@ only `.` (the root) is exported.
 
 ## When you're stuck
 
-- Read `src/services/transport.ts` for the Connect-JSON call path and the
+- Read `src/transport.ts` for the Connect-JSON call path and the
   `QuarkTransport` interface.
 - Read `src/errors.ts` for the full `fromConnectError` mapping table.
 - Read the [Connect protocol spec](https://connectrpc.com/docs/protocol/)
@@ -273,3 +272,19 @@ only `.` (the root) is exported.
 - Search existing issues and PRs before asking.
 - If unsure about a public API change, open an issue and ask before
   implementing.
+
+## Commit message format
+
+All commit messages must follow this format:
+
+```
+{type}: {message}
+```
+
+- All lowercase.
+- `{type}` is one of: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `build`, `ci`.
+- `{message}` is a concise, imperative-mood description.
+- No period at the end.
+- Example: `feat: add auth client with builder pattern`
+- Example: `fix: move transport out of services directory`
+- Example: `docs: update readme with correct sdk title`

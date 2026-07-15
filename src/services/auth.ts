@@ -32,8 +32,8 @@
  * change.
  */
 
-import type { QuarkCallOptions, QuarkTransport } from './transport.ts';
-import { ServiceClient } from './transport.ts';
+import type { QuarkCallOptions, QuarkTransport } from '../transport.ts';
+import { ServiceClient } from '../transport.ts';
 
 
 // ─── AuthService ──────────────────────────────────────────────────────────

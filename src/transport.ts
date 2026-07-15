@@ -41,7 +41,7 @@ import {
   codeFromHttpStatus,
   codeFromWireName,
   fromConnectError,
-} from '../errors.ts';
+} from './errors.ts';
 
 /**
  * Wire protocol used by the underlying Connect transport.

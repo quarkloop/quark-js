@@ -33,8 +33,8 @@
  * wired up; see the package-level README for the codegen roadmap.
  */
 
-import type { QuarkCallOptions, QuarkTransport } from './transport.ts';
-import { ServiceClient } from './transport.ts';
+import type { QuarkCallOptions, QuarkTransport } from '../transport.ts';
+import { ServiceClient } from '../transport.ts';
 
 /**
  * Shallow-merge the client's default namespace/identity into a request input.
