@@ -130,7 +130,7 @@ export abstract class ServiceClient {
 /**
  * A transport bound to a single service endpoint.
  *
- * Each Quarkloop service (auth, server, node, workflow) gets its own
+ * Each Quark service (auth, server, node, workflow) gets its own
  * {@link QuarkTransport} instance because they may live on different hosts
  * and ports.
  */

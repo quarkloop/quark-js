@@ -22,7 +22,7 @@
  *
  * ## Default namespace & identity
  *
- * Workflows in the Quarkloop platform are namespaced. A {@link WorkflowClient}
+ * Workflows in the Quark platform are namespaced. A {@link WorkflowClient}
  * carries an optional default `namespace` and `identity` (caller identity),
  * set via {@link QuarkClientBuilder.workflowNamespace} and
  * {@link QuarkClientBuilder.workflowIdentity}. When present, these defaults
@@ -188,7 +188,7 @@ export class WorkflowService extends ServiceClient {
 }
 
 /**
- * Client for the Quarkloop workflow component.
+ * Client for the Quark workflow component.
  *
  * Holds one {@link QuarkTransport} bound to the workflow-service endpoint and
  * exposes the {@link WorkflowService}. The optional `namespace` and

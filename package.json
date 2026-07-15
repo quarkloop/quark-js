@@ -1,7 +1,7 @@
 {
   "name": "@quarkloop/quark-js",
   "version": "0.1.0",
-  "description": "Quark JS SDK — Unified TypeScript client SDK for the Quarkloop platform",
+  "description": "Quark JS SDK — Unified TypeScript client SDK for the Quark platform",
   "license": "MIT",
   "author": "Reza Ebrahimi <reza.ebrahimi.dev@gmail.com>",
   "homepage": "https://github.com/quarkloop/quark-js#readme",
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "quark",
-    "quarkloop",
+    "quark",
     "sdk",
     "grpc",
     "connect-rpc",

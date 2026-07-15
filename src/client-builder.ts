@@ -2,7 +2,7 @@
  * {@link QuarkClientBuilder} — fluent builder for {@link QuarkClient}.
  *
  * A single builder accumulates endpoint URLs and shared configuration for any
- * subset of the four Quarkloop components (auth, server, node, workflow), then
+ * subset of the four Quark components (auth, server, node, workflow), then
  * {@link QuarkClientBuilder.build | build()} produces a {@link QuarkClient}
  * whose accessors expose only the configured sub-clients.
  *

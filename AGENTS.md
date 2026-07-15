@@ -1,7 +1,7 @@
 # Agent Guide
 
-This is the Quark JS SDK — a unified TypeScript client for the Quarkloop
-platform. It speaks gRPC to the four Quarkloop components (auth, server,
+This is the Quark JS SDK — a unified TypeScript client for the Quark
+platform. It speaks gRPC to the four Quark components (auth, server,
 node, workflow) over the Connect-RPC wire protocol using
 `@connectrpc/connect` + `@connectrpc/connect-web`. Make focused, tested
 changes that preserve the public API and keep the package ESM-only with no

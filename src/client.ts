@@ -1,5 +1,5 @@
 /**
- * {@link QuarkClient} — the unified facade over all Quarkloop gRPC services.
+ * {@link QuarkClient} — the unified facade over all Quark gRPC services.
  *
  * A single `QuarkClient` instance holds zero or more of the sub-clients
  * (`AuthClient`, `ServerClient`, `NodeClient`, `WorkflowClient`), each bound
@@ -29,7 +29,7 @@ export interface QuarkClientConfig {
 }
 
 /**
- * Unified client for the Quarkloop platform.
+ * Unified client for the Quark platform.
  *
  * Each accessor returns the corresponding sub-client configured on the
  * builder, or throws if it was not. Use {@link hasAuth}, {@link hasServer},

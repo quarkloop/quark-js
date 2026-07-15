@@ -78,7 +78,7 @@ export class NodeService extends ServiceClient {
 }
 
 /**
- * Client for the Quarkloop node-execution daemon.
+ * Client for the Quark node-execution daemon.
  *
  * Holds one {@link QuarkTransport} bound to the daemon's gRPC endpoint and
  * exposes the {@link NodeService}.

@@ -1,7 +1,7 @@
 /**
  * Auth service client.
  *
- * Wraps all 13 gRPC services exposed by the Quarkloop auth component
+ * Wraps all 13 gRPC services exposed by the Quark auth component
  * (`platform.auth.v1`):
  *
  * | Service                | RPCs | Purpose                                              |
@@ -12,7 +12,7 @@
  * | MFAService             | 5    | TOTP / phone / WebAuthn factor enrolment             |
  * | PasskeyService         | 7    | WebAuthn passkey registration & authentication       |
  * | SSOService             | 3    | SAML SSO                                             |
- * | OAuthServerService     | 8    | Quarkloop acting as an OAuth2/OIDC provider          |
+ * | OAuthServerService     | 8    | Quark acting as an OAuth2/OIDC provider          |
  * | AdminService           | 28   | Admin-only user/factor/passkey/SSO/OAuth management  |
  * | OrganizationService    | 8    | Organization CRUD + lifecycle                        |
  * | ProjectService         | 8    | Project CRUD + lifecycle                             |
@@ -254,7 +254,7 @@ export class SSOService extends ServiceClient {
 // ─── OAuthServerService ───────────────────────────────────────────────────
 
 /**
- * `platform.auth.v1.OAuthServerService` — Quarkloop as an OAuth2/OIDC provider
+ * `platform.auth.v1.OAuthServerService` — Quark as an OAuth2/OIDC provider
  * (8 RPCs).
  */
 export class OAuthServerService extends ServiceClient {
@@ -676,7 +676,7 @@ export class PolicyService extends ServiceClient {
 // ─── AuthClient facade ────────────────────────────────────────────────────
 
 /**
- * Client for the Quarkloop auth component.
+ * Client for the Quark auth component.
  *
  * Holds one {@link QuarkTransport} (bound to the auth endpoint) and exposes
  * lazily-instantiated accessors for each of the 13 gRPC services declared in
@@ -739,7 +739,7 @@ export class AuthClient {
     return (this._sso ??= new SSOService(this.transport, 'platform.auth.v1.SSOService'));
   }
 
-  /** `platform.auth.v1.OAuthServerService` — Quarkloop as OAuth2/OIDC provider (8 RPCs). */
+  /** `platform.auth.v1.OAuthServerService` — Quark as OAuth2/OIDC provider (8 RPCs). */
   oauthServer(): OAuthServerService {
     return (this._oauthServer ??= new OAuthServerService(this.transport, 'platform.auth.v1.OAuthServerService'));
   }

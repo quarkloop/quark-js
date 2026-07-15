@@ -1,7 +1,7 @@
 # Quark JS SDK
 
-Unified TypeScript client SDK for the Quarkloop platform. Talks gRPC to the
-four quarkloop components — **auth**, **server**, **node**, and **workflow** —
+Unified TypeScript client SDK for the Quark platform. Talks gRPC to the
+four Quark components — **auth**, **server**, **node**, and **workflow** —
 over the [connect-rpc](https://connectrpc.com/) wire protocol using the
 `@connectrpc/connect` + `@connectrpc/connect-web` runtime.
 

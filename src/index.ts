@@ -1,8 +1,8 @@
 /**
- * @quarkloop/quark-js — Unified TypeScript client SDK for the Quarkloop
+ * @quarkloop/quark-js — Unified TypeScript client SDK for the Quark
  * platform.
  *
- * The SDK speaks gRPC to the four Quarkloop components — auth, server
+ * The SDK speaks gRPC to the four Quark components — auth, server
  * (control-plane), node, and workflow — using the Connect-RPC wire protocol
  * over HTTP. A single {@link QuarkClient} facade exposes the subset of
  * sub-clients configured on the {@link QuarkClientBuilder}.

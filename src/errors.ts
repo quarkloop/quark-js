@@ -1,5 +1,5 @@
 /**
- * Error model for the Quarkloop gRPC client SDK.
+ * Error model for the Quark gRPC client SDK.
  *
  * Every failure surfaced by this SDK — whether it originates from a Connect-RPC
  * status code returned by the server, a network/transport failure, or a local

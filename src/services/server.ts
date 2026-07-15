@@ -2,7 +2,7 @@
  * Server (control-plane) service client.
  *
  * Wraps the `platform.controlplane.v1.ControlPlaneService` gRPC service — the
- * orchestration, service-registry, and admin API exposed by the Quarkloop
+ * orchestration, service-registry, and admin API exposed by the Quark
  * server component. This is explicitly NOT a data-plane gateway: client CRUD
  * traffic never flows through here.
  *
@@ -105,7 +105,7 @@ export class ControlPlaneService extends ServiceClient {
 }
 
 /**
- * Client for the Quarkloop server (control-plane) component.
+ * Client for the Quark server (control-plane) component.
  *
  * Holds one {@link QuarkTransport} bound to the control-plane endpoint and
  * exposes the {@link ControlPlaneService}.
