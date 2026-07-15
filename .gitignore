@@ -29,3 +29,8 @@ yarn-error.log*
 # Test coverage
 coverage/
 .nyc_output/
+
+# Lock files (this package ships source .ts directly, no build step)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
