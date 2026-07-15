@@ -1,0 +1,33 @@
+# buf.yaml — buf module configuration for the Quark JS SDK.
+#
+# The proto contracts in this repository are duplicate copies of the
+# source-of-truth protos owned by the service repositories:
+#
+#   auth.proto, common/*.proto → copied from github.com/quarkloop/auth
+#   server.proto, nodes.proto, release.proto, secrets.proto, workflow.proto
+#                         → copied from github.com/quarkloop/server
+#   node.proto              → copied from github.com/quarkloop/quark-rs
+#                             (crates/quark-node-proto/proto/node.proto)
+#
+# Whenever a proto changes in any of those upstream repos, the duplicate in
+# this repo MUST be updated in lock-step, and `npm run generate` re-run to
+# regenerate the TypeScript bindings under src/gen/.
+#
+# The google/*.proto files are well-known types sourced from the protoc
+# runtime include dir; they are vendored here so that `buf generate` works
+# fully offline.
+
+version: v2
+modules:
+  - path: proto
+lint:
+  use:
+    - STANDARD
+  except:
+    - PACKAGE_VERSION_SUFFIX
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+breaking:
+  use:
+    - WIRE_JSON

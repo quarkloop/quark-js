@@ -1,0 +1,31 @@
+# buf.gen.yaml — TypeScript codegen pipeline for the Quark JS SDK.
+#
+# Uses a single protoc plugin:
+#
+#   @bufbuild/protoc-gen-es (v2.x)
+#     Generates `*_pb.ts` files containing BOTH:
+#       - typed message classes and enums (GenMessage / GenEnum)
+#       - typed service descriptors (GenService) — these satisfy the
+#         `DescService` interface from `@bufbuild/protobuf` v2 and can be
+#         passed directly to `createClient(service, transport)` from
+#         `@connectrpc/connect` v2 to produce a fully-typed RPC client.
+#
+#     The v2 plugin supersedes the v1-era `protoc-gen-connect-es` plugin,
+#     which generated a separate `*_connect.ts` file with v1-style
+#     descriptors incompatible with `@bufbuild/protobuf` v2.
+#
+# Output layout: src/gen/<proto-package-path>/<file>_pb.ts
+#
+# Re-run with `npm run generate`.
+
+version: v2
+managed:
+  enabled: true
+plugins:
+  - local: protoc-gen-es
+    out: src/gen
+    opt:
+      - target=ts
+      - import_extension=.js
+inputs:
+  - directory: proto

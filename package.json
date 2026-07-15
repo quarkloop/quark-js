@@ -31,21 +31,34 @@
   },
   "files": [
     "src",
+    "proto",
+    "scripts",
+    "buf.yaml",
+    "buf.gen.yaml",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
+    "generate": "buf generate && python3 scripts/generate_quark_js_services.py",
+    "generate:protos": "buf generate",
+    "generate:services": "python3 scripts/generate_quark_js_services.py",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@connectrpc/connect": "^2.0.0",
-    "@connectrpc/connect-web": "^2.0.0"
+    "@bufbuild/protobuf": "^2.12.1",
+    "@connectrpc/connect": "^2.1.2",
+    "@connectrpc/connect-web": "^2.1.2"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
+    "@bufbuild/buf": "^1.71.0",
+    "@bufbuild/protoc-gen-es": "^2.12.1",
     "@types/node": "^22.10.0",
     "typescript": "^5.7.0"
+  },
+  "allowScripts": {
+    "@bufbuild/buf@1.71.0": true
   }
 }

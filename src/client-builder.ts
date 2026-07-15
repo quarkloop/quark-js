@@ -12,16 +12,14 @@
  *   .serverEndpoint('https://127.0.0.1:3000')
  *   .nodeEndpoint('https://node.example.com')
  *   .workflowEndpoint('https://workflow.example.com')
- *   .workflowNamespace('my-org/my-project')
- *   .workflowIdentity('user-123')
  *   .accessToken('<jwt>')
  *   .requestTimeout(15_000)
  *   .build();
  *
  * const session = await quark.auth().login({ handle: 'reza', apiKey: '…' });
  * const registry = await quark.server().getServiceRegistry({});
- * const result = await quark.node().execute({ nodeUri: '…', input: { … } });
- * const run = await quark.workflow().startRun({ workflowId: '…' });
+ * const result = await quark.node().execute({ nodeUri: '…', input: … });
+ * const run = await quark.workflow().startRun({ workflowId: '…', input: … });
  * ```
  *
  * The builder is single-use: {@link build} consumes the accumulated state and
@@ -63,9 +61,6 @@ export class QuarkClientBuilder {
   private nodeEndpointUrl?: string;
   private workflowEndpointUrl?: string;
 
-  private workflowNamespaceValue?: string;
-  private workflowIdentityValue?: string;
-
   private connectTimeoutMs: number = 10_000;
   private requestTimeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS;
 
@@ -81,7 +76,7 @@ export class QuarkClientBuilder {
     return this;
   }
 
-  /** Set the server (server) endpoint URL. */
+  /** Set the server (orchestration) endpoint URL. */
   serverEndpoint(url: string): this {
     this.serverEndpointUrl = normalizeUrl(url);
     return this;
@@ -100,32 +95,12 @@ export class QuarkClientBuilder {
   }
 
   /**
-   * Set the default workflow namespace. When set, every workflow RPC request
-   * that does not already include a `namespace` field is shallow-merged with
-   * this value.
-   */
-  workflowNamespace(ns: string): this {
-    this.workflowNamespaceValue = ns;
-    return this;
-  }
-
-  /**
-   * Set the default workflow caller identity. When set, every workflow RPC
-   * request that does not already include an `identity` field is shallow-
-   * merged with this value.
-   */
-  workflowIdentity(id: string): this {
-    this.workflowIdentityValue = id;
-    return this;
-  }
-
-  /**
    * Set the connection timeout in milliseconds.
    *
-   * The fetch-based transports used today hold no persistent connection, so
-   * this value is currently informational — it bounds any future pre-flight
-   * reachability check. Per-RPC deadlines are controlled by
-   * {@link requestTimeout}.
+   * The fetch-based Connect transports used today hold no persistent
+   * connection, so this value is currently informational — it bounds any
+   * future pre-flight reachability check. Per-RPC deadlines are controlled
+   * by {@link requestTimeout}.
    */
   connectTimeout(ms: number): this {
     if (!Number.isFinite(ms) || ms <= 0) {
@@ -151,8 +126,9 @@ export class QuarkClientBuilder {
   /**
    * Select the wire protocol for the underlying Connect transport.
    *
-   * - `connect` (default) — Connect-JSON over HTTP.
-   * - `grpc-web` — gRPC-Web. Requires protobuf codegen for binary framing.
+   * - `connect` (default) — Connect-JSON over HTTP. Human-readable payloads.
+   * - `grpc-web` — gRPC-Web. Binary protobuf framing; use when the upstream
+   *   service is exposed via a gRPC-Web gateway.
    */
   protocol(protocol: QuarkProtocol): this {
     this.protocolValue = protocol;
@@ -198,7 +174,7 @@ export class QuarkClientBuilder {
    *
    * Creates one {@link QuarkTransport} per configured endpoint. Throws if no
    * endpoints are configured. The returned promise resolves immediately —
-   * the fetch-based transports perform no network I/O at construction time.
+   * the Connect transports perform no network I/O at construction time.
    */
   async build(): Promise<QuarkClient> {
     if (
@@ -222,18 +198,16 @@ export class QuarkClientBuilder {
       fetch: this.fetchFn,
     };
     void this.connectTimeoutMs;
+    void this.accessTokenValue;
 
     const config = {
       authTransport: this.authEndpointUrl ? this.transportFor(this.authEndpointUrl, shared) : undefined,
       serverTransport: this.serverEndpointUrl ? this.transportFor(this.serverEndpointUrl, shared) : undefined,
       nodeTransport: this.nodeEndpointUrl ? this.transportFor(this.nodeEndpointUrl, shared) : undefined,
       workflowTransport: this.workflowEndpointUrl ? this.transportFor(this.workflowEndpointUrl, shared) : undefined,
-      workflowNamespace: this.workflowNamespaceValue,
-      workflowIdentity: this.workflowIdentityValue,
     };
 
-    const client = new QuarkClient(config);
-    return client;
+    return new QuarkClient(config);
   }
 
   private transportFor(baseUrl: string, shared: SharedTransportOptions): QuarkTransport {

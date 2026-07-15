@@ -3,7 +3,8 @@
  *
  * Each accessor returns the corresponding service client directly. For auth,
  * {@link AuthClient} extends {@link AuthService} so `quark.auth().login(...)`
- * works without a double call.
+ * works without a double call. For server, {@link ServerClient} extends
+ * {@link ServerService} so `quark.server().deploy(...)` works directly.
  *
  * Construct a `QuarkClient` with {@link QuarkClientBuilder.build} — never
  * instantiate it directly.
@@ -24,12 +25,15 @@ export interface QuarkClientConfig {
   serverTransport?: QuarkTransport;
   nodeTransport?: QuarkTransport;
   workflowTransport?: QuarkTransport;
-  workflowNamespace?: string;
-  workflowIdentity?: string;
 }
 
 /**
  * Unified client for the Quark platform.
+ *
+ * Holds zero or more service-specific transports (one per configured
+ * endpoint). Each accessor lazily instantiates the corresponding service
+ * client and caches it. Calling an accessor when the matching endpoint was
+ * not configured throws an actionable error.
  */
 export class QuarkClient {
   private _auth?: AuthClient;
@@ -41,8 +45,6 @@ export class QuarkClient {
   private readonly _serverTransport?: QuarkTransport;
   private readonly _nodeTransport?: QuarkTransport;
   private readonly _workflowTransport?: QuarkTransport;
-  private readonly _workflowNamespace?: string;
-  private readonly _workflowIdentity?: string;
 
   /** @internal Use {@link QuarkClientBuilder.build}. */
   constructor(config: QuarkClientConfig) {
@@ -50,8 +52,6 @@ export class QuarkClient {
     this._serverTransport = config.serverTransport;
     this._nodeTransport = config.nodeTransport;
     this._workflowTransport = config.workflowTransport;
-    this._workflowNamespace = config.workflowNamespace;
-    this._workflowIdentity = config.workflowIdentity;
   }
 
   /** `true` if an auth endpoint was configured on the builder. */
@@ -75,14 +75,12 @@ export class QuarkClient {
   /** `true` if a server endpoint was configured. */
   hasServer(): boolean { return this._serverTransport !== undefined; }
 
-  /** `platform.server.v1.ServerService` — orchestration, registry, admin (8 RPCs).
-   *
-   * Returns a {@link ServerClient} which extends `ServerService`, so all 8
-   * orchestration RPCs are callable directly. The CRUD services for
-   * organizations / projects / workspaces (also served by the server as of
-   * the org/project/workspace migration) are accessible via
-   * `.organization()` / `.project()` / `.workspace()` accessors on the
-   * returned client. */
+  /**
+   * The server client. Extends `ServerService` so `getServiceRegistry`,
+   * `deploy`, `rollback`, etc. are callable directly. The CRUD services for
+   * organizations / projects / workspaces are accessed via accessors on the
+   * returned client.
+   */
   server(): ServerClient {
     if (!this._serverTransport) {
       throw new Error(
@@ -104,7 +102,7 @@ export class QuarkClient {
         'Call QuarkClientBuilder.nodeEndpoint(url) before build().',
       );
     }
-    return this._node ??= new NodeService(this._nodeTransport, 'quark.node.v1.NodeService');
+    return this._node ??= new NodeService(this._nodeTransport);
   }
 
   /** `true` if a workflow endpoint was configured. */
@@ -118,16 +116,12 @@ export class QuarkClient {
         'Call QuarkClientBuilder.workflowEndpoint(url) before build().',
       );
     }
-    return this._workflow ??= new WorkflowService(
-      this._workflowTransport,
-      'platform.workflow.v1.WorkflowService',
-      this._workflowNamespace,
-      this._workflowIdentity,
-    );
+    return this._workflow ??= new WorkflowService(this._workflowTransport);
   }
 
   /**
-   * Close every configured transport, releasing resources.
+   * Close every configured transport, releasing resources. Never throws —
+   * transport errors are passed to the optional `onError` callback.
    */
   async close(onError?: (err: unknown) => void): Promise<void> {
     const closers: Array<Promise<void>> = [];
