@@ -10,6 +10,8 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "lib": ["ES2022"],
     "types": ["node"]
   },

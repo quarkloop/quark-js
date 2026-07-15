@@ -136,9 +136,9 @@ quark.server().getServiceRegistry();                          // ServerService �
 quark.server().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
 quark.server().rollback({ deploymentId: 'dpl-123' });
 quark.server().getDeployment({ id: 'dpl-123' });
-quark.server().listDeployments({ query: { page: 1, pageSize: 20 } });
+quark.server().listDeployments({ query: { limit: 20, offset: 0 } });
 quark.server().provisionTenant({ orgName: 'Acme', orgSlug: 'acme' });
-quark.server().listTenants({ query: { page: 1, pageSize: 20 } });
+quark.server().listTenants({ query: { limit: 20, offset: 0 } });
 quark.server().getSystemHealth();
 quark.server().organization().createOrganization({ … });    // OrganizationService — 8 RPCs
 quark.server().project().createProject({ … });              // ProjectService — 8 RPCs
@@ -162,7 +162,7 @@ quark.node().shutdown({ force: false });
 ```ts
 quark.workflow().createWorkflow({ name: 'wf-deploy' });
 quark.workflow().getWorkflow({ id: 'wf-1' });
-quark.workflow().listWorkflows({ query: { page: 1, pageSize: 20 } });
+quark.workflow().listWorkflows({ query: { limit: 20, offset: 0 } });
 quark.workflow().updateWorkflow({ id: 'wf-1', name: 'wf-deploy-v2' });
 quark.workflow().deleteWorkflow({ id: 'wf-1' });
 quark.workflow().startRun({ workflowId: 'wf-1', input: new Uint8Array() });

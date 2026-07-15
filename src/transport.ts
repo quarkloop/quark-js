@@ -15,8 +15,8 @@
  * proto changes upstream, the duplicate in this repo is updated in
  * lock-step, and `npm run generate` (which invokes `buf generate`) is
  * re-run to regenerate the TypeScript bindings under `src/gen/`. The
- * generated descriptors (`*_connect.ts`) and message types (`*_pb.ts`) are
- * consumed by the service classes in `src/services/`.
+ * generated message types and service descriptors (`*_pb.ts`) are consumed
+ * by the service classes in `src/services/`.
  *
  * ## Wire protocol
  *
@@ -105,8 +105,7 @@ export type QuarkCallOptions = CallOptions;
  * and expose one method per RPC that delegates to the typed client.
  *
  * Subclasses are responsible for importing the generated service descriptor
- * (from `src/gen/<proto>_connect.ts`) and the generated message types (from
- * `src/gen/<proto>_pb.ts`).
+ * and the generated message types (both from `src/gen/<proto>_pb.ts`).
  */
 export abstract class ServiceClient {
   constructor(
@@ -158,7 +157,6 @@ export function createQuarkTransport(options: QuarkTransportOptions): QuarkTrans
   const baseUrl = options.baseUrl.replace(/\/+$/, '');
   const protocol: QuarkProtocol = options.protocol ?? 'connect';
   const defaultTimeoutMs = options.defaultTimeoutMs;
-  const defaultHeaders = new Headers(options.defaultHeaders);
   const fetchFn = options.fetch ?? globalThis.fetch;
 
   if (typeof fetchFn !== 'function') {

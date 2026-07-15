@@ -223,9 +223,9 @@ The public API is exported from `src/index.ts`. It includes:
   `QuarkProtocol`, `QuarkCallOptions`, `QuarkHeadersInit`,
   `createQuarkTransport`, `ServiceClient`
 - Generated type namespaces: `authGen`, `serverGen`, `nodeGen`,
-  `workflowGen`, `commonGen` — re-export the contents of
-  `src/gen/*_pb.ts` under named barrels to avoid name collisions between
-  proto packages.
+  `workflowGen`, `commonGen`, `commonPagingGen`, `commonErrorsGen` — re-export
+  the contents of `src/gen/*_pb.ts` under named barrels to avoid name
+  collisions between proto packages.
 
 ## Common mistakes
 

@@ -114,9 +114,10 @@ export type {
 // `platform.auth.v1.Identity` are different messages with the same name).
 //
 // Usage:
-//   import { authGen, serverGen, nodeGen, workflowGen, commonGen } from '@quarkloop/quark-js';
+//   import { authGen, serverGen, nodeGen, workflowGen, commonGen, commonPagingGen, commonErrorsGen } from '@quarkloop/quark-js';
 //
 //   const req: authGen.LoginRequest = { handle: '…', apiKey: '…' };
+//   const page: commonPagingGen.PageQuery = { limit: 20, offset: 0 };
 //   const desc = authGen.AuthService; // GenService descriptor for createClient()
 //
 // To use a service descriptor directly with `createClient()`:
@@ -129,4 +130,11 @@ export * as authGen from './gen/auth_pb.js';
 export * as serverGen from './gen/server_pb.js';
 export * as nodeGen from './gen/node_pb.js';
 export * as workflowGen from './gen/workflow_pb.js';
+
+// `commonGen` aggregates the shared `platform.common.v1` types from all three
+// common proto files (identities, paging, errors). Re-exported under a single
+// namespace so callers can name any shared type via `commonGen.PageQuery`,
+// `commonGen.Identity`, etc.
 export * as commonGen from './gen/common/identities_pb.js';
+export * as commonPagingGen from './gen/common/paging_pb.js';
+export * as commonErrorsGen from './gen/common/errors_pb.js';
