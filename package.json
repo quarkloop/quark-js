@@ -1,28 +1,8 @@
 {
   "name": "@quarkloop/quark-js",
   "version": "0.1.0",
-  "description": "TypeScript client library for the Quark Runtime — execute nodes over NATS",
-  "license": "MIT",
+  "description": "Unified TypeScript client SDK for the Quarkloop platform (gRPC)",
   "author": "Reza Ebrahimi <reza.ebrahimi.dev@gmail.com>",
-  "homepage": "https://github.com/quarkloop/quark-js#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/quarkloop/quark-js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/quarkloop/quark-js/issues"
-  },
-  "keywords": [
-    "quark",
-    "quarkloop",
-    "nats",
-    "client",
-    "runtime",
-    "node-execution",
-    "wasm",
-    "shared-library",
-    "typescript"
-  ],
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -32,19 +12,12 @@
       "types": "./src/index.ts"
     }
   },
-  "engines": {
-    "node": ">=20"
-  },
-  "files": [
-    "src",
-    "README.md",
-    "LICENSE"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nats-io/transport-node": "^3.0.0-0"
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-web": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
