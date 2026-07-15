@@ -6,7 +6,7 @@ Licensed under the MIT License.
 
 ## Overview
 
-- **Single facade.** One `QuarkClient` exposes the subset of sub-clients you configured on a fluent `QuarkClientBuilder`.
+- **Single facade.** One `QuarkClient` exposes the subset of service clients you configured on a fluent `QuarkClientBuilder`.
 - **No build step.** The package ships source TypeScript. Bun, Deno, and modern bundlers consume `.ts` directly.
 - **ESM-only.** `"type": "module"`.
 - **Typed errors.** Every failure — server status, transport failure, local precondition — is a `QuarkError` subclass with a stable `code` string.
@@ -42,12 +42,12 @@ import {
 } from '@quarkloop/quark-js';
 
 const quark = await new QuarkClientBuilder()
-  .authEndpoint('https://auth.example.com')
-  .serverEndpoint('https://controlplane.example.com')
-  .nodeEndpoint('https://node.example.com')
-  .workflowEndpoint('https://workflow.example.com')
-  .workflowNamespace('my-org/my-project')
-  .workflowIdentity('user-123')
+  .authEndpoint('http://127.0.0.1:5001')
+  .serverEndpoint('http://127.0.0.1:3000')
+  .nodeEndpoint('http://127.0.0.1:50051')
+  .workflowEndpoint('http://127.0.0.1:7233')
+  .workflowNamespace('default')
+  .workflowIdentity('my-app')
   .accessToken('<jwt access token>')
   .requestTimeout(15_000)
   .build();
@@ -55,8 +55,8 @@ const quark = await new QuarkClientBuilder()
 try {
   // Auth: log in with an API key.
   const session = await quark.auth().login({
-    handle: 'reza',
-    apiKey: 'secret-api-key',
+    handle: 'admin',
+    apiKey: 'your-api-key',
   });
 
   // Server: fetch the service registry.
@@ -67,7 +67,7 @@ try {
     apiVersion: 'v1',
     requestId: crypto.randomUUID(),
     nodeUri: 'myorg/myteam/validate:v1',
-    input: { servers: ['nats://localhost:4222'] },
+    input: {},
     deadlineMs: 5000,
   });
 
@@ -92,27 +92,29 @@ try {
 
 ## Service Accessors
 
-Each service is constructed only if the corresponding `*Endpoint(url)` was called on the builder. Accessors on `QuarkClient` throw if accessors were not configured; use the `hasAuth()` / `hasServer()` / `hasNode()` / `hasWorkflow()` guards to check without throwing.
+Each service is constructed only if the corresponding `*Endpoint(url)` was called on the builder. Accessors on `QuarkClient` throw if the endpoint was not configured; use the `hasAuth()` / `hasServer()` / `hasNode()` / `hasWorkflow()` guards to check without throwing.
 
-### Auth Services — `platform.auth.v1` (115 RPCs across 13 services)
+### Auth — `AuthClient` (extends `AuthService`)
+
+`AuthClient` extends `AuthService`, so all 19 authentication RPCs (`login`, `signup`, `token`, `verify`, etc.) are callable directly. The remaining 12 services are accessed via accessors:
 
 ```ts
-quark.auth()        // AuthService         — 19 RPCs
-quark.users()       // UserService         —  7 RPCs
-quark.identity()    // IdentityService     —  3 RPCs
-quark.mfa()         // MFAService          —  5 RPCs
-quark.passkey()     // PasskeyService      —  7 RPCs
-quark.sso()         // SSOService          —  3 RPCs
-quark.oauthServer() // OAuthServerService  —  8 RPCs
-quark.admin()       // AdminService        — 28 RPCs
-quark.organization()// OrganizationService —  8 RPCs
-quark.project()     // ProjectService      —  8 RPCs
-quark.workspace()   // WorkspaceService    —  8 RPCs
-quark.role()        // RoleService         —  7 RPCs
-quark.policy()      // PolicyService       —  4 RPCs
+quark.auth().login({ handle: 'admin', apiKey: '…' });     // AuthService — 19 RPCs (direct)
+quark.auth().users().createUser({ … });                    // UserService — 7 RPCs
+quark.auth().identity().listIdentities({ … });             // IdentityService — 3 RPCs
+quark.auth().mfa().enrollFactor({ … });                    // MFAService — 5 RPCs
+quark.auth().passkey().passkeyRegistrationOptions({ … });  // PasskeyService — 7 RPCs
+quark.auth().sso().ssoRedirect({ … });                     // SSOService — 3 RPCs
+quark.auth().oauthServer().oauthServerAuthorize({ … });    // OAuthServerService — 8 RPCs
+quark.auth().admin().adminListUsers({ … });                // AdminService — 28 RPCs
+quark.auth().organization().createOrganization({ … });     // OrganizationService — 8 RPCs
+quark.auth().project().createProject({ … });               // ProjectService — 8 RPCs
+quark.auth().workspace().createWorkspace({ … });           // WorkspaceService — 8 RPCs
+quark.auth().role().createRole({ … });                     // RoleService — 7 RPCs
+quark.auth().policy().createPolicy({ … });                 // PolicyService — 4 RPCs
 ```
 
-### Server Service
+### Server — `ControlPlaneService` (8 RPCs)
 
 ```ts
 quark.controlPlane().getServiceRegistry({});
@@ -125,7 +127,7 @@ quark.controlPlane().listTenants({ query: { page: 1, pageSize: 20 } });
 quark.controlPlane().getSystemHealth({});
 ```
 
-### Node Service
+### Node — `NodeService` (7 RPCs)
 
 ```ts
 quark.node().execute({ nodeUri: '…', input: {}, deadlineMs: 5000 });
@@ -137,7 +139,7 @@ quark.node().drain({ timeoutMs: 30_000 });
 quark.node().shutdown({ force: false });
 ```
 
-### Workflow Service
+### Workflow — `WorkflowService` (9 RPCs)
 
 ```ts
 quark.workflow().createWorkflow({ name: 'wf-deploy' });
@@ -194,7 +196,7 @@ quark-js/
 │   ├── client.ts                 # QuarkClient facade
 │   ├── client-builder.ts         # QuarkClientBuilder fluent builder
 │   └── services/
-│       ├── auth.ts               # AuthService + 12 more service classes (115 RPCs)
+│       ├── auth.ts               # AuthClient (extends AuthService) + 12 service classes
 │       ├── server.ts             # ControlPlaneService (8 RPCs)
 │       ├── node.ts               # NodeService (7 RPCs)
 │       └── workflow.ts           # WorkflowService (9 RPCs)

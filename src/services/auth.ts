@@ -678,14 +678,20 @@ export class PolicyService extends ServiceClient {
 /**
  * Client for the Quark auth component.
  *
- * Holds one {@link QuarkTransport} (bound to the auth endpoint) and exposes
- * lazily-instantiated accessors for each of the 13 gRPC services declared in
- * `platform.auth.v1`. The accessor methods (`auth()`, `users()`, `admin()`,
- * etc.) return a singleton service instance per `AuthClient`.
+ * Extends {@link AuthService} so all 19 authentication RPCs (`login`,
+ * `signup`, `token`, `verify`, etc.) are callable directly. The remaining 12
+ * services are accessed via lazy accessors (`users()`, `mfa()`, `admin()`,
+ * etc.).
+ *
+ * Usage:
+ * ```ts
+ * const auth = new AuthClient(transport);
+ * await auth.login({ handle: '…', apiKey: '…' });   // direct — no .auth() needed
+ * await auth.users().createUser({ … });               // via accessor
+ * await auth.mfa().enrollFactor({ … });               // via accessor
+ * ```
  */
-export class AuthClient {
-  private readonly transport: QuarkTransport;
-  private _auth?: AuthService;
+export class AuthClient extends AuthService {
   private _users?: UserService;
   private _identity?: IdentityService;
   private _mfa?: MFAService;
@@ -701,17 +707,12 @@ export class AuthClient {
 
   /** @internal Constructed by {@link QuarkClientBuilder.build}. */
   constructor(transport: QuarkTransport) {
-    this.transport = transport;
+    super(transport, 'platform.auth.v1.AuthService');
   }
 
   /** The underlying transport (for advanced use). */
   get quarkTransport(): QuarkTransport {
     return this.transport;
-  }
-
-  /** `platform.auth.v1.AuthService` — login, signup, token, verify, OIDC (19 RPCs). */
-  auth(): AuthService {
-    return (this._auth ??= new AuthService(this.transport, 'platform.auth.v1.AuthService'));
   }
 
   /** `platform.auth.v1.UserService` — user CRUD + role assignment (7 RPCs). */

@@ -3,15 +3,14 @@
  *
  * The SDK speaks gRPC to the four Quark components — auth, server, node, and
  * workflow — using the Connect-RPC wire protocol over HTTP. A single
- * {@link QuarkClient} facade exposes service clients directly — no
- * intermediate wrapper classes.
+ * {@link QuarkClient} facade exposes service clients directly.
  *
  * ```ts
  * import { QuarkClientBuilder, QuarkError } from '@quarkloop/quark-js';
  *
  * const quark = await new QuarkClientBuilder()
- *   .authEndpoint('https://auth.example.com')
- *   .nodeEndpoint('https://node.example.com')
+ *   .authEndpoint('http://127.0.0.1:5001')
+ *   .nodeEndpoint('http://127.0.0.1:50051')
  *   .accessToken('<jwt>')
  *   .requestTimeout(15_000)
  *   .build();
@@ -48,9 +47,9 @@ export {
 } from './errors.ts';
 export type { QuarkErrorCode } from './errors.ts';
 
-// Service classes (re-exported so consumers can import them directly and
-// so that `instanceof` checks work).
+// Auth (AuthClient extends AuthService — login/signup/etc. are direct).
 export {
+  AuthClient,
   AuthService,
   UserService,
   IdentityService,
@@ -66,8 +65,13 @@ export {
   PolicyService,
 } from './services/auth.ts';
 
+// Server.
 export { ControlPlaneService } from './services/server.ts';
+
+// Node.
 export { NodeService } from './services/node.ts';
+
+// Workflow.
 export { WorkflowService } from './services/workflow.ts';
 
 // Transport-layer types (advanced use).

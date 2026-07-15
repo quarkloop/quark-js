@@ -233,9 +233,6 @@ export class QuarkClientBuilder {
     };
 
     const client = new QuarkClient(config);
-    if (this.workflowNamespaceValue || this.workflowIdentityValue) {
-      client.setWorkflowDefaults(this.workflowNamespaceValue, this.workflowIdentityValue);
-    }
     return client;
   }
 
