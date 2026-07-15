@@ -19,6 +19,9 @@
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.0"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "typescript": "^5.7.0"
