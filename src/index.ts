@@ -1,5 +1,5 @@
 /**
- * @quarkloop/quark-js — Unified TypeScript client SDK for the Quark platform.
+ * @quarkloop/quark — Unified TypeScript client SDK for the Quark platform.
  *
  * The SDK speaks gRPC to the four Quark components — auth, server, node, and
  * workflow — using the Connect-RPC wire protocol over HTTP. A single
@@ -12,7 +12,7 @@
  * `@connectrpc/connect`.
  *
  * ```ts
- * import { QuarkClientBuilder, QuarkError } from '@quarkloop/quark-js';
+ * import { QuarkClientBuilder, QuarkError } from '@quarkloop/quark';
  *
  * const quark = await new QuarkClientBuilder()
  *   .accessToken('<jwt>')
@@ -112,7 +112,7 @@ export type {
 // `platform.auth.v1.Identity` are different messages with the same name).
 //
 // Usage:
-//   import { authGen, serverGen, nodeGen, workflowGen, commonGen, commonPagingGen, commonErrorsGen } from '@quarkloop/quark-js';
+//   import { authGen, serverGen, nodeGen, workflowGen, commonGen, commonPagingGen, commonErrorsGen } from '@quarkloop/quark';
 //
 //   const req: authGen.LoginRequest = { handle: '…', apiKey: '…' };
 //   const page: commonPagingGen.PageQuery = { limit: 20, offset: 0 };
@@ -120,7 +120,7 @@ export type {
 //
 // To use a service descriptor directly with `createClient()`:
 //   import { createClient } from '@connectrpc/connect';
-//   import { authGen } from '@quarkloop/quark-js';
+//   import { authGen } from '@quarkloop/quark';
 //   const client = createClient(authGen.AuthService, transport);
 // ---------------------------------------------------------------------------
 

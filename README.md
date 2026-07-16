@@ -38,9 +38,9 @@ The generated `src/gen/*_pb.ts` files contain:
 ## Install
 
 ```bash
-bun add @quarkloop/quark-js
+bun add @quarkloop/quark
 # or
-npm install @quarkloop/quark-js
+npm install @quarkloop/quark
 ```
 
 Node.js ≥ 20 (global `fetch`) or any modern browser is required. In environments without a global `fetch`, pass one to the builder via `.fetch(myFetch)`.
@@ -53,7 +53,7 @@ import {
   QuarkError,
   UnauthenticatedError,
   NotFoundError,
-} from '@quarkloop/quark-js';
+} from '@quarkloop/quark';
 
 const quark = await new QuarkClientBuilder()
   // Auth, node, workflow endpoints are discovered automatically
@@ -174,7 +174,7 @@ quark.workflow().listRuns({ query: { page: 1, pageSize: 20 }, workflowId: 'wf-1'
 Every RPC method accepts an optional `QuarkCallOptions` as its second argument:
 
 ```ts
-import type { QuarkCallOptions } from '@quarkloop/quark-js';
+import type { QuarkCallOptions } from '@quarkloop/quark';
 
 const opts: QuarkCallOptions = {
   timeoutMs: 5_000,
@@ -190,7 +190,7 @@ await quark.node().execute({ nodeUri: '…', input: … }, opts);
 The generated message types and service descriptors are re-exported under namespace barrels so callers can import them directly:
 
 ```ts
-import { authGen, serverGen, nodeGen, workflowGen, commonGen } from '@quarkloop/quark-js';
+import { authGen, serverGen, nodeGen, workflowGen, commonGen } from '@quarkloop/quark';
 
 // Typed message shapes:
 const req: authGen.LoginRequest = { handle: 'admin', apiKey: '…' };

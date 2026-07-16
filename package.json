@@ -1,5 +1,5 @@
 {
-  "name": "@quarkloop/quark-js",
+  "name": "@quarkloop/quark",
   "version": "0.1.0",
   "description": "Quark JS SDK — Unified TypeScript client SDK for the Quark platform",
   "license": "MIT",
