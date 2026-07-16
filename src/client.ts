@@ -76,7 +76,7 @@ export class QuarkClient {
   hasServer(): boolean { return this._serverTransport !== undefined; }
 
   /**
-   * The server client. Extends `ServerService` so `getServiceRegistry`,
+   * The server client. Extends `ServerService` so `deploy`,
    * `deploy`, `rollback`, etc. are callable directly. The CRUD services for
    * organizations / projects / workspaces are accessed via accessors on the
    * returned client.

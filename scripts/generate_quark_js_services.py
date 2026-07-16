@@ -420,7 +420,7 @@ def main() -> None:
         facade_doc=(
             "Client for the Quark server component.\n\n"
             "Extends {@link ServerService} so all 8 orchestration RPCs\n"
-            "(`getServiceRegistry`, `deploy`, `rollback`, `provisionTenant`, …)\n"
+            "(`deploy`, `rollback`, `provisionTenant`, …)\n"
             "are callable directly. The remaining 3 services (organizations /\n"
             "projects / workspaces) are accessed via lazy accessors.\n\n"
             "Usage:\n"
