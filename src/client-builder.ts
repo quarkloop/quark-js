@@ -1,23 +1,18 @@
 /**
  * {@link QuarkClientBuilder} — fluent builder for {@link QuarkClient}.
  *
- * A single builder accumulates endpoint URLs and shared configuration for any
- * subset of the four Quark components (auth, server, node, workflow), then
- * {@link QuarkClientBuilder.build | build()} produces a {@link QuarkClient}
- * whose accessors expose the configured service clients directly.
+ * Only the server endpoint URL is required. On `build()`, the SDK calls
+ * `DiscoverServices` on the server's `ServiceDiscovery` service to
+ * discover all other service URLs (auth, node, workflow) automatically.
  *
  * ```ts
  * const quark = await new QuarkClientBuilder()
- *   .authEndpoint('https://auth.example.com')
- *   .serverEndpoint('https://127.0.0.1:3000')
- *   .nodeEndpoint('https://node.example.com')
- *   .workflowEndpoint('https://workflow.example.com')
+ *   .serverEndpoint('http://127.0.0.1:3000')
  *   .accessToken('<jwt>')
  *   .requestTimeout(15_000)
  *   .build();
  *
  * const session = await quark.auth().login({ handle: 'reza', apiKey: '…' });
- * const registry = await quark.server().getServiceRegistry({});
  * const result = await quark.node().execute({ nodeUri: '…', input: … });
  * const run = await quark.workflow().startRun({ workflowId: '…', input: … });
  * ```
@@ -27,6 +22,7 @@
  */
 
 import type { Interceptor } from '@connectrpc/connect';
+import { createClient } from '@connectrpc/connect';
 import { QuarkClient } from './client.ts';
 import {
   createQuarkTransport,
@@ -34,15 +30,14 @@ import {
   type QuarkTransport,
   type QuarkHeadersInit,
 } from './transport.ts';
+import { ServiceDiscovery } from './gen/server_pb.js';
+import type { ServiceEntry } from './gen/server_pb.js';
 
 /** Default per-RPC deadline (30 seconds) if none is configured. */
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 
 /**
  * Shared transport options derived from builder state.
- *
- * Each configured endpoint produces one {@link QuarkTransport} from these
- * shared options plus the endpoint-specific `baseUrl`.
  */
 interface SharedTransportOptions {
   protocol: QuarkProtocol;
@@ -54,12 +49,13 @@ interface SharedTransportOptions {
 
 /**
  * Fluent builder for {@link QuarkClient}.
+ *
+ * The only required configuration is the server endpoint URL. All other
+ * service endpoints (auth, node, workflow) are discovered automatically
+ * via the server's `ServiceDiscovery` service.
  */
 export class QuarkClientBuilder {
-  private authEndpointUrl?: string;
   private serverEndpointUrl?: string;
-  private nodeEndpointUrl?: string;
-  private workflowEndpointUrl?: string;
 
   private connectTimeoutMs: number = 10_000;
   private requestTimeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS;
@@ -70,37 +66,18 @@ export class QuarkClientBuilder {
   private fetchFn?: typeof fetch;
   private accessTokenValue?: string;
 
-  /** Set the auth-service endpoint URL (no trailing slash required). */
-  authEndpoint(url: string): this {
-    this.authEndpointUrl = normalizeUrl(url);
-    return this;
-  }
-
-  /** Set the server (orchestration) endpoint URL. */
+  /**
+   * Set the server endpoint URL. This is the ONLY endpoint the caller
+   * needs to know — all other service URLs are discovered from the
+   * server's `ServiceDiscovery` service.
+   */
   serverEndpoint(url: string): this {
     this.serverEndpointUrl = normalizeUrl(url);
     return this;
   }
 
-  /** Set the node-execution daemon endpoint URL. */
-  nodeEndpoint(url: string): this {
-    this.nodeEndpointUrl = normalizeUrl(url);
-    return this;
-  }
-
-  /** Set the workflow-service endpoint URL. */
-  workflowEndpoint(url: string): this {
-    this.workflowEndpointUrl = normalizeUrl(url);
-    return this;
-  }
-
   /**
    * Set the connection timeout in milliseconds.
-   *
-   * The fetch-based Connect transports used today hold no persistent
-   * connection, so this value is currently informational — it bounds any
-   * future pre-flight reachability check. Per-RPC deadlines are controlled
-   * by {@link requestTimeout}.
    */
   connectTimeout(ms: number): this {
     if (!Number.isFinite(ms) || ms <= 0) {
@@ -111,9 +88,7 @@ export class QuarkClientBuilder {
   }
 
   /**
-   * Set the default per-RPC deadline in milliseconds. Every unary call that
-   * does not override `timeoutMs` in its `CallOptions` is bounded by this
-   * value. Defaults to 30 000 ms. Set to `0` to disable the default deadline.
+   * Set the default per-RPC deadline in milliseconds.
    */
   requestTimeout(ms: number): this {
     if (!Number.isFinite(ms) || ms < 0) {
@@ -125,10 +100,6 @@ export class QuarkClientBuilder {
 
   /**
    * Select the wire protocol for the underlying Connect transport.
-   *
-   * - `connect` (default) — Connect-JSON over HTTP. Human-readable payloads.
-   * - `grpc-web` — gRPC-Web. Binary protobuf framing; use when the upstream
-   *   service is exposed via a gRPC-Web gateway.
    */
   protocol(protocol: QuarkProtocol): this {
     this.protocolValue = protocol;
@@ -172,21 +143,20 @@ export class QuarkClientBuilder {
   /**
    * Build the {@link QuarkClient} from the accumulated configuration.
    *
-   * Creates one {@link QuarkTransport} per configured endpoint. Throws if no
-   * endpoints are configured. The returned promise resolves immediately —
-   * the Connect transports perform no network I/O at construction time.
+   * This is an async operation that:
+   * 1. Connects to the server endpoint.
+   * 2. Calls `DiscoverServices` to discover all healthy service URLs.
+   * 3. Creates sub-clients for each discovered service.
+   *
+   * If a service is not registered in the discovery registry, its
+   * sub-client will be `undefined` (accessing it throws an error).
    */
   async build(): Promise<QuarkClient> {
-    if (
-      this.authEndpointUrl === undefined &&
-      this.serverEndpointUrl === undefined &&
-      this.nodeEndpointUrl === undefined &&
-      this.workflowEndpointUrl === undefined
-    ) {
+    const serverUrl = this.serverEndpointUrl;
+    if (serverUrl === undefined) {
       throw new Error(
-        'QuarkClientBuilder.build() called with no endpoints configured. ' +
-        'Call at least one of authEndpoint/serverEndpoint/nodeEndpoint/' +
-        'workflowEndpoint before build().',
+        'QuarkClientBuilder.build() requires serverEndpoint(url). ' +
+        'All other service URLs are discovered automatically.',
       );
     }
 
@@ -200,11 +170,23 @@ export class QuarkClientBuilder {
     void this.connectTimeoutMs;
     void this.accessTokenValue;
 
+    // 1. Create the server transport (always available — it's the bootstrap).
+    const serverTransport = this.transportFor(serverUrl, shared);
+
+    // 2. Discover all healthy services from the server.
+    const services = await discoverServices(serverTransport);
+
+    // 3. Find service URLs by name.
+    const authUrl = findServiceUrl(services, 'auth');
+    const nodeUrl = findServiceUrl(services, 'node');
+    const workflowUrl = findServiceUrl(services, 'workflow');
+
+    // 4. Create transports for each discovered service.
     const config = {
-      authTransport: this.authEndpointUrl ? this.transportFor(this.authEndpointUrl, shared) : undefined,
-      serverTransport: this.serverEndpointUrl ? this.transportFor(this.serverEndpointUrl, shared) : undefined,
-      nodeTransport: this.nodeEndpointUrl ? this.transportFor(this.nodeEndpointUrl, shared) : undefined,
-      workflowTransport: this.workflowEndpointUrl ? this.transportFor(this.workflowEndpointUrl, shared) : undefined,
+      serverTransport,
+      authTransport: authUrl ? this.transportFor(authUrl, shared) : undefined,
+      nodeTransport: nodeUrl ? this.transportFor(nodeUrl, shared) : undefined,
+      workflowTransport: workflowUrl ? this.transportFor(workflowUrl, shared) : undefined,
     };
 
     return new QuarkClient(config);
@@ -223,8 +205,31 @@ export class QuarkClientBuilder {
 }
 
 /**
+ * Call `DiscoverServices` on the server and return the list of healthy
+ * service entries.
+ */
+async function discoverServices(
+  transport: QuarkTransport,
+): Promise<ServiceEntry[]> {
+  const client = createClient(ServiceDiscovery, transport.underlying);
+  const response = await client.discoverServices({
+    names: [],
+    healthyOnly: true,
+  });
+  return response.services;
+}
+
+/** Find a service URL by name from the discovery results. */
+function findServiceUrl(
+  services: ServiceEntry[],
+  name: string,
+): string | undefined {
+  return services.find((s) => s.name === name)?.grpcUrl;
+}
+
+/**
  * Normalise an endpoint URL: trim surrounding whitespace and strip any
- * trailing slashes so that `{baseUrl}/{service}/{method}` joins cleanly.
+ * trailing slashes.
  */
 function normalizeUrl(url: string): string {
   const trimmed = url.trim();

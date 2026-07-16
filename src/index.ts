@@ -15,8 +15,6 @@
  * import { QuarkClientBuilder, QuarkError } from '@quarkloop/quark-js';
  *
  * const quark = await new QuarkClientBuilder()
- *   .authEndpoint('http://127.0.0.1:5001')
- *   .nodeEndpoint('http://127.0.0.1:50051')
  *   .accessToken('<jwt>')
  *   .requestTimeout(15_000)
  *   .build();

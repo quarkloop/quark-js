@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file server.proto.
  */
 export const file_server: GenFile = /*@__PURE__*/
-  fileDesc("CgxzZXJ2ZXIucHJvdG8SEnBsYXRmb3JtLnNlcnZlci52MSJFCg9TZXJ2aWNlUmVnaXN0cnkSMgoIc2VydmljZXMYASADKAsyIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuU2VydmljZUVudHJ5Ij8KDFNlcnZpY2VFbnRyeRIMCgRuYW1lGAEgASgJEhAKCGdycGNfdXJsGAIgASgJEg8KB3ZlcnNpb24YAyABKAkihwIKCkRlcGxveW1lbnQSCgoCaWQYASABKAkSEgoKdmVyc2lvbl9pZBgCIAEoCRITCgt3b3JrZmxvd19pZBgDIAEoCRIOCgZydW5faWQYBCABKAkSNAoGc3RhdHVzGAUgASgOMiQucGxhdGZvcm0uc2VydmVyLnYxLkRlcGxveW1lbnRTdGF0dXMSLgoKc3RhcnRlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASMAoMY29tcGxldGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBISCgVlcnJvchgIIAEoCUgAiAEBQggKBl9lcnJvciJHCg1EZXBsb3lSZXF1ZXN0EhIKCnZlcnNpb25faWQYASABKAkSEwoLd29ya2Zsb3dfaWQYAiABKAkSDQoFaW5wdXQYAyABKAwiKAoPUm9sbGJhY2tSZXF1ZXN0EhUKDWRlcGxveW1lbnRfaWQYASABKAkiIgoUR2V0RGVwbG95bWVudFJlcXVlc3QSCgoCaWQYASABKAkiRgoWTGlzdERlcGxveW1lbnRzUmVxdWVzdBIsCgVxdWVyeRgBIAEoCzIdLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlUXVlcnkiegoXTGlzdERlcGxveW1lbnRzUmVzcG9uc2USMwoLZGVwbG95bWVudHMYASADKAsyHi5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVwbG95bWVudBIqCgRtZXRhGAIgASgLMhwucGxhdGZvcm0uY29tbW9uLnYxLlBhZ2VNZXRhIoABCgZUZW5hbnQSCgoCaWQYASABKAkSDgoGb3JnX2lkGAIgASgJEhMKC2FydGlmYWN0X2lkGAMgASgJEhEKCXNlY3JldF9pZBgEIAEoCRIyCgp0aW1lc3RhbXBzGAUgASgLMh4ucGxhdGZvcm0uY29tbW9uLnYxLlRpbWVzdGFtcHMiUwoWUHJvdmlzaW9uVGVuYW50UmVxdWVzdBIQCghvcmdfbmFtZRgBIAEoCRIQCghvcmdfc2x1ZxgCIAEoCRIVCg1hcnRpZmFjdF9uYW1lGAMgASgJIkIKEkxpc3RUZW5hbnRzUmVxdWVzdBIsCgVxdWVyeRgBIAEoCzIdLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlUXVlcnkibgoTTGlzdFRlbmFudHNSZXNwb25zZRIrCgd0ZW5hbnRzGAEgAygLMhoucGxhdGZvcm0uc2VydmVyLnYxLlRlbmFudBIqCgRtZXRhGAIgASgLMhwucGxhdGZvcm0uY29tbW9uLnYxLlBhZ2VNZXRhInMKDFN5c3RlbUhlYWx0aBIzCghzZXJ2aWNlcxgBIAMoCzIhLnBsYXRmb3JtLnNlcnZlci52MS5TZXJ2aWNlSGVhbHRoEi4KCmNoZWNrZWRfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIk4KDVNlcnZpY2VIZWFsdGgSDAoEbmFtZRgBIAEoCRIPCgdoZWFsdGh5GAIgASgIEhMKBmRldGFpbBgDIAEoCUgAiAEBQgkKB19kZXRhaWwiywEKDE9yZ2FuaXphdGlvbhIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkSGAoLZGVzY3JpcHRpb24YBCABKAlIAIgBARI1CglsaWZlY3ljbGUYBSABKA4yIi5wbGF0Zm9ybS5jb21tb24udjEuTGlmZWN5Y2xlU3RhdGUSMgoKdGltZXN0YW1wcxgGIAEoCzIeLnBsYXRmb3JtLmNvbW1vbi52MS5UaW1lc3RhbXBzQg4KDF9kZXNjcmlwdGlvbiJhChlDcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0EgwKBG5hbWUYASABKAkSDAoEc2x1ZxgCIAEoCRIYCgtkZXNjcmlwdGlvbhgDIAEoCUgAiAEBQg4KDF9kZXNjcmlwdGlvbiIkChZHZXRPcmdhbml6YXRpb25SZXF1ZXN0EgoKAmlkGAEgASgJIkgKGExpc3RPcmdhbml6YXRpb25zUmVxdWVzdBIsCgVxdWVyeRgBIAEoCzIdLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlUXVlcnkigAEKGUxpc3RPcmdhbml6YXRpb25zUmVzcG9uc2USNwoNb3JnYW5pemF0aW9ucxgBIAMoCzIgLnBsYXRmb3JtLnNlcnZlci52MS5Pcmdhbml6YXRpb24SKgoEbWV0YRgCIAEoCzIcLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlTWV0YSJtChlVcGRhdGVPcmdhbml6YXRpb25SZXF1ZXN0EgoKAmlkGAEgASgJEhEKBG5hbWUYAiABKAlIAIgBARIYCgtkZXNjcmlwdGlvbhgDIAEoCUgBiAEBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbiIdCg9BY3RpdmF0ZVJlcXVlc3QSCgoCaWQYASABKAkiHwoRRGVhY3RpdmF0ZVJlcXVlc3QSCgoCaWQYASABKAkiHAoOQXJjaGl2ZVJlcXVlc3QSCgoCaWQYASABKAkiJwoZRGVsZXRlT3JnYW5pemF0aW9uUmVxdWVzdBIKCgJpZBgBIAEoCSLfAQoHUHJvamVjdBIKCgJpZBgBIAEoCRIXCg9vcmdhbml6YXRpb25faWQYAiABKAkSDAoEbmFtZRgDIAEoCRIMCgRzbHVnGAQgASgJEhgKC2Rlc2NyaXB0aW9uGAUgASgJSACIAQESNQoJbGlmZWN5Y2xlGAYgASgOMiIucGxhdGZvcm0uY29tbW9uLnYxLkxpZmVjeWNsZVN0YXRlEjIKCnRpbWVzdGFtcHMYByABKAsyHi5wbGF0Zm9ybS5jb21tb24udjEuVGltZXN0YW1wc0IOCgxfZGVzY3JpcHRpb24idQoUQ3JlYXRlUHJvamVjdFJlcXVlc3QSFwoPb3JnYW5pemF0aW9uX2lkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIYCgtkZXNjcmlwdGlvbhgEIAEoCUgAiAEBQg4KDF9kZXNjcmlwdGlvbiIfChFHZXRQcm9qZWN0UmVxdWVzdBIKCgJpZBgBIAEoCSJcChNMaXN0UHJvamVjdHNSZXF1ZXN0EiwKBXF1ZXJ5GAEgASgLMh0ucGxhdGZvcm0uY29tbW9uLnYxLlBhZ2VRdWVyeRIXCg9vcmdhbml6YXRpb25faWQYAiABKAkicQoUTGlzdFByb2plY3RzUmVzcG9uc2USLQoIcHJvamVjdHMYASADKAsyGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBIqCgRtZXRhGAIgASgLMhwucGxhdGZvcm0uY29tbW9uLnYxLlBhZ2VNZXRhImgKFFVwZGF0ZVByb2plY3RSZXF1ZXN0EgoKAmlkGAEgASgJEhEKBG5hbWUYAiABKAlIAIgBARIYCgtkZXNjcmlwdGlvbhgDIAEoCUgBiAEBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbiIkChZBY3RpdmF0ZVByb2plY3RSZXF1ZXN0EgoKAmlkGAEgASgJIiYKGERlYWN0aXZhdGVQcm9qZWN0UmVxdWVzdBIKCgJpZBgBIAEoCSIjChVBcmNoaXZlUHJvamVjdFJlcXVlc3QSCgoCaWQYASABKAkiIgoURGVsZXRlUHJvamVjdFJlcXVlc3QSCgoCaWQYASABKAkizgEKCVdvcmtzcGFjZRIKCgJpZBgBIAEoCRISCgpwcm9qZWN0X2lkGAIgASgJEgwKBG5hbWUYAyABKAkSGAoLZGVzY3JpcHRpb24YBCABKAlIAIgBARI1CglsaWZlY3ljbGUYBSABKA4yIi5wbGF0Zm9ybS5jb21tb24udjEuTGlmZWN5Y2xlU3RhdGUSMgoKdGltZXN0YW1wcxgGIAEoCzIeLnBsYXRmb3JtLmNvbW1vbi52MS5UaW1lc3RhbXBzQg4KDF9kZXNjcmlwdGlvbiJkChZDcmVhdGVXb3Jrc3BhY2VSZXF1ZXN0EhIKCnByb2plY3RfaWQYASABKAkSDAoEbmFtZRgCIAEoCRIYCgtkZXNjcmlwdGlvbhgDIAEoCUgAiAEBQg4KDF9kZXNjcmlwdGlvbiIhChNHZXRXb3Jrc3BhY2VSZXF1ZXN0EgoKAmlkGAEgASgJIlkKFUxpc3RXb3Jrc3BhY2VzUmVxdWVzdBIsCgVxdWVyeRgBIAEoCzIdLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlUXVlcnkSEgoKcHJvamVjdF9pZBgCIAEoCSJ3ChZMaXN0V29ya3NwYWNlc1Jlc3BvbnNlEjEKCndvcmtzcGFjZXMYASADKAsyHS5wbGF0Zm9ybS5zZXJ2ZXIudjEuV29ya3NwYWNlEioKBG1ldGEYAiABKAsyHC5wbGF0Zm9ybS5jb21tb24udjEuUGFnZU1ldGEiagoWVXBkYXRlV29ya3NwYWNlUmVxdWVzdBIKCgJpZBgBIAEoCRIRCgRuYW1lGAIgASgJSACIAQESGAoLZGVzY3JpcHRpb24YAyABKAlIAYgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb24iJgoYQWN0aXZhdGVXb3Jrc3BhY2VSZXF1ZXN0EgoKAmlkGAEgASgJIigKGkRlYWN0aXZhdGVXb3Jrc3BhY2VSZXF1ZXN0EgoKAmlkGAEgASgJIiUKF0FyY2hpdmVXb3Jrc3BhY2VSZXF1ZXN0EgoKAmlkGAEgASgJIiQKFkRlbGV0ZVdvcmtzcGFjZVJlcXVlc3QSCgoCaWQYASABKAkqtwEKEERlcGxveW1lbnRTdGF0dXMSIQodREVQTE9ZTUVOVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIfChtERVBMT1lNRU5UX1NUQVRVU19ERVBMT1lJTkcQARIeChpERVBMT1lNRU5UX1NUQVRVU19ERVBMT1lFRBACEhwKGERFUExPWU1FTlRfU1RBVFVTX0ZBSUxFRBADEiEKHURFUExPWU1FTlRfU1RBVFVTX1JPTExFRF9CQUNLEAQyzwUKDVNlcnZlclNlcnZpY2USUQoSR2V0U2VydmljZVJlZ2lzdHJ5EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiMucGxhdGZvcm0uc2VydmVyLnYxLlNlcnZpY2VSZWdpc3RyeRJLCgZEZXBsb3kSIS5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVwbG95UmVxdWVzdBoeLnBsYXRmb3JtLnNlcnZlci52MS5EZXBsb3ltZW50Ek8KCFJvbGxiYWNrEiMucGxhdGZvcm0uc2VydmVyLnYxLlJvbGxiYWNrUmVxdWVzdBoeLnBsYXRmb3JtLnNlcnZlci52MS5EZXBsb3ltZW50ElkKDUdldERlcGxveW1lbnQSKC5wbGF0Zm9ybS5zZXJ2ZXIudjEuR2V0RGVwbG95bWVudFJlcXVlc3QaHi5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVwbG95bWVudBJqCg9MaXN0RGVwbG95bWVudHMSKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdERlcGxveW1lbnRzUmVxdWVzdBorLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0RGVwbG95bWVudHNSZXNwb25zZRJZCg9Qcm92aXNpb25UZW5hbnQSKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvdmlzaW9uVGVuYW50UmVxdWVzdBoaLnBsYXRmb3JtLnNlcnZlci52MS5UZW5hbnQSXgoLTGlzdFRlbmFudHMSJi5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdFRlbmFudHNSZXF1ZXN0GicucGxhdGZvcm0uc2VydmVyLnYxLkxpc3RUZW5hbnRzUmVzcG9uc2USSwoPR2V0U3lzdGVtSGVhbHRoEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiAucGxhdGZvcm0uc2VydmVyLnYxLlN5c3RlbUhlYWx0aDKyBgoTT3JnYW5pemF0aW9uU2VydmljZRJlChJDcmVhdGVPcmdhbml6YXRpb24SLS5wbGF0Zm9ybS5zZXJ2ZXIudjEuQ3JlYXRlT3JnYW5pemF0aW9uUmVxdWVzdBogLnBsYXRmb3JtLnNlcnZlci52MS5Pcmdhbml6YXRpb24SXwoPR2V0T3JnYW5pemF0aW9uEioucGxhdGZvcm0uc2VydmVyLnYxLkdldE9yZ2FuaXphdGlvblJlcXVlc3QaIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uEnAKEUxpc3RPcmdhbml6YXRpb25zEiwucGxhdGZvcm0uc2VydmVyLnYxLkxpc3RPcmdhbml6YXRpb25zUmVxdWVzdBotLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0T3JnYW5pemF0aW9uc1Jlc3BvbnNlEmUKElVwZGF0ZU9yZ2FuaXphdGlvbhItLnBsYXRmb3JtLnNlcnZlci52MS5VcGRhdGVPcmdhbml6YXRpb25SZXF1ZXN0GiAucGxhdGZvcm0uc2VydmVyLnYxLk9yZ2FuaXphdGlvbhJdChRBY3RpdmF0ZU9yZ2FuaXphdGlvbhIjLnBsYXRmb3JtLnNlcnZlci52MS5BY3RpdmF0ZVJlcXVlc3QaIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uEmEKFkRlYWN0aXZhdGVPcmdhbml6YXRpb24SJS5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVhY3RpdmF0ZVJlcXVlc3QaIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uElsKE0FyY2hpdmVPcmdhbml6YXRpb24SIi5wbGF0Zm9ybS5zZXJ2ZXIudjEuQXJjaGl2ZVJlcXVlc3QaIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uElsKEkRlbGV0ZU9yZ2FuaXphdGlvbhItLnBsYXRmb3JtLnNlcnZlci52MS5EZWxldGVPcmdhbml6YXRpb25SZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Mt4FCg5Qcm9qZWN0U2VydmljZRJWCg1DcmVhdGVQcm9qZWN0EigucGxhdGZvcm0uc2VydmVyLnYxLkNyZWF0ZVByb2plY3RSZXF1ZXN0GhsucGxhdGZvcm0uc2VydmVyLnYxLlByb2plY3QSUAoKR2V0UHJvamVjdBIlLnBsYXRmb3JtLnNlcnZlci52MS5HZXRQcm9qZWN0UmVxdWVzdBobLnBsYXRmb3JtLnNlcnZlci52MS5Qcm9qZWN0EmEKDExpc3RQcm9qZWN0cxInLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0UHJvamVjdHNSZXF1ZXN0GigucGxhdGZvcm0uc2VydmVyLnYxLkxpc3RQcm9qZWN0c1Jlc3BvbnNlElYKDVVwZGF0ZVByb2plY3QSKC5wbGF0Zm9ybS5zZXJ2ZXIudjEuVXBkYXRlUHJvamVjdFJlcXVlc3QaGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBJaCg9BY3RpdmF0ZVByb2plY3QSKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuQWN0aXZhdGVQcm9qZWN0UmVxdWVzdBobLnBsYXRmb3JtLnNlcnZlci52MS5Qcm9qZWN0El4KEURlYWN0aXZhdGVQcm9qZWN0EiwucGxhdGZvcm0uc2VydmVyLnYxLkRlYWN0aXZhdGVQcm9qZWN0UmVxdWVzdBobLnBsYXRmb3JtLnNlcnZlci52MS5Qcm9qZWN0ElgKDkFyY2hpdmVQcm9qZWN0EikucGxhdGZvcm0uc2VydmVyLnYxLkFyY2hpdmVQcm9qZWN0UmVxdWVzdBobLnBsYXRmb3JtLnNlcnZlci52MS5Qcm9qZWN0ElEKDURlbGV0ZVByb2plY3QSKC5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVsZXRlUHJvamVjdFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkyjgYKEFdvcmtzcGFjZVNlcnZpY2USXAoPQ3JlYXRlV29ya3NwYWNlEioucGxhdGZvcm0uc2VydmVyLnYxLkNyZWF0ZVdvcmtzcGFjZVJlcXVlc3QaHS5wbGF0Zm9ybS5zZXJ2ZXIudjEuV29ya3NwYWNlElYKDEdldFdvcmtzcGFjZRInLnBsYXRmb3JtLnNlcnZlci52MS5HZXRXb3Jrc3BhY2VSZXF1ZXN0Gh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRJnCg5MaXN0V29ya3NwYWNlcxIpLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0V29ya3NwYWNlc1JlcXVlc3QaKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdFdvcmtzcGFjZXNSZXNwb25zZRJcCg9VcGRhdGVXb3Jrc3BhY2USKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuVXBkYXRlV29ya3NwYWNlUmVxdWVzdBodLnBsYXRmb3JtLnNlcnZlci52MS5Xb3Jrc3BhY2USYAoRQWN0aXZhdGVXb3Jrc3BhY2USLC5wbGF0Zm9ybS5zZXJ2ZXIudjEuQWN0aXZhdGVXb3Jrc3BhY2VSZXF1ZXN0Gh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRJkChNEZWFjdGl2YXRlV29ya3NwYWNlEi4ucGxhdGZvcm0uc2VydmVyLnYxLkRlYWN0aXZhdGVXb3Jrc3BhY2VSZXF1ZXN0Gh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRJeChBBcmNoaXZlV29ya3NwYWNlEisucGxhdGZvcm0uc2VydmVyLnYxLkFyY2hpdmVXb3Jrc3BhY2VSZXF1ZXN0Gh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRJVCg9EZWxldGVXb3Jrc3BhY2USKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVsZXRlV29ya3NwYWNlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eUKPAQoWY29tLnBsYXRmb3JtLnNlcnZlci52MUILU2VydmVyUHJvdG9QAaICA1BTWKoCElBsYXRmb3JtLlNlcnZlci5WMcoCElBsYXRmb3JtXFNlcnZlclxWMeICHlBsYXRmb3JtXFNlcnZlclxWMVxHUEJNZXRhZGF0YeoCFFBsYXRmb3JtOjpTZXJ2ZXI6OlYxYgZwcm90bzM", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_common_identities, file_common_paging]);
+  fileDesc("CgxzZXJ2ZXIucHJvdG8SEnBsYXRmb3JtLnNlcnZlci52MSJFCg9TZXJ2aWNlUmVnaXN0cnkSMgoIc2VydmljZXMYASADKAsyIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuU2VydmljZUVudHJ5IsMCCgxTZXJ2aWNlRW50cnkSDAoEbmFtZRgBIAEoCRITCgtpbnN0YW5jZV9pZBgCIAEoCRIQCghncnBjX3VybBgDIAEoCRIPCgd2ZXJzaW9uGAQgASgJEjEKBnN0YXR1cxgFIAEoDjIhLnBsYXRmb3JtLnNlcnZlci52MS5TZXJ2aWNlU3RhdHVzEhMKBnJlZ2lvbhgGIAEoCUgAiAEBEhEKBHpvbmUYByABKAlIAYgBARIxCg1yZWdpc3RlcmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBI1ChFsYXN0X2hlYXJ0YmVhdF9hdBgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFAoMY2FwYWJpbGl0aWVzGAogAygJQgkKB19yZWdpb25CBwoFX3pvbmUisAEKFlJlZ2lzdGVyU2VydmljZVJlcXVlc3QSDAoEbmFtZRgBIAEoCRITCgtpbnN0YW5jZV9pZBgCIAEoCRIQCghncnBjX3VybBgDIAEoCRIPCgd2ZXJzaW9uGAQgASgJEhMKBnJlZ2lvbhgFIAEoCUgAiAEBEhEKBHpvbmUYBiABKAlIAYgBARIUCgxjYXBhYmlsaXRpZXMYByADKAlCCQoHX3JlZ2lvbkIHCgVfem9uZSJJChdSZWdpc3RlclNlcnZpY2VSZXNwb25zZRITCgtpbnN0YW5jZV9pZBgBIAEoCRIZChFsZWFzZV90dGxfc2Vjb25kcxgCIAEoDSIvChhEZXJlZ2lzdGVyU2VydmljZVJlcXVlc3QSEwoLaW5zdGFuY2VfaWQYASABKAkiWgoQSGVhcnRiZWF0UmVxdWVzdBITCgtpbnN0YW5jZV9pZBgBIAEoCRIxCgZzdGF0dXMYAiABKA4yIS5wbGF0Zm9ybS5zZXJ2ZXIudjEuU2VydmljZVN0YXR1cyJEChFIZWFydGJlYXRSZXNwb25zZRIUCgxhY2tub3dsZWRnZWQYASABKAgSGQoRbGVhc2VfdHRsX3NlY29uZHMYAiABKA0iPgoXRGlzY292ZXJTZXJ2aWNlc1JlcXVlc3QSDQoFbmFtZXMYASADKAkSFAoMaGVhbHRoeV9vbmx5GAIgASgIIocCCgpEZXBsb3ltZW50EgoKAmlkGAEgASgJEhIKCnZlcnNpb25faWQYAiABKAkSEwoLd29ya2Zsb3dfaWQYAyABKAkSDgoGcnVuX2lkGAQgASgJEjQKBnN0YXR1cxgFIAEoDjIkLnBsYXRmb3JtLnNlcnZlci52MS5EZXBsb3ltZW50U3RhdHVzEi4KCnN0YXJ0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEjAKDGNvbXBsZXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEgoFZXJyb3IYCCABKAlIAIgBAUIICgZfZXJyb3IiRwoNRGVwbG95UmVxdWVzdBISCgp2ZXJzaW9uX2lkGAEgASgJEhMKC3dvcmtmbG93X2lkGAIgASgJEg0KBWlucHV0GAMgASgMIigKD1JvbGxiYWNrUmVxdWVzdBIVCg1kZXBsb3ltZW50X2lkGAEgASgJIiIKFEdldERlcGxveW1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJIkYKFkxpc3REZXBsb3ltZW50c1JlcXVlc3QSLAoFcXVlcnkYASABKAsyHS5wbGF0Zm9ybS5jb21tb24udjEuUGFnZVF1ZXJ5InoKF0xpc3REZXBsb3ltZW50c1Jlc3BvbnNlEjMKC2RlcGxveW1lbnRzGAEgAygLMh4ucGxhdGZvcm0uc2VydmVyLnYxLkRlcGxveW1lbnQSKgoEbWV0YRgCIAEoCzIcLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlTWV0YSKAAQoGVGVuYW50EgoKAmlkGAEgASgJEg4KBm9yZ19pZBgCIAEoCRITCgthcnRpZmFjdF9pZBgDIAEoCRIRCglzZWNyZXRfaWQYBCABKAkSMgoKdGltZXN0YW1wcxgFIAEoCzIeLnBsYXRmb3JtLmNvbW1vbi52MS5UaW1lc3RhbXBzIlMKFlByb3Zpc2lvblRlbmFudFJlcXVlc3QSEAoIb3JnX25hbWUYASABKAkSEAoIb3JnX3NsdWcYAiABKAkSFQoNYXJ0aWZhY3RfbmFtZRgDIAEoCSJCChJMaXN0VGVuYW50c1JlcXVlc3QSLAoFcXVlcnkYASABKAsyHS5wbGF0Zm9ybS5jb21tb24udjEuUGFnZVF1ZXJ5Im4KE0xpc3RUZW5hbnRzUmVzcG9uc2USKwoHdGVuYW50cxgBIAMoCzIaLnBsYXRmb3JtLnNlcnZlci52MS5UZW5hbnQSKgoEbWV0YRgCIAEoCzIcLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlTWV0YSJzCgxTeXN0ZW1IZWFsdGgSMwoIc2VydmljZXMYASADKAsyIS5wbGF0Zm9ybS5zZXJ2ZXIudjEuU2VydmljZUhlYWx0aBIuCgpjaGVja2VkX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJOCg1TZXJ2aWNlSGVhbHRoEgwKBG5hbWUYASABKAkSDwoHaGVhbHRoeRgCIAEoCBITCgZkZXRhaWwYAyABKAlIAIgBAUIJCgdfZGV0YWlsIssBCgxPcmdhbml6YXRpb24SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhgKC2Rlc2NyaXB0aW9uGAQgASgJSACIAQESNQoJbGlmZWN5Y2xlGAUgASgOMiIucGxhdGZvcm0uY29tbW9uLnYxLkxpZmVjeWNsZVN0YXRlEjIKCnRpbWVzdGFtcHMYBiABKAsyHi5wbGF0Zm9ybS5jb21tb24udjEuVGltZXN0YW1wc0IOCgxfZGVzY3JpcHRpb24iYQoZQ3JlYXRlT3JnYW5pemF0aW9uUmVxdWVzdBIMCgRuYW1lGAEgASgJEgwKBHNsdWcYAiABKAkSGAoLZGVzY3JpcHRpb24YAyABKAlIAIgBAUIOCgxfZGVzY3JpcHRpb24iJAoWR2V0T3JnYW5pemF0aW9uUmVxdWVzdBIKCgJpZBgBIAEoCSJIChhMaXN0T3JnYW5pemF0aW9uc1JlcXVlc3QSLAoFcXVlcnkYASABKAsyHS5wbGF0Zm9ybS5jb21tb24udjEuUGFnZVF1ZXJ5IoABChlMaXN0T3JnYW5pemF0aW9uc1Jlc3BvbnNlEjcKDW9yZ2FuaXphdGlvbnMYASADKAsyIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uEioKBG1ldGEYAiABKAsyHC5wbGF0Zm9ybS5jb21tb24udjEuUGFnZU1ldGEibQoZVXBkYXRlT3JnYW5pemF0aW9uUmVxdWVzdBIKCgJpZBgBIAEoCRIRCgRuYW1lGAIgASgJSACIAQESGAoLZGVzY3JpcHRpb24YAyABKAlIAYgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb24iHQoPQWN0aXZhdGVSZXF1ZXN0EgoKAmlkGAEgASgJIh8KEURlYWN0aXZhdGVSZXF1ZXN0EgoKAmlkGAEgASgJIhwKDkFyY2hpdmVSZXF1ZXN0EgoKAmlkGAEgASgJIicKGURlbGV0ZU9yZ2FuaXphdGlvblJlcXVlc3QSCgoCaWQYASABKAki3wEKB1Byb2plY3QSCgoCaWQYASABKAkSFwoPb3JnYW5pemF0aW9uX2lkGAIgASgJEgwKBG5hbWUYAyABKAkSDAoEc2x1ZxgEIAEoCRIYCgtkZXNjcmlwdGlvbhgFIAEoCUgAiAEBEjUKCWxpZmVjeWNsZRgGIAEoDjIiLnBsYXRmb3JtLmNvbW1vbi52MS5MaWZlY3ljbGVTdGF0ZRIyCgp0aW1lc3RhbXBzGAcgASgLMh4ucGxhdGZvcm0uY29tbW9uLnYxLlRpbWVzdGFtcHNCDgoMX2Rlc2NyaXB0aW9uInUKFENyZWF0ZVByb2plY3RSZXF1ZXN0EhcKD29yZ2FuaXphdGlvbl9pZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkSGAoLZGVzY3JpcHRpb24YBCABKAlIAIgBAUIOCgxfZGVzY3JpcHRpb24iHwoRR2V0UHJvamVjdFJlcXVlc3QSCgoCaWQYASABKAkiXAoTTGlzdFByb2plY3RzUmVxdWVzdBIsCgVxdWVyeRgBIAEoCzIdLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlUXVlcnkSFwoPb3JnYW5pemF0aW9uX2lkGAIgASgJInEKFExpc3RQcm9qZWN0c1Jlc3BvbnNlEi0KCHByb2plY3RzGAEgAygLMhsucGxhdGZvcm0uc2VydmVyLnYxLlByb2plY3QSKgoEbWV0YRgCIAEoCzIcLnBsYXRmb3JtLmNvbW1vbi52MS5QYWdlTWV0YSJoChRVcGRhdGVQcm9qZWN0UmVxdWVzdBIKCgJpZBgBIAEoCRIRCgRuYW1lGAIgASgJSACIAQESGAoLZGVzY3JpcHRpb24YAyABKAlIAYgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb24iJAoWQWN0aXZhdGVQcm9qZWN0UmVxdWVzdBIKCgJpZBgBIAEoCSImChhEZWFjdGl2YXRlUHJvamVjdFJlcXVlc3QSCgoCaWQYASABKAkiIwoVQXJjaGl2ZVByb2plY3RSZXF1ZXN0EgoKAmlkGAEgASgJIiIKFERlbGV0ZVByb2plY3RSZXF1ZXN0EgoKAmlkGAEgASgJIs4BCglXb3Jrc3BhY2USCgoCaWQYASABKAkSEgoKcHJvamVjdF9pZBgCIAEoCRIMCgRuYW1lGAMgASgJEhgKC2Rlc2NyaXB0aW9uGAQgASgJSACIAQESNQoJbGlmZWN5Y2xlGAUgASgOMiIucGxhdGZvcm0uY29tbW9uLnYxLkxpZmVjeWNsZVN0YXRlEjIKCnRpbWVzdGFtcHMYBiABKAsyHi5wbGF0Zm9ybS5jb21tb24udjEuVGltZXN0YW1wc0IOCgxfZGVzY3JpcHRpb24iZAoWQ3JlYXRlV29ya3NwYWNlUmVxdWVzdBISCgpwcm9qZWN0X2lkGAEgASgJEgwKBG5hbWUYAiABKAkSGAoLZGVzY3JpcHRpb24YAyABKAlIAIgBAUIOCgxfZGVzY3JpcHRpb24iIQoTR2V0V29ya3NwYWNlUmVxdWVzdBIKCgJpZBgBIAEoCSJZChVMaXN0V29ya3NwYWNlc1JlcXVlc3QSLAoFcXVlcnkYASABKAsyHS5wbGF0Zm9ybS5jb21tb24udjEuUGFnZVF1ZXJ5EhIKCnByb2plY3RfaWQYAiABKAkidwoWTGlzdFdvcmtzcGFjZXNSZXNwb25zZRIxCgp3b3Jrc3BhY2VzGAEgAygLMh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRIqCgRtZXRhGAIgASgLMhwucGxhdGZvcm0uY29tbW9uLnYxLlBhZ2VNZXRhImoKFlVwZGF0ZVdvcmtzcGFjZVJlcXVlc3QSCgoCaWQYASABKAkSEQoEbmFtZRgCIAEoCUgAiAEBEhgKC2Rlc2NyaXB0aW9uGAMgASgJSAGIAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uIiYKGEFjdGl2YXRlV29ya3NwYWNlUmVxdWVzdBIKCgJpZBgBIAEoCSIoChpEZWFjdGl2YXRlV29ya3NwYWNlUmVxdWVzdBIKCgJpZBgBIAEoCSIlChdBcmNoaXZlV29ya3NwYWNlUmVxdWVzdBIKCgJpZBgBIAEoCSIkChZEZWxldGVXb3Jrc3BhY2VSZXF1ZXN0EgoKAmlkGAEgASgJKqMBCg1TZXJ2aWNlU3RhdHVzEh4KGlNFUlZJQ0VfU1RBVFVTX1VOU1BFQ0lGSUVEEAASGgoWU0VSVklDRV9TVEFUVVNfSEVBTFRIWRABEhsKF1NFUlZJQ0VfU1RBVFVTX0RFR1JBREVEEAISHAoYU0VSVklDRV9TVEFUVVNfVU5IRUFMVEhZEAMSGwoXU0VSVklDRV9TVEFUVVNfRFJBSU5JTkcQBCq3AQoQRGVwbG95bWVudFN0YXR1cxIhCh1ERVBMT1lNRU5UX1NUQVRVU19VTlNQRUNJRklFRBAAEh8KG0RFUExPWU1FTlRfU1RBVFVTX0RFUExPWUlORxABEh4KGkRFUExPWU1FTlRfU1RBVFVTX0RFUExPWUVEEAISHAoYREVQTE9ZTUVOVF9TVEFUVVNfRkFJTEVEEAMSIQodREVQTE9ZTUVOVF9TVEFUVVNfUk9MTEVEX0JBQ0sQBDL8BAoNU2VydmVyU2VydmljZRJLCgZEZXBsb3kSIS5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVwbG95UmVxdWVzdBoeLnBsYXRmb3JtLnNlcnZlci52MS5EZXBsb3ltZW50Ek8KCFJvbGxiYWNrEiMucGxhdGZvcm0uc2VydmVyLnYxLlJvbGxiYWNrUmVxdWVzdBoeLnBsYXRmb3JtLnNlcnZlci52MS5EZXBsb3ltZW50ElkKDUdldERlcGxveW1lbnQSKC5wbGF0Zm9ybS5zZXJ2ZXIudjEuR2V0RGVwbG95bWVudFJlcXVlc3QaHi5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVwbG95bWVudBJqCg9MaXN0RGVwbG95bWVudHMSKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdERlcGxveW1lbnRzUmVxdWVzdBorLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0RGVwbG95bWVudHNSZXNwb25zZRJZCg9Qcm92aXNpb25UZW5hbnQSKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvdmlzaW9uVGVuYW50UmVxdWVzdBoaLnBsYXRmb3JtLnNlcnZlci52MS5UZW5hbnQSXgoLTGlzdFRlbmFudHMSJi5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdFRlbmFudHNSZXF1ZXN0GicucGxhdGZvcm0uc2VydmVyLnYxLkxpc3RUZW5hbnRzUmVzcG9uc2USSwoPR2V0U3lzdGVtSGVhbHRoEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiAucGxhdGZvcm0uc2VydmVyLnYxLlN5c3RlbUhlYWx0aDKZAwoQU2VydmljZURpc2NvdmVyeRJqCg9SZWdpc3RlclNlcnZpY2USKi5wbGF0Zm9ybS5zZXJ2ZXIudjEuUmVnaXN0ZXJTZXJ2aWNlUmVxdWVzdBorLnBsYXRmb3JtLnNlcnZlci52MS5SZWdpc3RlclNlcnZpY2VSZXNwb25zZRJZChFEZXJlZ2lzdGVyU2VydmljZRIsLnBsYXRmb3JtLnNlcnZlci52MS5EZXJlZ2lzdGVyU2VydmljZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSWAoJSGVhcnRiZWF0EiQucGxhdGZvcm0uc2VydmVyLnYxLkhlYXJ0YmVhdFJlcXVlc3QaJS5wbGF0Zm9ybS5zZXJ2ZXIudjEuSGVhcnRiZWF0UmVzcG9uc2USZAoQRGlzY292ZXJTZXJ2aWNlcxIrLnBsYXRmb3JtLnNlcnZlci52MS5EaXNjb3ZlclNlcnZpY2VzUmVxdWVzdBojLnBsYXRmb3JtLnNlcnZlci52MS5TZXJ2aWNlUmVnaXN0cnkysgYKE09yZ2FuaXphdGlvblNlcnZpY2USZQoSQ3JlYXRlT3JnYW5pemF0aW9uEi0ucGxhdGZvcm0uc2VydmVyLnYxLkNyZWF0ZU9yZ2FuaXphdGlvblJlcXVlc3QaIC5wbGF0Zm9ybS5zZXJ2ZXIudjEuT3JnYW5pemF0aW9uEl8KD0dldE9yZ2FuaXphdGlvbhIqLnBsYXRmb3JtLnNlcnZlci52MS5HZXRPcmdhbml6YXRpb25SZXF1ZXN0GiAucGxhdGZvcm0uc2VydmVyLnYxLk9yZ2FuaXphdGlvbhJwChFMaXN0T3JnYW5pemF0aW9ucxIsLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0T3JnYW5pemF0aW9uc1JlcXVlc3QaLS5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdE9yZ2FuaXphdGlvbnNSZXNwb25zZRJlChJVcGRhdGVPcmdhbml6YXRpb24SLS5wbGF0Zm9ybS5zZXJ2ZXIudjEuVXBkYXRlT3JnYW5pemF0aW9uUmVxdWVzdBogLnBsYXRmb3JtLnNlcnZlci52MS5Pcmdhbml6YXRpb24SXQoUQWN0aXZhdGVPcmdhbml6YXRpb24SIy5wbGF0Zm9ybS5zZXJ2ZXIudjEuQWN0aXZhdGVSZXF1ZXN0GiAucGxhdGZvcm0uc2VydmVyLnYxLk9yZ2FuaXphdGlvbhJhChZEZWFjdGl2YXRlT3JnYW5pemF0aW9uEiUucGxhdGZvcm0uc2VydmVyLnYxLkRlYWN0aXZhdGVSZXF1ZXN0GiAucGxhdGZvcm0uc2VydmVyLnYxLk9yZ2FuaXphdGlvbhJbChNBcmNoaXZlT3JnYW5pemF0aW9uEiIucGxhdGZvcm0uc2VydmVyLnYxLkFyY2hpdmVSZXF1ZXN0GiAucGxhdGZvcm0uc2VydmVyLnYxLk9yZ2FuaXphdGlvbhJbChJEZWxldGVPcmdhbml6YXRpb24SLS5wbGF0Zm9ybS5zZXJ2ZXIudjEuRGVsZXRlT3JnYW5pemF0aW9uUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eTLeBQoOUHJvamVjdFNlcnZpY2USVgoNQ3JlYXRlUHJvamVjdBIoLnBsYXRmb3JtLnNlcnZlci52MS5DcmVhdGVQcm9qZWN0UmVxdWVzdBobLnBsYXRmb3JtLnNlcnZlci52MS5Qcm9qZWN0ElAKCkdldFByb2plY3QSJS5wbGF0Zm9ybS5zZXJ2ZXIudjEuR2V0UHJvamVjdFJlcXVlc3QaGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBJhCgxMaXN0UHJvamVjdHMSJy5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdFByb2plY3RzUmVxdWVzdBooLnBsYXRmb3JtLnNlcnZlci52MS5MaXN0UHJvamVjdHNSZXNwb25zZRJWCg1VcGRhdGVQcm9qZWN0EigucGxhdGZvcm0uc2VydmVyLnYxLlVwZGF0ZVByb2plY3RSZXF1ZXN0GhsucGxhdGZvcm0uc2VydmVyLnYxLlByb2plY3QSWgoPQWN0aXZhdGVQcm9qZWN0EioucGxhdGZvcm0uc2VydmVyLnYxLkFjdGl2YXRlUHJvamVjdFJlcXVlc3QaGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBJeChFEZWFjdGl2YXRlUHJvamVjdBIsLnBsYXRmb3JtLnNlcnZlci52MS5EZWFjdGl2YXRlUHJvamVjdFJlcXVlc3QaGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBJYCg5BcmNoaXZlUHJvamVjdBIpLnBsYXRmb3JtLnNlcnZlci52MS5BcmNoaXZlUHJvamVjdFJlcXVlc3QaGy5wbGF0Zm9ybS5zZXJ2ZXIudjEuUHJvamVjdBJRCg1EZWxldGVQcm9qZWN0EigucGxhdGZvcm0uc2VydmVyLnYxLkRlbGV0ZVByb2plY3RSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Mo4GChBXb3Jrc3BhY2VTZXJ2aWNlElwKD0NyZWF0ZVdvcmtzcGFjZRIqLnBsYXRmb3JtLnNlcnZlci52MS5DcmVhdGVXb3Jrc3BhY2VSZXF1ZXN0Gh0ucGxhdGZvcm0uc2VydmVyLnYxLldvcmtzcGFjZRJWCgxHZXRXb3Jrc3BhY2USJy5wbGF0Zm9ybS5zZXJ2ZXIudjEuR2V0V29ya3NwYWNlUmVxdWVzdBodLnBsYXRmb3JtLnNlcnZlci52MS5Xb3Jrc3BhY2USZwoOTGlzdFdvcmtzcGFjZXMSKS5wbGF0Zm9ybS5zZXJ2ZXIudjEuTGlzdFdvcmtzcGFjZXNSZXF1ZXN0GioucGxhdGZvcm0uc2VydmVyLnYxLkxpc3RXb3Jrc3BhY2VzUmVzcG9uc2USXAoPVXBkYXRlV29ya3NwYWNlEioucGxhdGZvcm0uc2VydmVyLnYxLlVwZGF0ZVdvcmtzcGFjZVJlcXVlc3QaHS5wbGF0Zm9ybS5zZXJ2ZXIudjEuV29ya3NwYWNlEmAKEUFjdGl2YXRlV29ya3NwYWNlEiwucGxhdGZvcm0uc2VydmVyLnYxLkFjdGl2YXRlV29ya3NwYWNlUmVxdWVzdBodLnBsYXRmb3JtLnNlcnZlci52MS5Xb3Jrc3BhY2USZAoTRGVhY3RpdmF0ZVdvcmtzcGFjZRIuLnBsYXRmb3JtLnNlcnZlci52MS5EZWFjdGl2YXRlV29ya3NwYWNlUmVxdWVzdBodLnBsYXRmb3JtLnNlcnZlci52MS5Xb3Jrc3BhY2USXgoQQXJjaGl2ZVdvcmtzcGFjZRIrLnBsYXRmb3JtLnNlcnZlci52MS5BcmNoaXZlV29ya3NwYWNlUmVxdWVzdBodLnBsYXRmb3JtLnNlcnZlci52MS5Xb3Jrc3BhY2USVQoPRGVsZXRlV29ya3NwYWNlEioucGxhdGZvcm0uc2VydmVyLnYxLkRlbGV0ZVdvcmtzcGFjZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHlCjwEKFmNvbS5wbGF0Zm9ybS5zZXJ2ZXIudjFCC1NlcnZlclByb3RvUAGiAgNQU1iqAhJQbGF0Zm9ybS5TZXJ2ZXIuVjHKAhJQbGF0Zm9ybVxTZXJ2ZXJcVjHiAh5QbGF0Zm9ybVxTZXJ2ZXJcVjFcR1BCTWV0YWRhdGHqAhRQbGF0Zm9ybTo6U2VydmVyOjpWMWIGcHJvdG8z", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_common_identities, file_common_paging]);
 
 /**
  * @generated from message platform.server.v1.ServiceRegistry
@@ -47,16 +47,63 @@ export type ServiceEntry = Message<"platform.server.v1.ServiceEntry"> & {
   name: string;
 
   /**
+   * unique per process (UUID generated at startup)
+   *
+   * @generated from field: string instance_id = 2;
+   */
+  instanceId: string;
+
+  /**
    * e.g. "http://127.0.0.1:5001"
    *
-   * @generated from field: string grpc_url = 2;
+   * @generated from field: string grpc_url = 3;
    */
   grpcUrl: string;
 
   /**
-   * @generated from field: string version = 3;
+   * semver from CARGO_PKG_VERSION
+   *
+   * @generated from field: string version = 4;
    */
   version: string;
+
+  /**
+   * current health status
+   *
+   * @generated from field: platform.server.v1.ServiceStatus status = 5;
+   */
+  status: ServiceStatus;
+
+  /**
+   * for multi-region deployments
+   *
+   * @generated from field: optional string region = 6;
+   */
+  region?: string | undefined;
+
+  /**
+   * for zone-aware routing
+   *
+   * @generated from field: optional string zone = 7;
+   */
+  zone?: string | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp registered_at = 8;
+   */
+  registeredAt?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp last_heartbeat_at = 9;
+   */
+  lastHeartbeatAt?: Timestamp | undefined;
+
+  /**
+   * e.g. ["saml", "webauthn", "totp"]
+   *
+   * @generated from field: repeated string capabilities = 10;
+   */
+  capabilities: string[];
 };
 
 /**
@@ -65,6 +112,172 @@ export type ServiceEntry = Message<"platform.server.v1.ServiceEntry"> & {
  */
 export const ServiceEntrySchema: GenMessage<ServiceEntry> = /*@__PURE__*/
   messageDesc(file_server, 1);
+
+/**
+ * @generated from message platform.server.v1.RegisterServiceRequest
+ */
+export type RegisterServiceRequest = Message<"platform.server.v1.RegisterServiceRequest"> & {
+  /**
+   * "auth", "node", "workflow", "box", "server"
+   *
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * unique per process (UUID generated at startup)
+   *
+   * @generated from field: string instance_id = 2;
+   */
+  instanceId: string;
+
+  /**
+   * @generated from field: string grpc_url = 3;
+   */
+  grpcUrl: string;
+
+  /**
+   * @generated from field: string version = 4;
+   */
+  version: string;
+
+  /**
+   * @generated from field: optional string region = 5;
+   */
+  region?: string | undefined;
+
+  /**
+   * @generated from field: optional string zone = 6;
+   */
+  zone?: string | undefined;
+
+  /**
+   * @generated from field: repeated string capabilities = 7;
+   */
+  capabilities: string[];
+};
+
+/**
+ * Describes the message platform.server.v1.RegisterServiceRequest.
+ * Use `create(RegisterServiceRequestSchema)` to create a new message.
+ */
+export const RegisterServiceRequestSchema: GenMessage<RegisterServiceRequest> = /*@__PURE__*/
+  messageDesc(file_server, 2);
+
+/**
+ * @generated from message platform.server.v1.RegisterServiceResponse
+ */
+export type RegisterServiceResponse = Message<"platform.server.v1.RegisterServiceResponse"> & {
+  /**
+   * echoed back for confirmation
+   *
+   * @generated from field: string instance_id = 1;
+   */
+  instanceId: string;
+
+  /**
+   * how long until heartbeat must be renewed
+   *
+   * @generated from field: uint32 lease_ttl_seconds = 2;
+   */
+  leaseTtlSeconds: number;
+};
+
+/**
+ * Describes the message platform.server.v1.RegisterServiceResponse.
+ * Use `create(RegisterServiceResponseSchema)` to create a new message.
+ */
+export const RegisterServiceResponseSchema: GenMessage<RegisterServiceResponse> = /*@__PURE__*/
+  messageDesc(file_server, 3);
+
+/**
+ * @generated from message platform.server.v1.DeregisterServiceRequest
+ */
+export type DeregisterServiceRequest = Message<"platform.server.v1.DeregisterServiceRequest"> & {
+  /**
+   * @generated from field: string instance_id = 1;
+   */
+  instanceId: string;
+};
+
+/**
+ * Describes the message platform.server.v1.DeregisterServiceRequest.
+ * Use `create(DeregisterServiceRequestSchema)` to create a new message.
+ */
+export const DeregisterServiceRequestSchema: GenMessage<DeregisterServiceRequest> = /*@__PURE__*/
+  messageDesc(file_server, 4);
+
+/**
+ * @generated from message platform.server.v1.HeartbeatRequest
+ */
+export type HeartbeatRequest = Message<"platform.server.v1.HeartbeatRequest"> & {
+  /**
+   * @generated from field: string instance_id = 1;
+   */
+  instanceId: string;
+
+  /**
+   * HEALTHY, DEGRADED, DRAINING
+   *
+   * @generated from field: platform.server.v1.ServiceStatus status = 2;
+   */
+  status: ServiceStatus;
+};
+
+/**
+ * Describes the message platform.server.v1.HeartbeatRequest.
+ * Use `create(HeartbeatRequestSchema)` to create a new message.
+ */
+export const HeartbeatRequestSchema: GenMessage<HeartbeatRequest> = /*@__PURE__*/
+  messageDesc(file_server, 5);
+
+/**
+ * @generated from message platform.server.v1.HeartbeatResponse
+ */
+export type HeartbeatResponse = Message<"platform.server.v1.HeartbeatResponse"> & {
+  /**
+   * @generated from field: bool acknowledged = 1;
+   */
+  acknowledged: boolean;
+
+  /**
+   * @generated from field: uint32 lease_ttl_seconds = 2;
+   */
+  leaseTtlSeconds: number;
+};
+
+/**
+ * Describes the message platform.server.v1.HeartbeatResponse.
+ * Use `create(HeartbeatResponseSchema)` to create a new message.
+ */
+export const HeartbeatResponseSchema: GenMessage<HeartbeatResponse> = /*@__PURE__*/
+  messageDesc(file_server, 6);
+
+/**
+ * @generated from message platform.server.v1.DiscoverServicesRequest
+ */
+export type DiscoverServicesRequest = Message<"platform.server.v1.DiscoverServicesRequest"> & {
+  /**
+   * If non-empty, only return services matching one of these names.
+   *
+   * @generated from field: repeated string names = 1;
+   */
+  names: string[];
+
+  /**
+   * If true, only return HEALTHY instances.
+   *
+   * @generated from field: bool healthy_only = 2;
+   */
+  healthyOnly: boolean;
+};
+
+/**
+ * Describes the message platform.server.v1.DiscoverServicesRequest.
+ * Use `create(DiscoverServicesRequestSchema)` to create a new message.
+ */
+export const DiscoverServicesRequestSchema: GenMessage<DiscoverServicesRequest> = /*@__PURE__*/
+  messageDesc(file_server, 7);
 
 /**
  * @generated from message platform.server.v1.Deployment
@@ -122,7 +335,7 @@ export type Deployment = Message<"platform.server.v1.Deployment"> & {
  * Use `create(DeploymentSchema)` to create a new message.
  */
 export const DeploymentSchema: GenMessage<Deployment> = /*@__PURE__*/
-  messageDesc(file_server, 2);
+  messageDesc(file_server, 8);
 
 /**
  * @generated from message platform.server.v1.DeployRequest
@@ -151,7 +364,7 @@ export type DeployRequest = Message<"platform.server.v1.DeployRequest"> & {
  * Use `create(DeployRequestSchema)` to create a new message.
  */
 export const DeployRequestSchema: GenMessage<DeployRequest> = /*@__PURE__*/
-  messageDesc(file_server, 3);
+  messageDesc(file_server, 9);
 
 /**
  * @generated from message platform.server.v1.RollbackRequest
@@ -168,7 +381,7 @@ export type RollbackRequest = Message<"platform.server.v1.RollbackRequest"> & {
  * Use `create(RollbackRequestSchema)` to create a new message.
  */
 export const RollbackRequestSchema: GenMessage<RollbackRequest> = /*@__PURE__*/
-  messageDesc(file_server, 4);
+  messageDesc(file_server, 10);
 
 /**
  * @generated from message platform.server.v1.GetDeploymentRequest
@@ -185,7 +398,7 @@ export type GetDeploymentRequest = Message<"platform.server.v1.GetDeploymentRequ
  * Use `create(GetDeploymentRequestSchema)` to create a new message.
  */
 export const GetDeploymentRequestSchema: GenMessage<GetDeploymentRequest> = /*@__PURE__*/
-  messageDesc(file_server, 5);
+  messageDesc(file_server, 11);
 
 /**
  * @generated from message platform.server.v1.ListDeploymentsRequest
@@ -202,7 +415,7 @@ export type ListDeploymentsRequest = Message<"platform.server.v1.ListDeployments
  * Use `create(ListDeploymentsRequestSchema)` to create a new message.
  */
 export const ListDeploymentsRequestSchema: GenMessage<ListDeploymentsRequest> = /*@__PURE__*/
-  messageDesc(file_server, 6);
+  messageDesc(file_server, 12);
 
 /**
  * @generated from message platform.server.v1.ListDeploymentsResponse
@@ -224,7 +437,7 @@ export type ListDeploymentsResponse = Message<"platform.server.v1.ListDeployment
  * Use `create(ListDeploymentsResponseSchema)` to create a new message.
  */
 export const ListDeploymentsResponseSchema: GenMessage<ListDeploymentsResponse> = /*@__PURE__*/
-  messageDesc(file_server, 7);
+  messageDesc(file_server, 13);
 
 /**
  * @generated from message platform.server.v1.Tenant
@@ -267,7 +480,7 @@ export type Tenant = Message<"platform.server.v1.Tenant"> & {
  * Use `create(TenantSchema)` to create a new message.
  */
 export const TenantSchema: GenMessage<Tenant> = /*@__PURE__*/
-  messageDesc(file_server, 8);
+  messageDesc(file_server, 14);
 
 /**
  * @generated from message platform.server.v1.ProvisionTenantRequest
@@ -296,7 +509,7 @@ export type ProvisionTenantRequest = Message<"platform.server.v1.ProvisionTenant
  * Use `create(ProvisionTenantRequestSchema)` to create a new message.
  */
 export const ProvisionTenantRequestSchema: GenMessage<ProvisionTenantRequest> = /*@__PURE__*/
-  messageDesc(file_server, 9);
+  messageDesc(file_server, 15);
 
 /**
  * @generated from message platform.server.v1.ListTenantsRequest
@@ -313,7 +526,7 @@ export type ListTenantsRequest = Message<"platform.server.v1.ListTenantsRequest"
  * Use `create(ListTenantsRequestSchema)` to create a new message.
  */
 export const ListTenantsRequestSchema: GenMessage<ListTenantsRequest> = /*@__PURE__*/
-  messageDesc(file_server, 10);
+  messageDesc(file_server, 16);
 
 /**
  * @generated from message platform.server.v1.ListTenantsResponse
@@ -335,7 +548,7 @@ export type ListTenantsResponse = Message<"platform.server.v1.ListTenantsRespons
  * Use `create(ListTenantsResponseSchema)` to create a new message.
  */
 export const ListTenantsResponseSchema: GenMessage<ListTenantsResponse> = /*@__PURE__*/
-  messageDesc(file_server, 11);
+  messageDesc(file_server, 17);
 
 /**
  * @generated from message platform.server.v1.SystemHealth
@@ -357,7 +570,7 @@ export type SystemHealth = Message<"platform.server.v1.SystemHealth"> & {
  * Use `create(SystemHealthSchema)` to create a new message.
  */
 export const SystemHealthSchema: GenMessage<SystemHealth> = /*@__PURE__*/
-  messageDesc(file_server, 12);
+  messageDesc(file_server, 18);
 
 /**
  * @generated from message platform.server.v1.ServiceHealth
@@ -384,7 +597,7 @@ export type ServiceHealth = Message<"platform.server.v1.ServiceHealth"> & {
  * Use `create(ServiceHealthSchema)` to create a new message.
  */
 export const ServiceHealthSchema: GenMessage<ServiceHealth> = /*@__PURE__*/
-  messageDesc(file_server, 13);
+  messageDesc(file_server, 19);
 
 /**
  * @generated from message platform.server.v1.Organization
@@ -426,7 +639,7 @@ export type Organization = Message<"platform.server.v1.Organization"> & {
  * Use `create(OrganizationSchema)` to create a new message.
  */
 export const OrganizationSchema: GenMessage<Organization> = /*@__PURE__*/
-  messageDesc(file_server, 14);
+  messageDesc(file_server, 20);
 
 /**
  * @generated from message platform.server.v1.CreateOrganizationRequest
@@ -453,7 +666,7 @@ export type CreateOrganizationRequest = Message<"platform.server.v1.CreateOrgani
  * Use `create(CreateOrganizationRequestSchema)` to create a new message.
  */
 export const CreateOrganizationRequestSchema: GenMessage<CreateOrganizationRequest> = /*@__PURE__*/
-  messageDesc(file_server, 15);
+  messageDesc(file_server, 21);
 
 /**
  * @generated from message platform.server.v1.GetOrganizationRequest
@@ -470,7 +683,7 @@ export type GetOrganizationRequest = Message<"platform.server.v1.GetOrganization
  * Use `create(GetOrganizationRequestSchema)` to create a new message.
  */
 export const GetOrganizationRequestSchema: GenMessage<GetOrganizationRequest> = /*@__PURE__*/
-  messageDesc(file_server, 16);
+  messageDesc(file_server, 22);
 
 /**
  * @generated from message platform.server.v1.ListOrganizationsRequest
@@ -487,7 +700,7 @@ export type ListOrganizationsRequest = Message<"platform.server.v1.ListOrganizat
  * Use `create(ListOrganizationsRequestSchema)` to create a new message.
  */
 export const ListOrganizationsRequestSchema: GenMessage<ListOrganizationsRequest> = /*@__PURE__*/
-  messageDesc(file_server, 17);
+  messageDesc(file_server, 23);
 
 /**
  * @generated from message platform.server.v1.ListOrganizationsResponse
@@ -509,7 +722,7 @@ export type ListOrganizationsResponse = Message<"platform.server.v1.ListOrganiza
  * Use `create(ListOrganizationsResponseSchema)` to create a new message.
  */
 export const ListOrganizationsResponseSchema: GenMessage<ListOrganizationsResponse> = /*@__PURE__*/
-  messageDesc(file_server, 18);
+  messageDesc(file_server, 24);
 
 /**
  * @generated from message platform.server.v1.UpdateOrganizationRequest
@@ -536,7 +749,7 @@ export type UpdateOrganizationRequest = Message<"platform.server.v1.UpdateOrgani
  * Use `create(UpdateOrganizationRequestSchema)` to create a new message.
  */
 export const UpdateOrganizationRequestSchema: GenMessage<UpdateOrganizationRequest> = /*@__PURE__*/
-  messageDesc(file_server, 19);
+  messageDesc(file_server, 25);
 
 /**
  * @generated from message platform.server.v1.ActivateRequest
@@ -553,7 +766,7 @@ export type ActivateRequest = Message<"platform.server.v1.ActivateRequest"> & {
  * Use `create(ActivateRequestSchema)` to create a new message.
  */
 export const ActivateRequestSchema: GenMessage<ActivateRequest> = /*@__PURE__*/
-  messageDesc(file_server, 20);
+  messageDesc(file_server, 26);
 
 /**
  * @generated from message platform.server.v1.DeactivateRequest
@@ -570,7 +783,7 @@ export type DeactivateRequest = Message<"platform.server.v1.DeactivateRequest"> 
  * Use `create(DeactivateRequestSchema)` to create a new message.
  */
 export const DeactivateRequestSchema: GenMessage<DeactivateRequest> = /*@__PURE__*/
-  messageDesc(file_server, 21);
+  messageDesc(file_server, 27);
 
 /**
  * @generated from message platform.server.v1.ArchiveRequest
@@ -587,7 +800,7 @@ export type ArchiveRequest = Message<"platform.server.v1.ArchiveRequest"> & {
  * Use `create(ArchiveRequestSchema)` to create a new message.
  */
 export const ArchiveRequestSchema: GenMessage<ArchiveRequest> = /*@__PURE__*/
-  messageDesc(file_server, 22);
+  messageDesc(file_server, 28);
 
 /**
  * @generated from message platform.server.v1.DeleteOrganizationRequest
@@ -604,7 +817,7 @@ export type DeleteOrganizationRequest = Message<"platform.server.v1.DeleteOrgani
  * Use `create(DeleteOrganizationRequestSchema)` to create a new message.
  */
 export const DeleteOrganizationRequestSchema: GenMessage<DeleteOrganizationRequest> = /*@__PURE__*/
-  messageDesc(file_server, 23);
+  messageDesc(file_server, 29);
 
 /**
  * @generated from message platform.server.v1.Project
@@ -651,7 +864,7 @@ export type Project = Message<"platform.server.v1.Project"> & {
  * Use `create(ProjectSchema)` to create a new message.
  */
 export const ProjectSchema: GenMessage<Project> = /*@__PURE__*/
-  messageDesc(file_server, 24);
+  messageDesc(file_server, 30);
 
 /**
  * @generated from message platform.server.v1.CreateProjectRequest
@@ -683,7 +896,7 @@ export type CreateProjectRequest = Message<"platform.server.v1.CreateProjectRequ
  * Use `create(CreateProjectRequestSchema)` to create a new message.
  */
 export const CreateProjectRequestSchema: GenMessage<CreateProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 25);
+  messageDesc(file_server, 31);
 
 /**
  * @generated from message platform.server.v1.GetProjectRequest
@@ -700,7 +913,7 @@ export type GetProjectRequest = Message<"platform.server.v1.GetProjectRequest"> 
  * Use `create(GetProjectRequestSchema)` to create a new message.
  */
 export const GetProjectRequestSchema: GenMessage<GetProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 26);
+  messageDesc(file_server, 32);
 
 /**
  * @generated from message platform.server.v1.ListProjectsRequest
@@ -722,7 +935,7 @@ export type ListProjectsRequest = Message<"platform.server.v1.ListProjectsReques
  * Use `create(ListProjectsRequestSchema)` to create a new message.
  */
 export const ListProjectsRequestSchema: GenMessage<ListProjectsRequest> = /*@__PURE__*/
-  messageDesc(file_server, 27);
+  messageDesc(file_server, 33);
 
 /**
  * @generated from message platform.server.v1.ListProjectsResponse
@@ -744,7 +957,7 @@ export type ListProjectsResponse = Message<"platform.server.v1.ListProjectsRespo
  * Use `create(ListProjectsResponseSchema)` to create a new message.
  */
 export const ListProjectsResponseSchema: GenMessage<ListProjectsResponse> = /*@__PURE__*/
-  messageDesc(file_server, 28);
+  messageDesc(file_server, 34);
 
 /**
  * @generated from message platform.server.v1.UpdateProjectRequest
@@ -771,7 +984,7 @@ export type UpdateProjectRequest = Message<"platform.server.v1.UpdateProjectRequ
  * Use `create(UpdateProjectRequestSchema)` to create a new message.
  */
 export const UpdateProjectRequestSchema: GenMessage<UpdateProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 29);
+  messageDesc(file_server, 35);
 
 /**
  * @generated from message platform.server.v1.ActivateProjectRequest
@@ -788,7 +1001,7 @@ export type ActivateProjectRequest = Message<"platform.server.v1.ActivateProject
  * Use `create(ActivateProjectRequestSchema)` to create a new message.
  */
 export const ActivateProjectRequestSchema: GenMessage<ActivateProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 30);
+  messageDesc(file_server, 36);
 
 /**
  * @generated from message platform.server.v1.DeactivateProjectRequest
@@ -805,7 +1018,7 @@ export type DeactivateProjectRequest = Message<"platform.server.v1.DeactivatePro
  * Use `create(DeactivateProjectRequestSchema)` to create a new message.
  */
 export const DeactivateProjectRequestSchema: GenMessage<DeactivateProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 31);
+  messageDesc(file_server, 37);
 
 /**
  * @generated from message platform.server.v1.ArchiveProjectRequest
@@ -822,7 +1035,7 @@ export type ArchiveProjectRequest = Message<"platform.server.v1.ArchiveProjectRe
  * Use `create(ArchiveProjectRequestSchema)` to create a new message.
  */
 export const ArchiveProjectRequestSchema: GenMessage<ArchiveProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 32);
+  messageDesc(file_server, 38);
 
 /**
  * @generated from message platform.server.v1.DeleteProjectRequest
@@ -839,7 +1052,7 @@ export type DeleteProjectRequest = Message<"platform.server.v1.DeleteProjectRequ
  * Use `create(DeleteProjectRequestSchema)` to create a new message.
  */
 export const DeleteProjectRequestSchema: GenMessage<DeleteProjectRequest> = /*@__PURE__*/
-  messageDesc(file_server, 33);
+  messageDesc(file_server, 39);
 
 /**
  * @generated from message platform.server.v1.Workspace
@@ -881,7 +1094,7 @@ export type Workspace = Message<"platform.server.v1.Workspace"> & {
  * Use `create(WorkspaceSchema)` to create a new message.
  */
 export const WorkspaceSchema: GenMessage<Workspace> = /*@__PURE__*/
-  messageDesc(file_server, 34);
+  messageDesc(file_server, 40);
 
 /**
  * @generated from message platform.server.v1.CreateWorkspaceRequest
@@ -908,7 +1121,7 @@ export type CreateWorkspaceRequest = Message<"platform.server.v1.CreateWorkspace
  * Use `create(CreateWorkspaceRequestSchema)` to create a new message.
  */
 export const CreateWorkspaceRequestSchema: GenMessage<CreateWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 35);
+  messageDesc(file_server, 41);
 
 /**
  * @generated from message platform.server.v1.GetWorkspaceRequest
@@ -925,7 +1138,7 @@ export type GetWorkspaceRequest = Message<"platform.server.v1.GetWorkspaceReques
  * Use `create(GetWorkspaceRequestSchema)` to create a new message.
  */
 export const GetWorkspaceRequestSchema: GenMessage<GetWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 36);
+  messageDesc(file_server, 42);
 
 /**
  * @generated from message platform.server.v1.ListWorkspacesRequest
@@ -947,7 +1160,7 @@ export type ListWorkspacesRequest = Message<"platform.server.v1.ListWorkspacesRe
  * Use `create(ListWorkspacesRequestSchema)` to create a new message.
  */
 export const ListWorkspacesRequestSchema: GenMessage<ListWorkspacesRequest> = /*@__PURE__*/
-  messageDesc(file_server, 37);
+  messageDesc(file_server, 43);
 
 /**
  * @generated from message platform.server.v1.ListWorkspacesResponse
@@ -969,7 +1182,7 @@ export type ListWorkspacesResponse = Message<"platform.server.v1.ListWorkspacesR
  * Use `create(ListWorkspacesResponseSchema)` to create a new message.
  */
 export const ListWorkspacesResponseSchema: GenMessage<ListWorkspacesResponse> = /*@__PURE__*/
-  messageDesc(file_server, 38);
+  messageDesc(file_server, 44);
 
 /**
  * @generated from message platform.server.v1.UpdateWorkspaceRequest
@@ -996,7 +1209,7 @@ export type UpdateWorkspaceRequest = Message<"platform.server.v1.UpdateWorkspace
  * Use `create(UpdateWorkspaceRequestSchema)` to create a new message.
  */
 export const UpdateWorkspaceRequestSchema: GenMessage<UpdateWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 39);
+  messageDesc(file_server, 45);
 
 /**
  * @generated from message platform.server.v1.ActivateWorkspaceRequest
@@ -1013,7 +1226,7 @@ export type ActivateWorkspaceRequest = Message<"platform.server.v1.ActivateWorks
  * Use `create(ActivateWorkspaceRequestSchema)` to create a new message.
  */
 export const ActivateWorkspaceRequestSchema: GenMessage<ActivateWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 40);
+  messageDesc(file_server, 46);
 
 /**
  * @generated from message platform.server.v1.DeactivateWorkspaceRequest
@@ -1030,7 +1243,7 @@ export type DeactivateWorkspaceRequest = Message<"platform.server.v1.DeactivateW
  * Use `create(DeactivateWorkspaceRequestSchema)` to create a new message.
  */
 export const DeactivateWorkspaceRequestSchema: GenMessage<DeactivateWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 41);
+  messageDesc(file_server, 47);
 
 /**
  * @generated from message platform.server.v1.ArchiveWorkspaceRequest
@@ -1047,7 +1260,7 @@ export type ArchiveWorkspaceRequest = Message<"platform.server.v1.ArchiveWorkspa
  * Use `create(ArchiveWorkspaceRequestSchema)` to create a new message.
  */
 export const ArchiveWorkspaceRequestSchema: GenMessage<ArchiveWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 42);
+  messageDesc(file_server, 48);
 
 /**
  * @generated from message platform.server.v1.DeleteWorkspaceRequest
@@ -1064,7 +1277,43 @@ export type DeleteWorkspaceRequest = Message<"platform.server.v1.DeleteWorkspace
  * Use `create(DeleteWorkspaceRequestSchema)` to create a new message.
  */
 export const DeleteWorkspaceRequestSchema: GenMessage<DeleteWorkspaceRequest> = /*@__PURE__*/
-  messageDesc(file_server, 43);
+  messageDesc(file_server, 49);
+
+/**
+ * @generated from enum platform.server.v1.ServiceStatus
+ */
+export enum ServiceStatus {
+  /**
+   * @generated from enum value: SERVICE_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: SERVICE_STATUS_HEALTHY = 1;
+   */
+  HEALTHY = 1,
+
+  /**
+   * @generated from enum value: SERVICE_STATUS_DEGRADED = 2;
+   */
+  DEGRADED = 2,
+
+  /**
+   * @generated from enum value: SERVICE_STATUS_UNHEALTHY = 3;
+   */
+  UNHEALTHY = 3,
+
+  /**
+   * @generated from enum value: SERVICE_STATUS_DRAINING = 4;
+   */
+  DRAINING = 4,
+}
+
+/**
+ * Describes the enum platform.server.v1.ServiceStatus.
+ */
+export const ServiceStatusSchema: GenEnum<ServiceStatus> = /*@__PURE__*/
+  enumDesc(file_server, 0);
 
 /**
  * @generated from enum platform.server.v1.DeploymentStatus
@@ -1100,22 +1349,12 @@ export enum DeploymentStatus {
  * Describes the enum platform.server.v1.DeploymentStatus.
  */
 export const DeploymentStatusSchema: GenEnum<DeploymentStatus> = /*@__PURE__*/
-  enumDesc(file_server, 0);
+  enumDesc(file_server, 1);
 
 /**
  * @generated from service platform.server.v1.ServerService
  */
 export const ServerService: GenService<{
-  /**
-   * ─── Service registry ──────────────────────────────────────────────────
-   *
-   * @generated from rpc platform.server.v1.ServerService.GetServiceRegistry
-   */
-  getServiceRegistry: {
-    methodKind: "unary";
-    input: typeof EmptySchema;
-    output: typeof ServiceRegistrySchema;
-  },
   /**
    * ─── Orchestration: deployments ────────────────────────────────────────
    *
@@ -1180,6 +1419,53 @@ export const ServerService: GenService<{
   },
 }> = /*@__PURE__*/
   serviceDesc(file_server, 0);
+
+/**
+ * @generated from service platform.server.v1.ServiceDiscovery
+ */
+export const ServiceDiscovery: GenService<{
+  /**
+   * Called by each service on startup to register itself.
+   *
+   * @generated from rpc platform.server.v1.ServiceDiscovery.RegisterService
+   */
+  registerService: {
+    methodKind: "unary";
+    input: typeof RegisterServiceRequestSchema;
+    output: typeof RegisterServiceResponseSchema;
+  },
+  /**
+   * Called by each service on graceful shutdown.
+   *
+   * @generated from rpc platform.server.v1.ServiceDiscovery.DeregisterService
+   */
+  deregisterService: {
+    methodKind: "unary";
+    input: typeof DeregisterServiceRequestSchema;
+    output: typeof EmptySchema;
+  },
+  /**
+   * Called by each service periodically to renew its lease.
+   *
+   * @generated from rpc platform.server.v1.ServiceDiscovery.Heartbeat
+   */
+  heartbeat: {
+    methodKind: "unary";
+    input: typeof HeartbeatRequestSchema;
+    output: typeof HeartbeatResponseSchema;
+  },
+  /**
+   * Called by client SDKs to discover all healthy service instances.
+   *
+   * @generated from rpc platform.server.v1.ServiceDiscovery.DiscoverServices
+   */
+  discoverServices: {
+    methodKind: "unary";
+    input: typeof DiscoverServicesRequestSchema;
+    output: typeof ServiceRegistrySchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_server, 1);
 
 /**
  * @generated from service platform.server.v1.OrganizationService
@@ -1250,7 +1536,7 @@ export const OrganizationService: GenService<{
     output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/
-  serviceDesc(file_server, 1);
+  serviceDesc(file_server, 2);
 
 /**
  * @generated from service platform.server.v1.ProjectService
@@ -1321,7 +1607,7 @@ export const ProjectService: GenService<{
     output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/
-  serviceDesc(file_server, 2);
+  serviceDesc(file_server, 3);
 
 /**
  * @generated from service platform.server.v1.WorkspaceService
@@ -1392,5 +1678,5 @@ export const WorkspaceService: GenService<{
     output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/
-  serviceDesc(file_server, 3);
+  serviceDesc(file_server, 4);
 

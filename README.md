@@ -56,10 +56,8 @@ import {
 } from '@quarkloop/quark-js';
 
 const quark = await new QuarkClientBuilder()
-  .authEndpoint('http://127.0.0.1:5001')
+  // Auth, node, workflow endpoints are discovered automatically
   .serverEndpoint('http://127.0.0.1:3000')
-  .nodeEndpoint('http://127.0.0.1:50051')
-  .workflowEndpoint('http://127.0.0.1:7233')
   .accessToken('<jwt access token>')
   .requestTimeout(15_000)
   .build();
@@ -74,7 +72,7 @@ try {
 
   // Server: fetch the service registry. Request is Empty, response is
   // ServiceRegistry.
-  const registry = await quark.server().getServiceRegistry();
+  // Service discovery is automatic — no need to call getServiceRegistry
 
   // Node: execute a node. Request is ExecuteRequest, response is
   // ExecuteResponse.
@@ -132,7 +130,7 @@ quark.auth().policy().createPolicy({ … });                 // PolicyService �
 `ServerClient` extends `ServerService`, so all 8 server RPCs (`getServiceRegistry`, `deploy`, `rollback`, etc.) are callable directly. Organization, Project, and Workspace services are accessed via accessors:
 
 ```ts
-quark.server().getServiceRegistry();                          // ServerService — 8 RPCs (direct)
+// Service discovery is automatic
 quark.server().deploy({ versionId: 'v1.2.3', workflowId: 'wf-deploy' });
 quark.server().rollback({ deploymentId: 'dpl-123' });
 quark.server().getDeployment({ id: 'dpl-123' });

@@ -58,7 +58,6 @@ import type {
   Project,
   ProvisionTenantRequest,
   RollbackRequest,
-  ServiceRegistry,
   SystemHealth,
   Tenant,
   UpdateOrganizationRequest,
@@ -69,7 +68,7 @@ import type {
 import type { Empty } from '@bufbuild/protobuf/wkt';
 
 /**
- * `platform.server.v1.ServerService — orchestration, service registry, admin API` — 8 RPCs.
+ * `platform.server.v1.ServerService — orchestration, service registry, admin API` — 7 RPCs.
  *
  * Wraps the generated `ServerService` service descriptor from
  * `src/gen/server_pb.ts`. Each method delegates to the
@@ -82,11 +81,6 @@ export class ServerService extends ServiceClient {
   constructor(transport: QuarkTransport) {
     super(transport);
     this.client = createClient(ServerServiceDesc, transport.underlying);
-  }
-
-  /** `GetServiceRegistry` — input is `Empty`. */
-  getServiceRegistry(options?: QuarkCallOptions): Promise<ServiceRegistry> {
-    return this.client.getServiceRegistry({}, options);
   }
 
   /** `Deploy` — request: `DeployRequest`, response: `Deployment`. */
@@ -393,7 +387,7 @@ export class WorkspaceService extends ServiceClient {
  * Client for the Quark server component.
 
 Extends {@link ServerService} so all 8 orchestration RPCs
-(`getServiceRegistry`, `deploy`, `rollback`, `provisionTenant`, …)
+(`deploy`, `rollback`, `provisionTenant`, …)
 are callable directly. The remaining 3 services (organizations /
 projects / workspaces) are accessed via lazy accessors.
 
